@@ -23,7 +23,6 @@ mvn package
 ```
 
 Either deploy generated WAR File to Tomcat or directly run using
-### Build
 ```bash
 mvn spring-boot:run
 ```
