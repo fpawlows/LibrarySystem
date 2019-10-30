@@ -13,6 +13,7 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
    * Spring Boot Starter Web
    * Spring Boot Starter Tomcat
    * Spring Boot Starter Thymeleaf
+   * HTML5 Boilerplate
    * Embedded H2 for session management
 
 ## Deployment
