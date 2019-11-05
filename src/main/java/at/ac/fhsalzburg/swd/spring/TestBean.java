@@ -9,7 +9,6 @@ import org.springframework.web.context.WebApplicationContext;
 @Configuration
 public class TestBean{
 	
-
 	@Bean(name="singletonBean")	
 	public TestBean getSingletonBean()
 	{
