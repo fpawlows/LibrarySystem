@@ -26,6 +26,10 @@ mvn package
 Either deploy generated WAR File to Tomcat or directly run using
 ```bash
 mvn spring-boot:run
+
+### or alternatively build and run in one command
+mvn package; mvn spring-boot:run
+
 ```
 ### Connect
 localhost:8080
