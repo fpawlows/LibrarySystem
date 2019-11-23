@@ -1,5 +1,7 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import java.io.Serializable;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -7,7 +9,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 
 @Configuration
-public class TestBean{
+public class TestBean implements Serializable{
+	
+	int HashCode;
+	
+	public TestBean()
+	{
+		HashCode=System.identityHashCode(this);
+	}
 	
 	@Bean(name="singletonBean")	
 	public TestBean getSingletonBean()
@@ -24,7 +33,7 @@ public class TestBean{
 	
 	public int getHashCode()
 	{
-		return System.identityHashCode(this);
+		return HashCode;
 	}
 		
 	@Bean(name="sessionBean")

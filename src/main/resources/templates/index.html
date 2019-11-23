@@ -32,6 +32,13 @@
 			<span th:text="'Session counter, ' + ${session.count.toString()}"></span>		
 						
         </h2>
+        <h2>
+        	<span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
+        	<br>
+        	<span th:text="'Prototype Bean, ' + ${beanPrototype}"></span>
+        	<br>
+        	<span th:text="'Session Bean, ' + ${beanSession}"></span>
+        </h2>
         
          <a href="addCustomer">Add Customer</a>
 	      <br/><br/>
