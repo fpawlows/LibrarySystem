@@ -28,8 +28,9 @@ public class MyController {
 	@Resource(name = "sessionBean")
     TestBean sessionBean;
 	
+	
 	@Autowired
-	TestService testService;
+	TestServiceI testService;
 	
 	
     @Autowired //don't forget the setter
@@ -37,6 +38,7 @@ public class MyController {
     
     @Autowired
 	TestBean singletonBean;
+    
     
     
 	
@@ -59,6 +61,8 @@ public class MyController {
 		}
 
 		model.addAttribute("message",testService.doSomething());
+		
+		model.addAttribute("halloNachricht","welchem to SWD lab");
 
 		model.addAttribute("customers", repo.findAll());
 		
@@ -112,7 +116,7 @@ public class MyController {
     @RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.GET)
     public @ResponseBody Customer getCustomer(@PathVariable long id) {
     	Customer customer = repo.findById(id);
-
+    	
     	return customer;
     }
 	
