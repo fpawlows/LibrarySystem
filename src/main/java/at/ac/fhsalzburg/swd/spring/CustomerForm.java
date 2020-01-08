@@ -4,6 +4,8 @@ public class CustomerForm {
  
     private String firstName;
     private String lastName;
+    private String eMail;
+    private String tel;
  
     public String getFirstName() {
         return firstName;
@@ -20,5 +22,22 @@ public class CustomerForm {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    
+    public void setEMail(String eMail)
+	{
+		this.eMail = eMail;
+	}
+	
+	public String getEMail() {
+		return this.eMail;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
      
 }

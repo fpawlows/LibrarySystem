@@ -33,7 +33,7 @@ public class MyController {
 	TestServiceI testService;
 	
 	
-    @Autowired //don't forget the setter
+    @Autowired
     private CustomerRepository repo; 
     
     @Autowired
@@ -83,11 +83,13 @@ public class MyController {
         @ModelAttribute("customerForm") CustomerForm customerForm) {
         String firstName = customerForm.getFirstName();
         String lastName = customerForm.getLastName();
+        String eMail = customerForm.getEMail();
+        String tel = customerForm.getTel();
         
         if (firstName != null && firstName.length() > 0 //
                 && lastName != null && lastName.length() > 0) {
-            Customer newCustomer = new Customer(firstName, lastName);
-            //customers.add(newCustomer);
+            Customer newCustomer = new Customer(firstName, lastName, eMail, tel);
+   
             repo.save(newCustomer);
         } 
         return "redirect:/";

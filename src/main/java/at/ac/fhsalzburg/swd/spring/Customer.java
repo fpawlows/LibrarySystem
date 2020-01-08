@@ -13,12 +13,17 @@ public class Customer {
     private Long id;
     private String firstName;
     private String lastName;
+    private String eMail;
+    private String tel;
 
     protected Customer() {}
 
-    public Customer(String firstName, String lastName) {
+    public Customer(String firstName, String lastName, String eMail, String tel) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.eMail = eMail;
+        this.tel = tel;
+        
     }
 
     /*
@@ -48,5 +53,22 @@ public class Customer {
 	
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public void setEMail(String eMail)
+	{
+		this.eMail = eMail;
+	}
+	
+	public String getEMail() {
+		return this.eMail;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 }
