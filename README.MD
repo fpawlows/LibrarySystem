@@ -21,9 +21,9 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
 
    * By default application data is stored in in-memory database
    * to persist your data, the following line within application.properties need to be changed from
-   ** myapp.datasource.url=jdbc:h2:mem:myappdb;
+    * myapp.datasource.url=jdbc:h2:mem:myappdb;
    * to
-   ** myapp.datasource.jdbcurl=jdbc:h2:file:/path2databasefile;
+    *myapp.datasource.jdbcurl=jdbc:h2:file:/path2databasefile;
 
 ## Deployment
 
