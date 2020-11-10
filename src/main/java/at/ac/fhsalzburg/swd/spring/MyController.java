@@ -30,11 +30,9 @@ public class MyController {
 	
 	
 	@Autowired
-	TestServiceI testService;
+	CustomerServiceInterface customerService;
 	
-	
-    @Autowired
-    private CustomerRepository repo; 
+	    
     
     @Autowired
 	TestBean singletonBean;
@@ -60,11 +58,11 @@ public class MyController {
 			session.setAttribute("count", count);
 		}
 
-		model.addAttribute("message",testService.doSomething());
+		model.addAttribute("message",customerService.doSomething());
 		
 		model.addAttribute("halloNachricht","welchem to SWD lab");
 
-		model.addAttribute("customers", repo.findAll());
+		model.addAttribute("customers", customerService.getAll());
 		
 		model.addAttribute("beanSingleton", singletonBean.getHashCode());
 		
@@ -86,12 +84,8 @@ public class MyController {
         String eMail = customerForm.getEMail();
         String tel = customerForm.getTel();
         
-        if (firstName != null && firstName.length() > 0 //
-                && lastName != null && lastName.length() > 0) {
-            Customer newCustomer = new Customer(firstName, lastName, eMail, tel);
-   
-            repo.save(newCustomer);
-        } 
+        customerService.addCustomer(firstName, lastName, eMail,  tel);
+         
         return "redirect:/";
 	}
 	
@@ -100,7 +94,7 @@ public class MyController {
         CustomerForm customerForm = new CustomerForm();
         model.addAttribute("customerForm", customerForm);
         
-        model.addAttribute("message",testService.doSomething());
+        model.addAttribute("message",customerService.doSomething());
         
         return "addCustomer";
     }
@@ -112,12 +106,12 @@ public class MyController {
 	@GetMapping("/customers")
     public @ResponseBody List<Customer> allUsers() {
 
-        return (List<Customer>) repo.findAll();
+        return (List<Customer>) customerService.getAll();
     }
     
     @RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.GET)
     public @ResponseBody Customer getCustomer(@PathVariable long id) {
-    	Customer customer = repo.findById(id);
+    	Customer customer = customerService.getById(id);
     	
     	return customer;
     }
@@ -125,7 +119,7 @@ public class MyController {
     @RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.PUT)
     public String setCustomer(@RequestBody Customer customer) {    	
     	
-    	repo.save(customer);
+    	customerService.addCustomer(customer);
     	
     	return "redirect:/customers";
     }
@@ -133,7 +127,7 @@ public class MyController {
     @DeleteMapping("/customers/{id}")
     public String delete(@PathVariable String id) {
         Long customerid = Long.parseLong(id);
-        repo.deleteById(customerid);
+        customerService.deleteById(customerid);
         return "redirect:/customers";
     }
 
