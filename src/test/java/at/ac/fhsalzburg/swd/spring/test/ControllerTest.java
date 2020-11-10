@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.BDDMockito.*;
 
-import at.ac.fhsalzburg.swd.spring.Customer;
 import at.ac.fhsalzburg.swd.spring.CustomerForm;
-import at.ac.fhsalzburg.swd.spring.CustomerRepository;
 import at.ac.fhsalzburg.swd.spring.MyController;
+import at.ac.fhsalzburg.swd.spring.dao.Customer;
+import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
 
 
 @ExtendWith(SpringExtension.class)

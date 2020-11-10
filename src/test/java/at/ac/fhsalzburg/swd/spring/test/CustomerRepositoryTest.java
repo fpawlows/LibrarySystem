@@ -12,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import at.ac.fhsalzburg.swd.spring.Customer;
-import at.ac.fhsalzburg.swd.spring.CustomerRepository;
+import at.ac.fhsalzburg.swd.spring.dao.Customer;
+import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

@@ -1,10 +1,11 @@
 package at.ac.fhsalzburg.swd.spring;
 
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import at.ac.fhsalzburg.swd.spring.dao.Customer;
+import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
 
 
 @Service

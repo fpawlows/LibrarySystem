@@ -1,14 +1,13 @@
-package at.ac.fhsalzburg.swd.spring;
+package at.ac.fhsalzburg.swd.spring.dao;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
 	@Transactional(timeout = 10)
@@ -17,8 +16,5 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 	@Transactional(timeout = 10)
 	Customer findById(long id);
 	
-	//@Transactional(timeout = 10)
-	//@Override
-	//Customer save(Customer customer);
 	
 }

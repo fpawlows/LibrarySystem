@@ -1,9 +1,11 @@
-package at.ac.fhsalzburg.swd.spring;
+package at.ac.fhsalzburg.swd.spring.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @Entity
 public class Customer {
@@ -25,15 +27,6 @@ public class Customer {
         this.tel = tel;
         
     }
-
-    /*
-    @Override
-    public String toString() {
-        return String.format(
-                "Customer[id=%d, firstName='%s', lastName='%s']",
-                id, firstName, lastName);
-    }
-    */
 
 	public Long getId() {
 		return id;

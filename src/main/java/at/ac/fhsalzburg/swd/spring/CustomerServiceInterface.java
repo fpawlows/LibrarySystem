@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import at.ac.fhsalzburg.swd.spring.dao.Customer;
 
 public interface CustomerServiceInterface {
 	
