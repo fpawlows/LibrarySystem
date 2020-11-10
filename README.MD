@@ -15,6 +15,15 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
    * Spring Boot Starter Thymeleaf
    * HTML5 Boilerplate
    * Embedded H2 for session management
+   * H2 database for persisting application data
+
+### how to make your data persitent across spring-boot restarts
+
+   * By default application data is stored in in-memory database
+   * to persist your data, the following line within application.properties need to be changed from
+   ** myapp.datasource.url=jdbc:h2:mem:myappdb;
+   * to
+   ** myapp.datasource.jdbcurl=jdbc:h2:file:/path2databasefile;
 
 ## Deployment
 
