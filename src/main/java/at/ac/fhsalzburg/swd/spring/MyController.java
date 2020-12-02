@@ -19,28 +19,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.ac.fhsalzburg.swd.spring.dao.Customer;
 
-@Controller
+@Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring will look at the methods of the class marked with the @Controller annotation and establish the routing table to know which methods serve which endpoints.
 public class MyController {
 
-	@Autowired
+	@Autowired // To wire the application parts together, use @Autowired on the fields, constructors, or methods in a component. Spring's dependency injection mechanism wires appropriate beans into the class members marked with @Autowired.
 	private ApplicationContext context;
 	
-	@Resource(name = "sessionBean")
-    TestBean sessionBean;
+	@Resource(name = "sessionBean") // The @Resource annotation is part of the JSR-250 annotation collection and is packaged with Jakarta EE. This annotation has the following execution paths, listed by Match by Name, Match by Type, Match by Qualifier. These execution paths are applicable to both setter and field injection. https://www.baeldung.com/spring-annotations-resource-inject-autowire
+	TestBean sessionBean;
 	
 	
-	@Autowired
+	@Autowired 
 	CustomerServiceInterface customerService;
 	
 	    
     
-    @Autowired
+	@Autowired 
 	TestBean singletonBean;
     
     
     
 	
-	@RequestMapping("/")
+	@RequestMapping("/") // The @RequestMapping(method = RequestMethod.GET, value = "/path") annotation specifies a method in the controller that should be responsible for serving the HTTP request to the given path. Spring will work the implementation details of how it's done. You simply specify the path value on the annotation and Spring will route the requests into the correct action methods: https://springframework.guru/spring-requestmapping-annotation/#:~:text=%40RequestMapping%20is%20one%20of%20the,map%20Spring%20MVC%20controller%20methods.
 	public String index(Model model, HttpSession session) {
 		
 		if (session==null)
@@ -78,7 +78,7 @@ public class MyController {
 	
 	@RequestMapping(value = { "/addCustomer" }, method = RequestMethod.POST)
     public String addCustomer(Model model, //
-        @ModelAttribute("customerForm") CustomerForm customerForm) {
+        @ModelAttribute("customerForm") CustomerForm customerForm) { // The @ModelAttribute is an annotation that binds a method parameter or method return value to a named model attribute and then exposes it to a web view: https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
         String firstName = customerForm.getFirstName();
         String lastName = customerForm.getLastName();
         String eMail = customerForm.getEMail();
@@ -103,7 +103,7 @@ public class MyController {
 	
 	// Mappings for REST-Service
 	
-	@GetMapping("/customers")
+	@GetMapping("/customers") // @GetMapping annotation maps HTTP GET requests onto specific handler methods. It is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET).
     public @ResponseBody List<Customer> allUsers() {
 
         return (List<Customer>) customerService.getAll();
@@ -124,7 +124,7 @@ public class MyController {
     	return "redirect:/customers";
     }
     
-    @DeleteMapping("/customers/{id}")
+    @DeleteMapping("/customers/{id}") // @DeleteMapping annotation maps HTTP DELETE requests onto specific handler methods. It is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.DELETE).
     public String delete(@PathVariable String id) {
         Long customerid = Long.parseLong(id);
         customerService.deleteById(customerid);
