@@ -43,5 +43,13 @@ mvn package; mvn spring-boot:run
 ### Connect
 localhost:8080
 
-## initialization code (e.g. creating entities, as the configured h2 database is in-memory only) goes here:
+## initialization code 
+e.g. for creating entities for testing, as the configured h2 database is in-memory only.
+```
 at.ac.fhsalzburg.swd.spring.startup.CommandLineAppStartupRunner.run
+```
+
+## connect to local database using h2-console (browser)
+```
+http://localhost:8080/h2-console
+```
