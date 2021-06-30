@@ -17,6 +17,7 @@ public class Customer {
     private String lastName;
     private String eMail;
     private String tel;
+    private Long credit;
 
     protected Customer() {}
 
@@ -25,6 +26,7 @@ public class Customer {
         this.lastName = lastName;
         this.eMail = eMail;
         this.tel = tel;
+        this.setCredit((long) 0);
         
     }
 
@@ -64,4 +66,14 @@ public class Customer {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+
+	public Long getCredit() {
+		return credit;
+	}
+
+	public void setCredit(Long credit) {
+		this.credit = credit;
+	}
+	
+	
 }

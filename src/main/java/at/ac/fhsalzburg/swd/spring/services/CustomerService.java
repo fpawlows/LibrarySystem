@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring;
+package at.ac.fhsalzburg.swd.spring.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +64,11 @@ public class CustomerService implements CustomerServiceInterface {
 	@Override
 	public void deleteById(Long id) {
 		repo.deleteById(id);
+	}
+
+	@Override
+	public boolean hasCredit(Customer customer) {
+		if (customer.getCredit()>0) return true;
+		else return false;
 	}
 }
