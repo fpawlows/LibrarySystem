@@ -49,12 +49,14 @@
                <th>Last Name</th>
                 <th>eMail</th>
                 <th>Tel</th>
+                <th>Geburtsdatum</th>
             </tr>
             <tr th:each ="customer : ${customers}">
                <td th:utext="${customer.firstName}">...</td>
                <td th:utext="${customer.lastName}">...</td>
                <td th:utext="${customer.eMail}">...</td>
                <td th:utext="${customer.tel}">...</td>
+               <td th:utext="${customer.birthDate}">...</td>
             </tr>
          </table>
 

@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.test;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class CustomerRepositoryTest {
     @Test
     public void whenFindByName_thenReturnEmployee() {
         // given
-        Customer customer = new Customer("Max","Mustermann","max@muster.com","123");
+        Customer customer = new Customer("Max","Mustermann","max@muster.com","123",new Date());
         entityManager.persist(customer);
         entityManager.flush();
         List<Customer> given = new ArrayList<Customer>();

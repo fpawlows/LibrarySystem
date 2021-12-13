@@ -1,12 +1,14 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
+import java.util.Date;
+
 import at.ac.fhsalzburg.swd.spring.dao.Customer;
 
 public interface CustomerServiceInterface {
 	
 	public abstract String doSomething();
 	
-	public abstract boolean addCustomer(String firstName, String lastName, String eMail, String Tel);
+	public abstract boolean addCustomer(String firstName, String lastName, String eMail, String Tel, Date BirthDate);
 	
 	public abstract boolean addCustomer(Customer costumer);
 	

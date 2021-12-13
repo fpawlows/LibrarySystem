@@ -1,6 +1,8 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +30,11 @@ public class CustomerService implements CustomerServiceInterface {
 	}
 	
 	@Override
-	public boolean addCustomer(String firstName, String lastName, String eMail, String Tel) {
+	public boolean addCustomer(String firstName, String lastName, String eMail, String Tel, Date BirthDate) {
 		
         if (firstName != null && firstName.length() > 0 //
                 && lastName != null && lastName.length() > 0) {
-            Customer newCustomer = new Customer(firstName, lastName, eMail, Tel);
+            Customer newCustomer = new Customer(firstName, lastName, eMail, Tel, BirthDate);
    
             repo.save(newCustomer);
             return true;

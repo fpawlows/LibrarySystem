@@ -35,7 +35,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional // this method runs within one database transaction; performing a commit at the end
     public void run(String...args) throws Exception {
     	
-    	customerService.addCustomer("Max", "Mustermann", "max@muster.man", "123");
+    	customerService.addCustomer("Max", "Mustermann", "max@muster.man", "123", new Date());
     	productService.addProduct("first product", 3.30f);
     	Customer customer = customerService.getAll().iterator().next();
     	customer.setCredit(100l);

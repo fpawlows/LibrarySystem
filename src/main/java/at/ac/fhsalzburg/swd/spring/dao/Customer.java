@@ -1,5 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.dao;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,14 +20,24 @@ public class Customer {
     private String eMail;
     private String tel;
     private Long credit;
+    private Date birthDate;
 
-    protected Customer() {}
+    public Date getBirthDate() {
+		return birthDate;
+	}
 
-    public Customer(String firstName, String lastName, String eMail, String tel) {
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	protected Customer() {}
+
+    public Customer(String firstName, String lastName, String eMail, String tel, Date birth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.eMail = eMail;
         this.tel = tel;
+        this.birthDate = birth;
         this.setCredit((long) 0);
         
     }

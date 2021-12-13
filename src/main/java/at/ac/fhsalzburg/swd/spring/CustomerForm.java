@@ -1,11 +1,18 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 public class CustomerForm {
  
     private String firstName;
     private String lastName;
     private String eMail;
     private String tel;
+    @DateTimeFormat(iso=ISO.DATE)
+    private Date birthDate;
  
     public String getFirstName() {
         return firstName;
@@ -39,5 +46,15 @@ public class CustomerForm {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+	
+	
      
 }

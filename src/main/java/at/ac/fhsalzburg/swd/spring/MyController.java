@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -84,8 +85,9 @@ public class MyController {
         String lastName = customerForm.getLastName();
         String eMail = customerForm.getEMail();
         String tel = customerForm.getTel();
+        Date birth = customerForm.getBirthDate();
         
-        customerService.addCustomer(firstName, lastName, eMail,  tel);
+        customerService.addCustomer(firstName, lastName, eMail,  tel, birth);
          
         return "redirect:/";
 	}
