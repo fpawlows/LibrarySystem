@@ -27,6 +27,16 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
    * to
       * myapp.datasource.jdbcurl=jdbc:h2:file:/path2databasefile;
 
+## IDE
+### IntelliJ
+When using the Community Version it can happen, that a Breakpoint will not hit. Someone found a solution for this:
+
+
+```spring-boot:run -Dspring-boot.run.fork=false```
+
+source: https://dev.to/davey/debugging-springboot-application-in-intellij-idea-ce-22j9
+
+
 ## Deployment
 
 ### Build
