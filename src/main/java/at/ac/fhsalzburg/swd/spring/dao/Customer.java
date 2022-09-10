@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Entity
 public class Customer {
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -54,7 +55,7 @@ public class MyController {
 			Integer count = (Integer) session.getAttribute("count"); 
 			if (count==null)
 			{
-				count = new Integer(0);				
+				count = Integer.valueOf(0);				
 			}
 			count++;
 			session.setAttribute("count", count);

@@ -4,8 +4,10 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
 
 ## Recommended Development Environment
 
+   * IntelliJ
+   * VSCode+Java
    * Eclipse
-   * Maven
+   * [Maven] optional - local maven project setup
 
 
 ## Basic Project Setup
