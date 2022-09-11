@@ -9,6 +9,4 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 	@Transactional(timeout = 10)
 	Product findById(long id);
-	
-	
 }

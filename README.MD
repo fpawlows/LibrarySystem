@@ -36,7 +36,6 @@ When using the Community Version it can happen, that a Breakpoint will not hit. 
 
 source: https://dev.to/davey/debugging-springboot-application-in-intellij-idea-ce-22j9
 
-
 ## Deployment
 
 ### Build
@@ -55,7 +54,14 @@ mvn package; mvn spring-boot:run
 ### Connect
 localhost:8080
 
-## initialization code 
+### REST API
+To query the rest API use curl, httpie (https://httpie.io/), ...
+
+```
+curl -v -X GET http://localhost:8080/api/customers
+```
+
+## initialization code
 e.g. for creating entities for testing, as the configured h2 database is in-memory only.
 ```
 at.ac.fhsalzburg.swd.spring.startup.CommandLineAppStartupRunner.run

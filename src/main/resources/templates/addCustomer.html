@@ -1,94 +1,56 @@
-<!DOCTYPE HTML>
-<html lang="de" class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main-layout}">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>Spring Boot Thymeleaf Hello World Example</title>
-    
-     <link rel="manifest" href="site.webmanifest">
-  	 <link rel="apple-touch-icon" href="icon.png">
-  	 <!-- Place favicon.ico in the root directory -->
-
-     <link rel="stylesheet" href="css/normalize.css">
-     <link rel="stylesheet" href="css/main.css">
-
-     <meta name="theme-color" content="#fafafa">
-    
+   <title>Spring Boot Thymeleaf Hello World Example // add Customer</title>
 </head>
 
 <body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
 
+    <main layout:fragment="content" th:remove="tag">
 
-<main>
+        <h2>Spring Boot Web Thymeleaf Example Add</h2>
 
-        <h1>Spring Boot Web Thymeleaf Example Add</h1>
-        <h2>
-            <span th:text="'Service counter, ' + ${message}"></span>
-            <br>
-			<span th:text="'Session counter, ' + ${session.count.toString()}"></span>		
-						
-        </h2>
-        
-        
-        <form th:action="@{/addCustomer}"
-         th:object="${customerForm}" method="POST">
-         First Name:
-         <input type="text" th:field="*{firstName}" />    
-         <br/>
-         Last Name:
-         <input type="text" th:field="*{lastName}" />     
-         <br/>
-         eMail:
-         <input type="text" th:field="*{eMail}" />     
-         <br/>
-         Tel:
-         <input type="text" th:field="*{tel}" />    
-         <br/>
-         Geburtsdatum:
-         <input type="date" th:field="*{birthDate}" />    
-         <br/>
-         <input type="submit" value="Create" />
-     	 </form>
-        
-        
-        
-        
-         <a href="addCustomer">Add Customer</a>
-	      <br/><br/>
-         <table border="1">
-            <tr>
-               <th>First Name</th>
-               <th>Last Name</th>
-            </tr>
-            <tr th:each ="customer : ${customer}">
-               <td th:utext="${customer.firstName}">...</td>
-               <td th:utext="${customer.lastName}">...</td>
-            </tr>
-         </table>
+        <h3>Counters</h3>
+        <ul>
+            <li>
+                Service counter: <span class="badge text-bg-info rounded-pill" th:text="${message}"></span>
+            </li>
+            <li>
+                Session counter: <span class="badge text-bg-info rounded-pill" th:text="${session.count.toString()}"></span>
+            </li>
+        </ul>
+        <hr/>
 
-</main>
-<!-- /.container -->
+        <form th:action="@{/addCustomer}" th:object="${customerForm}" method="POST">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" >
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" >
+            </div>
+            <div class="mb-3">
+                <label for="eMail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="eMail" th:field="*{eMail}">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="tel" class="form-label">Telephone</label>
+                <input type="text" class="form-control" id="tel" th:field="*{tel}" >
+            </div>
+            <div class="mb-3">
+                <label for="birthData" class="form-label">Birthdate</label>
+                <input type="date" class="form-control" id="tel" th:field="*{birthDate}" >
+            </div>
 
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
 
-
-  <script src="js/vendor/modernizr-3.7.1.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
-
-  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-  <script>
-    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')
-  </script>
-  <script src="https://www.google-analytics.com/analytics.js" async></script>
-
-
+    </main>
 
 </body>
 </html>
