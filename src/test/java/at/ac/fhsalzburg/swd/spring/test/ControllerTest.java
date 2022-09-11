@@ -111,7 +111,7 @@ public class ControllerTest {
         given(repo.findAll()).willReturn(allCustomers);
 
         // call REST service and check
-        mvc.perform(get("/customers").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/customers").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.length()", is(1)))
                 .andExpect(jsonPath("$[0].lastName", is(customer.getLastName())));
 
