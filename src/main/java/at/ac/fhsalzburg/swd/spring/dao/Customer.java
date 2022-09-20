@@ -1,19 +1,16 @@
 package at.ac.fhsalzburg.swd.spring.dao;
 
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Entity
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
@@ -23,14 +20,14 @@ public class Customer {
     private Date birthDate;
 
     public Date getBirthDate() {
-		return birthDate;
-	}
+        return birthDate;
+    }
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
 
-	protected Customer() {}
+    protected Customer() {}
 
     public Customer(String firstName, String lastName, String eMail, String tel, Date birth) {
         this.firstName = firstName;
@@ -39,53 +36,50 @@ public class Customer {
         this.tel = tel;
         this.birthDate = birth;
         this.setCredit((long) 0);
-        
+
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public void setEMail(String eMail)
-	{
-		this.eMail = eMail;
-	}
-	
-	public String getEMail() {
-		return this.eMail;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public String getTel() {
-		return tel;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public Long getCredit() {
-		return credit;
-	}
+    public void setEMail(String eMail) {
+        this.eMail = eMail;
+    }
 
-	public void setCredit(Long credit) {
-		this.credit = credit;
-	}
-	
-	
+    public String getEMail() {
+        return this.eMail;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public Long getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Long credit) {
+        this.credit = credit;
+    }
 }

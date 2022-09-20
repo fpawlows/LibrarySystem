@@ -4,8 +4,10 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
 
 ## Recommended Development Environment
 
+   * IntelliJ
+   * VSCode+Java
    * Eclipse
-   * Maven
+   * [Maven] optional - local maven project setup
 
 
 ## Basic Project Setup
@@ -13,8 +15,7 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
    * Spring Boot Starter Web
    * Spring Boot Starter Tomcat
    * Spring Boot Starter Thymeleaf
-   * HTML5 Boilerplate
-   * Embedded H2 for session management
+   * Bootstrap templates
    * H2 database for persisting application data
 
 ### how to make your data persitent across spring-boot restarts
@@ -24,6 +25,15 @@ Initial project setup for Spring Boot Web-Application using Thymeleaf.
       * myapp.datasource.url=jdbc:h2:mem:myappdb;
    * to
       * myapp.datasource.jdbcurl=jdbc:h2:file:/path2databasefile;
+
+## IDE
+### IntelliJ
+When using the Community Version it can happen, that a Breakpoint will not hit. Someone found a solution for this:
+
+
+```spring-boot:run -Dspring-boot.run.fork=false```
+
+source: https://dev.to/davey/debugging-springboot-application-in-intellij-idea-ce-22j9
 
 ## Deployment
 
@@ -43,7 +53,14 @@ mvn package; mvn spring-boot:run
 ### Connect
 localhost:8080
 
-## initialization code 
+### REST API
+To query the rest API use curl, httpie (https://httpie.io/), ...
+
+```
+curl -v -X GET http://localhost:8080/api/customers
+```
+
+## initialization code
 e.g. for creating entities for testing, as the configured h2 database is in-memory only.
 ```
 at.ac.fhsalzburg.swd.spring.startup.CommandLineAppStartupRunner.run

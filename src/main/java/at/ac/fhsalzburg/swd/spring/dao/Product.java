@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private float price;
@@ -19,20 +19,18 @@ public class Product {
     public Product(String name, float price) {
         this.name = name;
         this.price = price;
-        
+
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public float getPrice() {
-		return price;
-	}
-	
-
+    public float getPrice() {
+        return price;
+    }
 }
