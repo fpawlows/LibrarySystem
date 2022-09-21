@@ -2,7 +2,7 @@ package at.ac.fhsalzburg.swd.spring.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
+import at.ac.fhsalzburg.swd.spring.dao.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,7 +59,7 @@ public class myappDataSourceConfiguration {
     	prop.setProperty("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
         LocalContainerEntityManagerFactoryBean bean =builder
                 .dataSource(dataDataSource())
-                .packages(Customer.class)
+                .packages(User.class)
                 .build();
         bean.setJpaProperties(prop);
         return bean;

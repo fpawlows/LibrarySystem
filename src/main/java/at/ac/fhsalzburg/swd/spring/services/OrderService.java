@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
+import at.ac.fhsalzburg.swd.spring.dao.User;
 import at.ac.fhsalzburg.swd.spring.dao.Order;
 import at.ac.fhsalzburg.swd.spring.dao.OrderRepository;
 import at.ac.fhsalzburg.swd.spring.dao.Product;
@@ -15,7 +15,7 @@ import at.ac.fhsalzburg.swd.spring.dao.Product;
 public class OrderService implements OrderServiceInterface {
 
     @Autowired
-    private CustomerServiceInterface customerService;
+    private UserServiceInterface userService;
 
     @Autowired
     private OrderRepository repo;
@@ -26,11 +26,11 @@ public class OrderService implements OrderServiceInterface {
 
 
     @Override
-    public Order addOrder(Date date, Customer customer, Iterable<Product> products) {
+    public Order addOrder(Date date, User customer, Iterable<Product> products) {
         List<Product> productlist = new ArrayList<Product>();
         products.forEach(productlist::add);
 
-        if (customerService.hasCredit(customer)) {
+        if (userService.hasCredit(customer)) {
             Order order = new Order(date, customer, productlist);
             order = repo.save(order);
 

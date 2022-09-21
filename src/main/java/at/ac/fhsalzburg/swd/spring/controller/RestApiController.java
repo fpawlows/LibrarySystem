@@ -10,44 +10,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
-import at.ac.fhsalzburg.swd.spring.services.CustomerServiceInterface;
+import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
 
-    @Autowired private CustomerServiceInterface customerService;
+    @Autowired private UserServiceInterface userService;
 
-    @GetMapping("/customers")
-    public @ResponseBody List<Customer> allUsers() {
+    @GetMapping("/users")
+    public @ResponseBody List<User> allUsers() {
 
-        return (List<Customer>) customerService.getAll();
+        return (List<User>) userService.getAll();
     }
 
-    @RequestMapping(value = {"/customers/{id}"}, method = RequestMethod.GET)
-    public @ResponseBody Customer getCustomer(@PathVariable long id) {
-        Customer customer = customerService.getById(id);
+    @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.GET)
+    public @ResponseBody User getCustomer(@PathVariable String username) {
+        User customer = userService.getByUsername(username);
 
         return customer;
     }
 
-    @RequestMapping(value = {"/customers/{id}"}, method = RequestMethod.PUT)
-    public String setCustomer(@RequestBody Customer customer) {
+    @RequestMapping(value = {"/users/{id}"}, method = RequestMethod.PUT)
+    public String setCustomer(@RequestBody User customer) {
 
-        customerService.addCustomer(customer);
+        userService.addUser(customer);
 
-        return "redirect:/customers";
+        return "redirect:/users";
     }
 
     // @DeleteMapping annotation maps HTTP DELETE requests onto
     // specific handler methods. It is a composed annotation that
     // acts as a shortcut for @RequestMapping(method =
     // RequestMethod.DELETE).
-    @DeleteMapping("/customers/{id}")
+    /// TODO
+    /*
+    @DeleteMapping("/users/{id}")
     public String delete(@PathVariable String id) {
         Long customerid = Long.parseLong(id);
-        customerService.deleteById(customerid);
-        return "redirect:/customers";
+        userService.deleteById(customerid);
+        return "redirect:/users";
     }
+    */
 }

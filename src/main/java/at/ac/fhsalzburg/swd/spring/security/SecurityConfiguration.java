@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.config;
+package at.ac.fhsalzburg.swd.spring.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -16,20 +16,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 	
 	@Bean
-	public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-	    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-	    manager.createUser(User.withUsername("admin")
-	      .password(bCryptPasswordEncoder.encode("admin"))
-	      .roles("ADMIN")
-	      .build());
-	    manager.createUser(User.withUsername("user")
-	      .password(bCryptPasswordEncoder.encode("user"))
-	      .roles("USER")
-	      .build());
-	    return manager;
-	}
-	
-	@Bean
 	public BCryptPasswordEncoder passwordEncoder()
 	{
 	    return new BCryptPasswordEncoder();
@@ -43,22 +29,25 @@ public class SecurityConfiguration {
 		http.csrf().disable()		
 	    .authorizeRequests()
 	    .antMatchers(HttpMethod.DELETE)
-	    .hasRole("ADMIN")
+	    	.hasRole("ADMIN") // http delete only with admin role
 	    .antMatchers("/admin/**")
-		.hasAnyRole("ADMIN")
+			.hasAnyRole("ADMIN") // everything under /admin needs admin role
 		.antMatchers("/user/**")
-		.hasAnyRole("USER", "ADMIN")
+			.hasAnyRole("USER", "ADMIN") // everything under /user needs either user or admin role
 		.antMatchers("/*")	      
-	      .permitAll()
+	      .permitAll() // no login required for everything under / (without sub-dirs)
 	      .and()
-	    .formLogin()
-	    	.loginPage("/login")
-	    	.defaultSuccessUrl("/")
-	    	.failureUrl("/login-error")
-	    .and().logout()	    	
-      		.logoutSuccessUrl("http://nobody@localhost:8080/")
-      		.invalidateHttpSession(true)
-      		.deleteCookies("JSESSIONID");
+	    .formLogin() // we want form based authentication
+	    	.loginPage("/login") // our login page
+	    	.defaultSuccessUrl("/") // where to go when login was successful
+	    	.failureUrl("/login-error") // when something went wrong
+	    .and().logout()    	
+	    	.logoutSuccessUrl("/") // where to go after logout
+      		.invalidateHttpSession(true) // at logout invalidate session
+      		.deleteCookies("JSESSIONID"); // and delete session cookie
+		
+		http.headers().frameOptions().disable(); // h2-console would not work otherwise
+		
 	    return http.build();
 	}
 	

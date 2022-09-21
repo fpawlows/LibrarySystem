@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
-import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
+import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -23,22 +24,22 @@ public class CustomerRepositoryTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository customerRepository;
 
     @Test
-    public void whenFindByName_thenReturnEmployee() {
+    public void whenFindByUsername_thenReturnCustomer() {
         // given
-        Customer customer = new Customer("Max", "Mustermann", "max@muster.com", "123", new Date());
+        User customer = new User("Max", "Max Mustermann", "max@muster.com", "123", new Date(),"","USER");
         entityManager.persist(customer);
         entityManager.flush();
-        List<Customer> given = new ArrayList<Customer>();
+        List<User> given = new ArrayList<User>();
         given.add(customer);
 
         // when
-        List<Customer> found = customerRepository.findByLastName(customer.getLastName());
+        User found = customerRepository.findByUsername(customer.getUsername());
 
         // then
-        assertIterableEquals(given, found);
+        assertEquals(given, found);
 
     }
 

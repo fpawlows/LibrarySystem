@@ -44,7 +44,7 @@
 
         <hr/>
 
-        <a href="admin/addCustomer" class="btn btn-primary">Add Customer</a>
+        <a href="admin/addUser" class="btn btn-primary">Add User</a>
         
         <a sec:authorize="isAuthenticated()" href="/logout" class="btn btn-primary">Logout</a>
 
@@ -59,15 +59,17 @@
                     <th scope="col">eMail</th>
                     <th scope="col">Tel</th>
                     <th scope="col">Geburtsdatum</th>
+                    <th scope="col">Role</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each ="customer : ${customers}">
-                    <td th:utext="${customer.firstName}">...</td>
-                    <td th:utext="${customer.lastName}">...</td>
-                    <td th:utext="${customer.eMail}">...</td>
-                    <td th:utext="${customer.tel}">...</td>
-                    <td th:utext="${customer.birthDate}">...</td>
+                <tr th:each ="user : ${users}">
+                    <td th:utext="${user.username}">...</td>
+                    <td th:utext="${user.fullname}">...</td>
+                    <td th:utext="${user.eMail}">...</td>
+                    <td th:utext="${user.tel}">...</td>
+                    <td th:utext="${user.birthDate}">...</td>
+                    <td th:utext="${user.role}">...</td>
                 </tr>
             </tbody>
         </table>

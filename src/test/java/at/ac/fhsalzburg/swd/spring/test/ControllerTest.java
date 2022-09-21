@@ -28,8 +28,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import at.ac.fhsalzburg.swd.spring.controller.TemplateController;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
-import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
+import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
 
 
 @ExtendWith(SpringExtension.class)
@@ -47,7 +47,7 @@ public class ControllerTest {
     // in these tests we focus on the controller, so we don't test the repo and mock the needed
     // behavior
     @MockBean
-    private CustomerRepository repo;
+    private UserRepository repo;
 
     @Autowired
     TemplateController myController;
@@ -103,9 +103,9 @@ public class ControllerTest {
     @Test
     public void givenCustomer_whenGetCustomer_thenReturnJsonArrayTest() throws Exception {
 
-        Customer customer = new Customer("Max", "Mustermann", "max@muster.com", "123", new Date());
+        User customer = new User("Max", "Mustermann", "max@muster.com", "123", new Date(),"","USER");
 
-        List<Customer> allCustomers = Arrays.asList(customer);
+        List<User> allCustomers = Arrays.asList(customer);
 
         // mock the repo: whenever findAll is called, we will get our predefined customer
         given(repo.findAll()).willReturn(allCustomers);
@@ -113,7 +113,7 @@ public class ControllerTest {
         // call REST service and check
         mvc.perform(get("/api/customers").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.length()", is(1)))
-                .andExpect(jsonPath("$[0].lastName", is(customer.getLastName())));
+                .andExpect(jsonPath("$[0].lastName", is(customer.getFullname())));
 
 
     }

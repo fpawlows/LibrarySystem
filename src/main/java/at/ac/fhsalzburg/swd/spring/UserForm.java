@@ -5,29 +5,30 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-public class CustomerForm {
+public class UserForm {
 
-    private String firstName;
-    private String lastName;
+    private String username;
+    private String fullname;
     private String eMail;
     private String tel;
     @DateTimeFormat(iso = ISO.DATE)
     private Date birthDate;
+    private String password;
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public void setEMail(String eMail) {
@@ -53,5 +54,13 @@ public class CustomerForm {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 }
