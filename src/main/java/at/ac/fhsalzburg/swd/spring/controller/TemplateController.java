@@ -1,10 +1,16 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import java.security.Principal;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,7 +59,7 @@ public class TemplateController {
                          // path value on the annotation and Spring will route the requests into the
                          // correct action methods:
                          // https://springframework.guru/spring-requestmapping-annotation/#:~:text=%40RequestMapping%20is%20one%20of%20the,map%20Spring%20MVC%20controller%20methods.
-    public String index(Model model, HttpSession session) {
+    public String index(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
         if (session == null) {
             model.addAttribute("message", "no session");
@@ -64,6 +70,12 @@ public class TemplateController {
             }
             count++;
             session.setAttribute("count", count);
+        }
+        
+        // check if user is logged in
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            model.addAttribute("user",currentUserName);
         }
 
         model.addAttribute("message", customerService.doSomething());
@@ -82,19 +94,35 @@ public class TemplateController {
 
         return "index";
     }
+    
+    @RequestMapping(value = {"/login"})
+    public String login(Model model) {
+    	return "login";
+    }
+    
+    @RequestMapping(value = {"/login-error"})
+    public String loginError(Model model) {
+    	model.addAttribute("error","Login error");
+    	return "login";
+    }
 
-    @RequestMapping(value = {"/addCustomer"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/addCustomer"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model) {
         CustomerForm customerForm = new CustomerForm();
         model.addAttribute("customerForm", customerForm);
 
         model.addAttribute("message", customerService.doSomething());
+        
+        
+        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();        
+        model.addAttribute("authenticated", lauthentication);
+        
 
         return "addCustomer";
     }
 
 
-    @RequestMapping(value = {"/addCustomer"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/admin/addCustomer"}, method = RequestMethod.POST)
     public String addCustomer(Model model, //
             @ModelAttribute("customerForm") CustomerForm customerForm) { // The @ModelAttribute is
                                                                          // an annotation that binds
