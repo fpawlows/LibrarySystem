@@ -32,7 +32,7 @@ public class SecurityConfiguration {
 	    	.hasRole("ADMIN") // http delete only with admin role
 	    .antMatchers("/admin/**")
 			.hasAnyRole("ADMIN") // everything under /admin needs admin role
-		.antMatchers("/user/**")
+		.antMatchers("/api/**")
 			.hasAnyRole("USER", "ADMIN") // everything under /user needs either user or admin role
 		.antMatchers("/*")	      
 	      .permitAll() // no login required for everything under / (without sub-dirs)

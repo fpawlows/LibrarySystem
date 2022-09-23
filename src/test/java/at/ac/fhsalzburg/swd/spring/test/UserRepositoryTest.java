@@ -18,28 +18,26 @@ import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
-public class CustomerRepositoryTest {
+public class UserRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private UserRepository customerRepository;
+    private UserRepository userRepository;
 
     @Test
     public void whenFindByUsername_thenReturnCustomer() {
         // given
-        User customer = new User("Max", "Max Mustermann", "max@muster.com", "123", new Date(),"","USER");
-        entityManager.persist(customer);
+        User givenUser = new User("Max", "Max Mustermann", "max@muster.com", "123", new Date(),"","USER");
+        entityManager.persist(givenUser);
         entityManager.flush();
-        List<User> given = new ArrayList<User>();
-        given.add(customer);
 
         // when
-        User found = customerRepository.findByUsername(customer.getUsername());
+        User foundUser = userRepository.findByUsername(givenUser.getUsername());
 
         // then
-        assertEquals(given, found);
+        assertEquals(givenUser, foundUser);
 
     }
 

@@ -31,7 +31,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                    // end
     public void run(String... args) throws Exception {
     	
-        userService.addUser("admin", "Administrator", "admin@work.org", "123", new Date(), "admin","ADMIN");
+    	if (userService.getByUsername("admin")!=null) return; // data already exists -> return
+    	
+    	userService.addUser("admin", "Administrator", "admin@work.org", "123", new Date(), "admin","ADMIN");
+    	
         productService.addProduct("first product", 3.30f);
         User user = userService.getAll().iterator().next();
         user.setCredit(100l);
