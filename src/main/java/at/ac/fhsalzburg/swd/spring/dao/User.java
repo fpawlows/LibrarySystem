@@ -2,8 +2,6 @@ package at.ac.fhsalzburg.swd.spring.dao;
 
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,11 +18,12 @@ public class User {
     private Date birthDate;
     private String password;
     private String role;
+    private String jwttoken;
     
     
     protected User() {}
 
-    public User(String username, String fullname, String eMail, String tel, Date birth, String password, String role) {
+    public User(String username, String fullname, String eMail, String tel, Date birth, String password, String role, String jwtToken) {
         this.username = username;
         this.fullname = fullname;
         this.eMail = eMail;
@@ -33,6 +32,7 @@ public class User {
         this.setCredit((long) 0);
         this.password = password;
         this.role = role;
+        this.jwttoken = jwtToken;
 
     }
 
@@ -98,6 +98,14 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getJwttoken() {
+		return jwttoken;
+	}
+
+	public void setJwttoken(String jwttoken) {
+		this.jwttoken = jwttoken;
 	}
 
 }

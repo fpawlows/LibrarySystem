@@ -3,11 +3,9 @@ package at.ac.fhsalzburg.swd.spring.security;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class DemoPrincipal implements UserDetails {
 	
@@ -18,12 +16,14 @@ public class DemoPrincipal implements UserDetails {
 	private String user;
 	private String password;
 	private String role;
+	private String jwtToken;
 	
 
-    public DemoPrincipal(String user, String password, String role) {
+    public DemoPrincipal(String user, String password, String role, String jwtToken) {
         this.user = user;
         this.password = password;
         this.role = role;
+        this.setJwtToken(jwtToken);
     }
 
     @Override
@@ -71,6 +71,14 @@ public class DemoPrincipal implements UserDetails {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getJwtToken() {
+		return jwtToken;
+	}
+
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
 	}
 	    
 }

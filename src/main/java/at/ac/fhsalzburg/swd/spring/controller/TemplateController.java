@@ -1,6 +1,5 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
-import java.security.Principal;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

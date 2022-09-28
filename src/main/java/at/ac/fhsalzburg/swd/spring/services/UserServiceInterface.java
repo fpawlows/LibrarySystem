@@ -2,7 +2,6 @@ package at.ac.fhsalzburg.swd.spring.services;
 
 import java.util.Date;
 import at.ac.fhsalzburg.swd.spring.dao.User;
-import at.ac.fhsalzburg.swd.spring.security.DemoPrincipal;
 
 public interface UserServiceInterface {
 

@@ -3,23 +3,22 @@ package at.ac.fhsalzburg.swd.spring.services;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import at.ac.fhsalzburg.swd.spring.dao.User;
 import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
 import at.ac.fhsalzburg.swd.spring.security.DemoPrincipal;
+import at.ac.fhsalzburg.swd.spring.security.TokenService;
 
 
 @Service
-public class UserService implements UserServiceInterface, UserDetailsService {
+public class UserService implements UserServiceInterface {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	private TokenService tokenService; // autowired using setter/field injection
 	
     public final static String DEFAULT_ROLE = "USER";
 	
@@ -45,9 +44,10 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 
         if (username != null && username.length() > 0 //
                 && fullName != null && fullName.length() > 0) {
-        	// lets assume the password = username (but encoded)
-            User newCustomer = new User(username, fullName, eMail, Tel, BirthDate,
-            		passwordEncoder.encode(password), role);
+        	DemoPrincipal userDetails = new DemoPrincipal(username, password, role, null);
+        	userDetails.setJwtToken(tokenService.generateToken(userDetails));
+            User newCustomer = new User(username, fullName, eMail, Tel, BirthDate,            		
+            		passwordEncoder.encode(password), role, userDetails.getJwtToken());
             
             repo.save(newCustomer);
             return true;
@@ -86,14 +86,15 @@ public class UserService implements UserServiceInterface, UserDetailsService {
 		return repo.findByUsername(username);
 	}
 	
+	@Autowired
+    public void setTokenService(@Lazy TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
-	@Override
-    public UserDetails loadUserByUsername(String username) {
-    	
-		User user = getByUsername(username);
-		if (user==null) throw new UsernameNotFoundException(username);
-		return new DemoPrincipal(user.getUsername(), user.getPassword(), user.getRole());
-			
-		}
+    public TokenService getTokenService() {
+        return tokenService;
+    }
+	
+
    
 }
