@@ -6,8 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
-import at.ac.fhsalzburg.swd.spring.services.CustomerServiceInterface;
+import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.OrderServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.ProductServiceInterface;
 
@@ -15,27 +15,30 @@ import at.ac.fhsalzburg.swd.spring.services.ProductServiceInterface;
 @Component
 public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Autowired
-    CustomerServiceInterface customerService;
+    UserServiceInterface userService;
 
     @Autowired
     ProductServiceInterface productService;
 
     @Autowired
     OrderServiceInterface orderService;
-
+  
 
     // Initialize System with preset accounts and stocks
     @Override
     @Transactional // this method runs within one database transaction; performing a commit at the
                    // end
     public void run(String... args) throws Exception {
-    	/*
-        customerService.addCustomer("Max", "Mustermann", "max@muster.man", "123", new Date());
+    	
+    	if (userService.getByUsername("admin")!=null) return; // data already exists -> return
+    	
+    	userService.addUser("admin", "Administrator", "admin@work.org", "123", new Date(), "admin","ADMIN");
+    	
         productService.addProduct("first product", 3.30f);
-        Customer customer = customerService.getAll().iterator().next();
-        customer.setCredit(100l);
-        customer = customerService.getById(1l);
-        orderService.addOrder(new Date(), customer, productService.getAll());
-        */
+        User user = userService.getAll().iterator().next();
+        user.setCredit(100l);
+        user = userService.getByUsername("admin");
+        orderService.addOrder(new Date(), user, productService.getAll());
+        
     }
 }

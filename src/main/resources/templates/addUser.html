@@ -4,34 +4,28 @@
       layout:decorate="~{layouts/main-layout}">
 
 <head>
-   <title>Spring Boot Thymeleaf Hello World Example // add Customer</title>
+   <title>Add User</title>
 </head>
 
 <body>
 
     <main layout:fragment="content" th:remove="tag">
 
-        <h2>Spring Boot Web Thymeleaf Example Add</h2>
-
-        <h3>Counters</h3>
-        <ul>
-            <li>
-                Service counter: <span class="badge text-bg-info rounded-pill" th:text="${message}"></span>
-            </li>
-            <li>
-                Session counter: <span class="badge text-bg-info rounded-pill" th:text="${session.count.toString()}"></span>
-            </li>
-        </ul>
+        <h2>Add User</h2>
         <hr/>
 
-        <form th:action="@{/addCustomer}" th:object="${customerForm}" method="POST">
+        <form th:action="@{/admin/addUser}" th:object="${userForm}" method="POST">
             <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" >
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" th:field="*{username}" >
             </div>
             <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" >
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullname" th:field="*{fullname}" >
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">password</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}" >
             </div>
             <div class="mb-3">
                 <label for="eMail" class="form-label">Email address</label>
@@ -49,7 +43,9 @@
 
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
-
+			<div class="alert alert-success" role="alert">
+            <span th:text="${authenticated}"></span>
+        </div>
     </main>
 
 </body>

@@ -5,14 +5,19 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import at.ac.fhsalzburg.swd.spring.CustomerForm;
+import at.ac.fhsalzburg.swd.spring.UserForm;
 import at.ac.fhsalzburg.swd.spring.TestBean;
-import at.ac.fhsalzburg.swd.spring.services.CustomerServiceInterface;
+import at.ac.fhsalzburg.swd.spring.services.UserService;
+import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 
 @Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring
             // will look at the methods of the class marked with the @Controller annotation and
@@ -28,7 +33,7 @@ public class TemplateController {
     private ApplicationContext context;
 
     @Autowired
-    CustomerServiceInterface customerService;
+    UserServiceInterface userService;
 
     @Resource(name = "sessionBean") // The @Resource annotation is part of the JSR-250 annotation
                                     // collection and is packaged with Jakarta EE. This annotation
@@ -53,7 +58,7 @@ public class TemplateController {
                          // path value on the annotation and Spring will route the requests into the
                          // correct action methods:
                          // https://springframework.guru/spring-requestmapping-annotation/#:~:text=%40RequestMapping%20is%20one%20of%20the,map%20Spring%20MVC%20controller%20methods.
-    public String index(Model model, HttpSession session) {
+    public String index(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
         if (session == null) {
             model.addAttribute("message", "no session");
@@ -65,12 +70,18 @@ public class TemplateController {
             count++;
             session.setAttribute("count", count);
         }
+        
+        // check if user is logged in
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            model.addAttribute("user",currentUserName);
+        }
 
-        model.addAttribute("message", customerService.doSomething());
+        model.addAttribute("message", userService.doSomething());
 
         model.addAttribute("halloNachricht", "welchem to SWD lab");
 
-        model.addAttribute("customers", customerService.getAll());
+        model.addAttribute("users", userService.getAll());
 
         model.addAttribute("beanSingleton", singletonBean.getHashCode());
 
@@ -82,21 +93,37 @@ public class TemplateController {
 
         return "index";
     }
+    
+    @RequestMapping(value = {"/login"})
+    public String login(Model model) {
+    	return "login";
+    }
+    
+    @RequestMapping(value = {"/login-error"})
+    public String loginError(Model model) {
+    	model.addAttribute("error","Login error");
+    	return "login";
+    }
 
-    @RequestMapping(value = {"/addCustomer"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model) {
-        CustomerForm customerForm = new CustomerForm();
-        model.addAttribute("customerForm", customerForm);
+        UserForm userForm = new UserForm();
+        model.addAttribute("userForm", userForm);
 
-        model.addAttribute("message", customerService.doSomething());
+        model.addAttribute("message", userService.doSomething());
+        
+        
+        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();        
+        model.addAttribute("authenticated", lauthentication);
+        
 
-        return "addCustomer";
+        return "addUser";
     }
 
 
-    @RequestMapping(value = {"/addCustomer"}, method = RequestMethod.POST)
-    public String addCustomer(Model model, //
-            @ModelAttribute("customerForm") CustomerForm customerForm) { // The @ModelAttribute is
+    @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.POST)
+    public String addUser(Model model, //
+            @ModelAttribute("UserForm") UserForm userForm) { // The @ModelAttribute is
                                                                          // an annotation that binds
                                                                          // a method parameter or
                                                                          // method return value to a
@@ -104,13 +131,14 @@ public class TemplateController {
                                                                          // and then exposes it to a
                                                                          // web view:
                                                                          // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
-        String firstName = customerForm.getFirstName();
-        String lastName = customerForm.getLastName();
-        String eMail = customerForm.getEMail();
-        String tel = customerForm.getTel();
-        Date birth = customerForm.getBirthDate();
+        String username = userForm.getUsername();
+        String fullName = userForm.getFullname();
+        String password = userForm.getPassword();
+        String eMail = userForm.getEMail();
+        String tel = userForm.getTel();
+        Date birth = userForm.getBirthDate();
 
-        customerService.addCustomer(firstName, lastName, eMail, tel, birth);
+        userService.addUser(username, fullName, eMail, tel, birth, password, UserService.DEFAULT_ROLE);
 
         return "redirect:/";
     }

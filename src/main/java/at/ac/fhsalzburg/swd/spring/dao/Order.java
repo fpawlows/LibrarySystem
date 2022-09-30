@@ -20,7 +20,7 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    private Customer customer;
+    private User customer;
 
     @ElementCollection
     private Collection<Product> products;
@@ -30,7 +30,7 @@ public class Order {
 
     protected Order() {}
 
-    public Order(Date date, Customer customer, Collection<Product> products) {
+    public Order(Date date, User customer, Collection<Product> products) {
         this.customer = customer;
         this.date = date;
         this.products = products;
@@ -40,11 +40,11 @@ public class Order {
         return id;
     }
 
-    public Customer getCustomer() {
+    public User getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(User customer) {
         this.customer = customer;
     }
 

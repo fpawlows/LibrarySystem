@@ -21,6 +21,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,8 +31,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import at.ac.fhsalzburg.swd.spring.controller.TemplateController;
-import at.ac.fhsalzburg.swd.spring.dao.Customer;
-import at.ac.fhsalzburg.swd.spring.dao.CustomerRepository;
+import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
 
 
 @ExtendWith(SpringExtension.class)
@@ -47,7 +50,7 @@ public class ControllerTest {
     // in these tests we focus on the controller, so we don't test the repo and mock the needed
     // behavior
     @MockBean
-    private CustomerRepository repo;
+    private UserRepository repo;
 
     @Autowired
     TemplateController myController;
@@ -55,7 +58,10 @@ public class ControllerTest {
     @BeforeEach // this method will be run before each test
     public void setup() {
         // init webcontext
-        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        		.apply(SecurityMockMvcConfigurers.springSecurity())
+        		.build();       
+	
     }
 
 
@@ -66,6 +72,7 @@ public class ControllerTest {
 
     // Test /
     @Test
+    @WithAnonymousUser
     public void givenNothing_whenHome_thenIndex() throws Exception {
 
         MockHttpSession session = new MockHttpSession(); // set session attribute (mocked session)
@@ -73,8 +80,9 @@ public class ControllerTest {
 
 
         mvc.perform(MockMvcRequestBuilders.get("/").session(session) // set the mocked session
-                .contentType(MediaType.TEXT_HTML)).andExpect(status().isOk())
-                .andExpect(model().attributeExists("customers")).andExpect(view().name("index"))
+                .contentType(MediaType.TEXT_HTML))        
+        		.andExpect(status().isOk())
+                .andExpect(model().attributeExists("users")).andExpect(view().name("index"))
                 .andExpect(request().sessionAttribute("count", is(4))); // check if session
                                                                         // attribute has changed
                                                                         // properly
@@ -83,6 +91,7 @@ public class ControllerTest {
 
     // HTTP add customer test
     @Test
+    @WithMockUser(username="test", roles = {"ADMIN"})
     public void givenCustomerForm_whenAddCustomer_thenRedirect() throws Exception {
         /*
          * submitting the form object itself does not work in the unit test (even flashAttr does not
@@ -90,8 +99,8 @@ public class ControllerTest {
          * form.setLastName("MusterMann"); form.setEMail("max@musterm.ann"); form.setTel("123");
          */
 
-        mvc.perform(MockMvcRequestBuilders.post("/addCustomer").param("firstName", "Max")
-                .param("lastName", "Mustermann").param("eMail", "max@musterm.ann")
+        mvc.perform(MockMvcRequestBuilders.post("/admin/addUser").param("username", "Max")
+                .param("fullname", "Mustermann").param("password","Max").param("eMail", "max@musterm.ann")
                 .param("tel", "1234").param("birthDate", "2000-01-01")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection());
@@ -101,19 +110,20 @@ public class ControllerTest {
 
     // REST Service Test
     @Test
+    @WithMockUser(username="test", roles = {"USER"})
     public void givenCustomer_whenGetCustomer_thenReturnJsonArrayTest() throws Exception {
 
-        Customer customer = new Customer("Max", "Mustermann", "max@muster.com", "123", new Date());
+        User customer = new User("Max", "Mustermann", "max@muster.com", "123", new Date(),"","USER",null);
 
-        List<Customer> allCustomers = Arrays.asList(customer);
+        List<User> allCustomers = Arrays.asList(customer);
 
         // mock the repo: whenever findAll is called, we will get our predefined customer
         given(repo.findAll()).willReturn(allCustomers);
 
         // call REST service and check
-        mvc.perform(get("/api/customers").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.length()", is(1)))
-                .andExpect(jsonPath("$[0].lastName", is(customer.getLastName())));
+                .andExpect(jsonPath("$[0].username", is(customer.getUsername())));
 
 
     }
