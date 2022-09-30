@@ -1,9 +1,10 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
 import java.util.Date;
-import at.ac.fhsalzburg.swd.spring.dao.User;
-import at.ac.fhsalzburg.swd.spring.dao.Order;
-import at.ac.fhsalzburg.swd.spring.dao.Product;
+
+import at.ac.fhsalzburg.swd.spring.model.Order;
+import at.ac.fhsalzburg.swd.spring.model.Product;
+import at.ac.fhsalzburg.swd.spring.model.User;
 
 public interface OrderServiceInterface {
 

@@ -1,6 +1,8 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,47 +11,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import at.ac.fhsalzburg.swd.spring.dao.User;
+
+import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
+import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
+import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 
 @RestController
 @RequestMapping("/api")
-public class RestApiController {
+public class RestApiController {	
+	@Autowired
+	private ModelMapper modelMapper; // Model mapper to convert entity to dto and vice versa
 
     @Autowired private UserServiceInterface userService;
 
+    // test with: curl http://localhost:8080/api/users -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
     @GetMapping("/users")
-    public @ResponseBody List<User> allUsers() {
+    public @ResponseBody List<UserDTO> allUsers() {
+    	
+    	// map list of entities to list of DTOs
+        List<UserDTO> listOfUserTO = ObjectMapperUtils.mapAll(userService.getAll(), UserDTO.class);
 
-        return (List<User>) userService.getAll();
+        return listOfUserTO;
     }
 
+    // test with: curl http://localhost:8080/api/users/admin -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
     @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.GET)
-    public @ResponseBody User getCustomer(@PathVariable String username) {
-        User customer = userService.getByUsername(username);
-
-        return customer;
+    public @ResponseBody UserDTO getUser(@PathVariable String username) {
+        User user = userService.getByUsername(username);
+        // map user to userDTO
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        return userDTO;
     }
 
-    @RequestMapping(value = {"/users/{id}"}, method = RequestMethod.PUT)
-    public String setCustomer(@RequestBody User customer) {
+    // test with: curl -X PUT http://localhost:8080/api/users/fromrest -H "Content-Type: application/json" -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak" -d '{"username":"fromrest","fullname":"created by rest","tel":"+00000000","birthDate":"2022-09-30T00:00:00.000+00:00","password":"fromrest","jwtToken":null,"email":"fromrest@acme.at"}'
+    @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.PUT)
+    public String setUser(@RequestBody UserDTO user) {
+    	
+        userService.addUser(modelMapper.map(user,User.class));
 
-        userService.addUser(customer);
-
-        return "redirect:/users";
+        return "redirect:/api/users";
     }
 
-    // @DeleteMapping annotation maps HTTP DELETE requests onto
-    // specific handler methods. It is a composed annotation that
-    // acts as a shortcut for @RequestMapping(method =
-    // RequestMethod.DELETE).
-    /// TODO
-    /*
-    @DeleteMapping("/users/{id}")
-    public String delete(@PathVariable String id) {
-        Long customerid = Long.parseLong(id);
-        userService.deleteById(customerid);
-        return "redirect:/users";
+    // test with curl -X DELETE http://localhost:8080/api/users/fromrest -H "Content-Type: application/json" -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
+    @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.DELETE)
+    public String delete(@PathVariable String username) {
+   
+    	userService.deleteUser(username);
+   
+        return "redirect:/api/users";
     }
-    */
+ 
 }

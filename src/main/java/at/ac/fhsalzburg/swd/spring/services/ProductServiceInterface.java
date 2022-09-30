@@ -1,7 +1,8 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
 import java.util.Collection;
-import at.ac.fhsalzburg.swd.spring.dao.Product;
+
+import at.ac.fhsalzburg.swd.spring.model.Product;
 
 public interface ProductServiceInterface {
 

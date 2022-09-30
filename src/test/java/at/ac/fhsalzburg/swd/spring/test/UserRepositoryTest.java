@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import at.ac.fhsalzburg.swd.spring.dao.User;
-import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
+
+import at.ac.fhsalzburg.swd.spring.model.User;
+import at.ac.fhsalzburg.swd.spring.repository.UserRepository;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

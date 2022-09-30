@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.dao;
+package at.ac.fhsalzburg.swd.spring.model;
 
 import java.util.Collection;
 import java.util.Date;

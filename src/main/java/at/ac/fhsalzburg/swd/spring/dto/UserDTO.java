@@ -1,11 +1,11 @@
-package at.ac.fhsalzburg.swd.spring;
+package at.ac.fhsalzburg.swd.spring.dto;
 
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-public class UserForm {
+public class UserDTO {
 
     private String username;
     private String fullname;
@@ -14,6 +14,8 @@ public class UserForm {
     @DateTimeFormat(iso = ISO.DATE)
     private Date birthDate;
     private String password;
+    private String jwttoken;
+    private String role;
 
     public String getUsername() {
         return username;
@@ -61,6 +63,22 @@ public class UserForm {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getJwttoken() {
+		return jwttoken;
+	}
+
+	public void setJwttoken(String jwtToken) {
+		this.jwttoken = jwtToken;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

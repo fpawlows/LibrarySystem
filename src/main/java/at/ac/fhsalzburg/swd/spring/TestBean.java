@@ -10,7 +10,11 @@ import org.springframework.web.context.WebApplicationContext;
 @Configuration
 public class TestBean implements Serializable {
 
-    int HashCode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	int HashCode;
 
     public TestBean() {
         HashCode = System.identityHashCode(this);

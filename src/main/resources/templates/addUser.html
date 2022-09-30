@@ -14,7 +14,7 @@
         <h2>Add User</h2>
         <hr/>
 
-        <form th:action="@{/admin/addUser}" th:object="${userForm}" method="POST">
+        <form th:action="@{/admin/addUser}" th:object="${user}" method="POST">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" th:field="*{username}" >

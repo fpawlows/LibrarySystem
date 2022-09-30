@@ -1,8 +1,11 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
-import java.util.Date;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -14,10 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import at.ac.fhsalzburg.swd.spring.UserForm;
+
 import at.ac.fhsalzburg.swd.spring.TestBean;
-import at.ac.fhsalzburg.swd.spring.services.UserService;
+import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
+import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
+import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 
 @Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring
             // will look at the methods of the class marked with the @Controller annotation and
@@ -42,6 +47,9 @@ public class TemplateController {
                                     // applicable to both setter and field injection.
                                     // https://www.baeldung.com/spring-annotations-resource-inject-autowire
     TestBean sessionBean;
+    
+    @Autowired
+	private ModelMapper modelMapper; // Model mapper to convert entity to dto and vice versa
 
     @Autowired
     TestBean singletonBean;
@@ -80,8 +88,11 @@ public class TemplateController {
         model.addAttribute("message", userService.doSomething());
 
         model.addAttribute("halloNachricht", "welchem to SWD lab");
-
-        model.addAttribute("users", userService.getAll());
+        
+        // map list of entities to list of DTOs
+        List<UserDTO> listOfUserTO = ObjectMapperUtils.mapAll(userService.getAll(), UserDTO.class);
+        
+        model.addAttribute("users", listOfUserTO);
 
         model.addAttribute("beanSingleton", singletonBean.getHashCode());
 
@@ -107,8 +118,8 @@ public class TemplateController {
 
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model) {
-        UserForm userForm = new UserForm();
-        model.addAttribute("userForm", userForm);
+        UserDTO user = new UserDTO();
+        model.addAttribute("user", user);
 
         model.addAttribute("message", userService.doSomething());
         
@@ -123,22 +134,18 @@ public class TemplateController {
 
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.POST)
     public String addUser(Model model, //
-            @ModelAttribute("UserForm") UserForm userForm) { // The @ModelAttribute is
+            @ModelAttribute("UserForm") UserDTO userDTO) { // The @ModelAttribute is
                                                                          // an annotation that binds
                                                                          // a method parameter or
                                                                          // method return value to a
                                                                          // named model attribute
                                                                          // and then exposes it to a
                                                                          // web view:
-                                                                         // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
-        String username = userForm.getUsername();
-        String fullName = userForm.getFullname();
-        String password = userForm.getPassword();
-        String eMail = userForm.getEMail();
-        String tel = userForm.getTel();
-        Date birth = userForm.getBirthDate();
-
-        userService.addUser(username, fullName, eMail, tel, birth, password, UserService.DEFAULT_ROLE);
+        // use the model mapper to map the DTO to Entity                                                            // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+        User user = modelMapper.map(userDTO, User.class);
+    	
+        // use the service to add the user entity
+    	userService.addUser(user);
 
         return "redirect:/";
     }

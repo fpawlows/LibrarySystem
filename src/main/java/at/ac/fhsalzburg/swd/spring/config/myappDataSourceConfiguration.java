@@ -2,7 +2,7 @@ package at.ac.fhsalzburg.swd.spring.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import at.ac.fhsalzburg.swd.spring.dao.User;
+import at.ac.fhsalzburg.swd.spring.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "at.ac.fhsalzburg.swd.spring.dao",
+@EnableJpaRepositories(basePackages = "at.ac.fhsalzburg.swd.spring",
         entityManagerFactoryRef = "dataEntityManagerFactory",
         transactionManagerRef= "dataTransactionManager"
 )

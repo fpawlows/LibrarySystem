@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.dao;
+package at.ac.fhsalzburg.swd.spring.model;
 
 import java.util.Date;
 import javax.persistence.Entity;
@@ -32,7 +32,7 @@ public class User {
         this.setCredit((long) 0);
         this.password = password;
         this.role = role;
-        this.jwttoken = jwtToken;
+        this.jwttoken = jwtToken;        
 
     }
 

@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import at.ac.fhsalzburg.swd.spring.dao.User;
-import at.ac.fhsalzburg.swd.spring.dao.Order;
-import at.ac.fhsalzburg.swd.spring.dao.OrderRepository;
-import at.ac.fhsalzburg.swd.spring.dao.Product;
+
+import at.ac.fhsalzburg.swd.spring.model.Order;
+import at.ac.fhsalzburg.swd.spring.model.Product;
+import at.ac.fhsalzburg.swd.spring.model.User;
+import at.ac.fhsalzburg.swd.spring.repository.OrderRepository;
 
 
 @Service

@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.dao;
+package at.ac.fhsalzburg.swd.spring.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -31,8 +31,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import at.ac.fhsalzburg.swd.spring.controller.TemplateController;
-import at.ac.fhsalzburg.swd.spring.dao.User;
-import at.ac.fhsalzburg.swd.spring.dao.UserRepository;
+import at.ac.fhsalzburg.swd.spring.model.User;
+import at.ac.fhsalzburg.swd.spring.repository.UserRepository;
 
 
 @ExtendWith(SpringExtension.class)

@@ -1,7 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
+import java.util.Collection;
 import java.util.Date;
-import at.ac.fhsalzburg.swd.spring.dao.User;
+
+import at.ac.fhsalzburg.swd.spring.model.User;
 
 public interface UserServiceInterface {
 
@@ -12,9 +14,11 @@ public interface UserServiceInterface {
 
     public abstract boolean addUser(User user);
 
-    public abstract Iterable<User> getAll();
+    public abstract Collection<User> getAll();
 
     public abstract boolean hasCredit(User user);
+    
+    public abstract boolean deleteUser(String username);
     
     public abstract User getByUsername(String username);
 
