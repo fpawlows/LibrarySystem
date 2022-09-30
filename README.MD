@@ -55,9 +55,10 @@ localhost:8080
 
 ### REST API
 To query the rest API use curl, httpie (https://httpie.io/), ...
+Provide the Bearer token for authentication.
 
 ```
-curl -v -X GET http://localhost:8080/api/customers
+curl http://localhost:8080/api/users -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
 ```
 
 ## initialization code
