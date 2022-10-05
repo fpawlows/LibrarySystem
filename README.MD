@@ -47,7 +47,7 @@ Either deploy generated WAR File to Tomcat or directly run using
 mvn spring-boot:run
 
 ### or alternatively build and run in one command
-mvn package; mvn spring-boot:run
+mvn package spring-boot:run
 
 ```
 ### Connect
@@ -66,6 +66,15 @@ e.g. for creating entities for testing, as the configured h2 database is in-memo
 ```
 at.ac.fhsalzburg.swd.spring.startup.CommandLineAppStartupRunner.run
 ```
+
+## Authentication
+During startup an administration user is created with username=__admin__ and password=__admin__.
+* All pages directly under root / do not need authentication
+* All pages under /admin/ needs an authenticated user with ADMIN role
+* All pages under /user or /api need an authenticated user with either ADMIN or USER role
+* Two authentication methods are implemented:
+    * form based authentication
+    * JWT Bearer authentication (especially for REST)
 
 ## connect to local database using h2-console (browser)
 ```
