@@ -70,7 +70,7 @@ at.ac.fhsalzburg.swd.spring.startup.CommandLineAppStartupRunner.run
 ## Authentication
 During startup an administration user is created with username=__admin__ and password=__admin__.
 * All pages directly under root / do not need authentication
-* All pages under /admin/ needs an authenticated user with ADMIN role
+* All pages under /admin/ need an authenticated user with ADMIN role
 * All pages under /user or /api need an authenticated user with either ADMIN or USER role
 * Two authentication methods are implemented:
     * form based authentication
