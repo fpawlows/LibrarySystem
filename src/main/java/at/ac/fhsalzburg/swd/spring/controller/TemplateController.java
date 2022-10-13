@@ -3,9 +3,9 @@ package at.ac.fhsalzburg.swd.spring.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import at.ac.fhsalzburg.swd.spring.TestBean;
 import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
@@ -36,7 +37,11 @@ public class TemplateController {
                // constructors, or methods in a component. Spring's dependency injection mechanism
                // wires appropriate beans into the class members marked with @Autowired.
     private ApplicationContext context;
-
+    
+    @Autowired
+    private EntityManager entityManager;
+    
+   
     @Autowired
     UserServiceInterface userService;
 
@@ -48,8 +53,6 @@ public class TemplateController {
                                     // https://www.baeldung.com/spring-annotations-resource-inject-autowire
     TestBean sessionBean;
     
-    @Autowired
-	private ModelMapper modelMapper; // Model mapper to convert entity to dto and vice versa
 
     @Autowired
     TestBean singletonBean;
@@ -100,6 +103,9 @@ public class TemplateController {
         model.addAttribute("beanPrototype", prototypeBean.getHashCode());
 
         model.addAttribute("beanSession", sessionBean.getHashCode());
+        
+        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();        
+        model.addAttribute("authenticated", lauthentication);
 
 
         return "index";
@@ -117,16 +123,23 @@ public class TemplateController {
     }
 
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
-    public String showAddPersonPage(Model model) {
-        UserDTO user = new UserDTO();
-        model.addAttribute("user", user);
-
-        model.addAttribute("message", userService.doSomething());
+    public String showAddPersonPage(Model model, @RequestParam(value = "username", required = false) String username) {
         
-        
-        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();        
-        model.addAttribute("authenticated", lauthentication);
-        
+    	User modUser = null;
+    	UserDTO userDto = new UserDTO();
+    	
+    	if (username!=null) {
+    		modUser = userService.getByUsername(username);    		    	
+    	}
+    	
+    	if (modUser!=null) {
+    		// map user to userDTO
+    		userDto = ObjectMapperUtils.map(modUser, UserDTO.class);
+    	} else {
+    		userDto = new UserDTO();
+    	}
+    	    	
+        model.addAttribute("user", userDto);     
 
         return "addUser";
     }
@@ -141,11 +154,13 @@ public class TemplateController {
                                                                          // named model attribute
                                                                          // and then exposes it to a
                                                                          // web view:
-        // use the model mapper to map the DTO to Entity                                                            // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
-        User user = modelMapper.map(userDTO, User.class);
     	
-        // use the service to add the user entity
-    	userService.addUser(user);
+        // merge instances
+        User user = ObjectMapperUtils.map(userDTO, User.class); 
+    	
+        // if user already existed in DB, new information is already merged and saved
+        // a new user must be persisted (because not managed by entityManager yet)        
+        if (!entityManager.contains(user)) userService.addUser(user);
 
         return "redirect:/";
     }

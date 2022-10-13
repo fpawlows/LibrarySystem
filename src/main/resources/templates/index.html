@@ -16,7 +16,7 @@
  
 		<div class="alert alert-success" role="alert" sec:authorize="isAuthenticated()"> <span th:text="${halloNachricht}+' '+${user}"></span></div>
 		<div class="alert alert-success" role="alert" sec:authorize="!isAuthenticated()"> <span th:text="${halloNachricht}+' - Du bist nicht angemeldet'"></span></div>
-
+		
         <h3>Counters</h3>
         <ul>
             <li>
@@ -64,17 +64,21 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr th:each ="user : ${users}">
-	                    <td th:utext="${user.username}">...</td>
+	                	<tr th:each ="user : ${users}">
+	                	<td> <a th:href="@{/admin/addUser(username=${user.username})}" th:utext="${user.username}"></a> </td>	                    
 	                    <td th:utext="${user.fullname}">...</td>
 	                    <td th:utext="${user.eMail}">...</td>
 	                    <td th:utext="${user.tel}">...</td>
 	                    <td th:utext="${user.birthDate}">...</td>
 	                    <td th:utext="${user.role}">...</td>
-	                    <td th:utext="${user.jwttoken}">...</td>
+	                    <td th:utext="${user.jwttoken}">...</td>	                    
 	                </tr>
 	            </tbody>
 	        </table>
+        </div>
+        
+        <div class="alert alert-success" role="alert">
+            <span th:text="${authenticated}"></span>
         </div>
 
     </main>

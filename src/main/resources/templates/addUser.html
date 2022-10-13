@@ -17,15 +17,15 @@
         <form th:action="@{/admin/addUser}" th:object="${user}" method="POST">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" th:field="*{username}" >
+                <input type="text" class="form-control" id="username" th:field="*{username}" th:readonly='${not #strings.isEmpty(user.username)}'>
             </div>
             <div class="mb-3">
                 <label for="fullname" class="form-label">Full Name</label>
                 <input type="text" class="form-control" id="fullname" th:field="*{fullname}" >
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">password</label>
-                <input type="password" class="form-control" id="password" th:field="*{password}" >
+                <label for="password" class="form-label" >password</label>
+                <input type="password" class="form-control" th:readonly='${not #strings.isEmpty(user.username)}' id="password" th:field="*{password}" >
             </div>
             <div class="mb-3">
                 <label for="eMail" class="form-label">Email address</label>
@@ -41,11 +41,9 @@
                 <input type="date" class="form-control" id="tel" th:field="*{birthDate}" >
             </div>
 
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
-			<div class="alert alert-success" role="alert">
-            <span th:text="${authenticated}"></span>
-        </div>
+			
     </main>
 
 </body>

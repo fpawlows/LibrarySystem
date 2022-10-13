@@ -2,7 +2,8 @@ package at.ac.fhsalzburg.swd.spring.controller;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +21,9 @@ import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 @RestController
 @RequestMapping("/api")
 public class RestApiController {	
+	
 	@Autowired
-	private ModelMapper modelMapper; // Model mapper to convert entity to dto and vice versa
+    private EntityManager entityManager;
 
     @Autowired private UserServiceInterface userService;
 
@@ -40,15 +42,18 @@ public class RestApiController {
     public @ResponseBody UserDTO getUser(@PathVariable String username) {
         User user = userService.getByUsername(username);
         // map user to userDTO
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        UserDTO userDTO = ObjectMapperUtils.map(user, UserDTO.class);
         return userDTO;
     }
 
     // test with: curl -X PUT http://localhost:8080/api/users/fromrest -H "Content-Type: application/json" -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak" -d '{"username":"fromrest","fullname":"created by rest","tel":"+00000000","birthDate":"2022-09-30T00:00:00.000+00:00","password":"fromrest","jwtToken":null,"email":"fromrest@acme.at"}'
     @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.PUT)
-    public String setUser(@RequestBody UserDTO user) {
+    public String setUser(@RequestBody UserDTO userDTO) {
+    	User user = ObjectMapperUtils.map(userDTO, User.class); 
     	
-        userService.addUser(modelMapper.map(user,User.class));
+        // if user already existed in DB, new information is already merged and saved
+        // a new user must be persisted (because not managed by entityManager yet)        
+        if (!entityManager.contains(user)) userService.addUser(user);
 
         return "redirect:/api/users";
     }
