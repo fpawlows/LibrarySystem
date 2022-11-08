@@ -10,19 +10,21 @@ import at.ac.fhsalzburg.swd.spring.model.Order;
 import at.ac.fhsalzburg.swd.spring.model.Product;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 
 
 @Service
+@RequiredArgsConstructor
 public class OrderService implements OrderServiceInterface {
 
-    @Autowired
-    private UserServiceInterface userService;
 
-    @Autowired
-    private OrderRepository repo;
+    private final UserServiceInterface userService;
 
-    public OrderService() {
+    private final OrderRepository repo;
 
+    public OrderService(UserServiceInterface userService, OrderRepository orderRepo) {
+    	this.userService = userService;
+    	this.repo = orderRepo;
     }
 
 
