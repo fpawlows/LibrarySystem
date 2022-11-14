@@ -34,8 +34,9 @@ import java.util.Date;
 
 @ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 @ActiveProfiles("test")
-public class UserServiceTest {
-
+public class OrderServiceTest {
+	
+	
 	private OrderRepository orderRepo;
     private OrderServiceInterface orderService;    
     private UserServiceInterface userService;
