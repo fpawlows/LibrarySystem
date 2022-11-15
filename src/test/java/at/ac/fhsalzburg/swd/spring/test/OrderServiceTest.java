@@ -71,8 +71,8 @@ public class OrderServiceTest {
 
         // then
     	assertEquals(order, orderActual);
-    	assertArrayEquals( products.toArray(), order.getProducts().toArray());
-        assertEquals(customer, order.getCustomer());
+    	assertArrayEquals( products.toArray(), orderActual.getProducts().toArray());
+        assertEquals(customer, orderActual.getCustomer());
     }
     
     @Test

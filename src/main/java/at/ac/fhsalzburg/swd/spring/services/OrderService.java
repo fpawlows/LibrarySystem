@@ -3,25 +3,23 @@ package at.ac.fhsalzburg.swd.spring.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import at.ac.fhsalzburg.swd.spring.model.Order;
 import at.ac.fhsalzburg.swd.spring.model.Product;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.repository.OrderRepository;
-import lombok.RequiredArgsConstructor;
 
 
 @Service
-@RequiredArgsConstructor
 public class OrderService implements OrderServiceInterface {
 
-	
     private final UserServiceInterface userService;
 
     private final OrderRepository repo;
 
+    
     public OrderService(UserServiceInterface userService, OrderRepository orderRepo) {
     	this.userService = userService;
     	this.repo = orderRepo;
