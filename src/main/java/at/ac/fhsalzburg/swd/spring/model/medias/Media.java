@@ -1,5 +1,7 @@
-package at.ac.fhsalzburg.swd.spring.model;
+package at.ac.fhsalzburg.swd.spring.model.medias;
 
+import at.ac.fhsalzburg.swd.spring.model.Copy;
+import at.ac.fhsalzburg.swd.spring.model.Genre;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
