@@ -1,32 +1,39 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import com.sun.xml.bind.v2.TODO;
+
+import javax.persistence.*;
 
 @Entity
-@IdClass(CompartmentId.class)
 public class Compartment {
-    @Id
-    private Integer shelfNumber;
-
-    @Id
-    private Integer position;
+    @EmbeddedId
+    private CompartmentId compartmentId;
+    private Integer numberOfPlaces;
 
     public Compartment() {
-
     }
 
-    public Compartment(Integer position) {
-        this.position = position;
+    public Compartment(CompartmentId compartmentId, Integer numberOfPlaces) {
+        this.compartmentId = compartmentId;
+        this.numberOfPlaces = numberOfPlaces;
     }
 
-    public Integer getPosition() {
-        return position;
+    //TODO
+//  public Integer getFreeSpaces() {}
+
+    public CompartmentId getCompartmentId() {
+        return compartmentId;
     }
 
-    public void setPosition(Integer position) {
-        this.position = position;
+    public void setCompartmentId(CompartmentId compartmentId) {
+        this.compartmentId = compartmentId;
     }
 
+    public Integer getNumberOfPlaces() {
+        return numberOfPlaces;
+    }
+
+    public void setNumberOfPlaces(Integer numberOfPlaces) {
+        this.numberOfPlaces = numberOfPlaces;
+    }
 }

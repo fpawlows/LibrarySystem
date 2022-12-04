@@ -1,46 +1,31 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
+@NoArgsConstructor
+@Data //Getters, setters, constructors
 public class CompartmentId implements Serializable {
-    private Integer shelfRowNumber;
-    private Integer compartmentPosition;
 
-    public CompartmentId() {
-    }
+    @Column(nullable = false)
+    private Integer position;
 
-    public CompartmentId(Integer compartmentPosition, Integer shelfRowNumber) {
-        this.compartmentPosition = compartmentPosition;
-        this.shelfRowNumber = shelfRowNumber;
-    }
+    //    @Column(name = "SHELF_NUMBER_FROM_TOP", nullable = false)
+    @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "shelf_number_from_top", nullable = false),
+        @JoinColumn(name = "location_id", nullable = false)
+    })
+    //TOCHECK i think they should be nullable actually
+    private Shelf shelf;
 
-    public Integer getCompartmentPosition() {
-        return compartmentPosition;
-    }
-
-    public void setCompartmentPosition(Integer compartmentPosition) {
-        this.compartmentPosition = compartmentPosition;
-    }
-
-    public Integer getShelfRowNumber() {
-        return shelfRowNumber;
-    }
-
-    public void setShelfRowNumber(Integer shelfRowNumber) {
-        this.shelfRowNumber = shelfRowNumber;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CompartmentId)) return false;
-        CompartmentId compartmentId = (CompartmentId) o;
-        return Objects.equals(getCompartmentPosition(), compartmentId.getCompartmentPosition()) && Objects.equals(getShelfRowNumber(), compartmentId.getShelfRowNumber());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getCompartmentPosition(), getShelfRowNumber());
+    public CompartmentId(Integer position, Shelf shelf) {
+        this.position = position;
+        this.shelf = shelf;
     }
 }
