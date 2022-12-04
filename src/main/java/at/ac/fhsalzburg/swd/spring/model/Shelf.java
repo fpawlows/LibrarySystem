@@ -1,40 +1,42 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
-@IdClass(CompartmentId.class)
 public class Shelf {
-    @Id
-    private Long id;
 
-    @Id
-    private Integer numberFromTop;
+    @EmbeddedId
+    private ShelfId id;
+
+    @OneToMany(mappedBy = "compartmentId.shelf")
+    private Collection<Compartment> compartments;
 
     public Shelf() {
     }
 
-    public Shelf(Long id, Integer rowNumber) {
+    public Shelf(ShelfId id) {
         this.id = id;
-        this.numberFromTop = rowNumber;
     }
 
-    public Long getId() {
+    public Shelf(ShelfId id, Collection<Compartment> compartments) {
+        this.id = id;
+        this.compartments = compartments;
+    }
+
+    public ShelfId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ShelfId id) {
         this.id = id;
     }
 
-    public Integer getNumberFromTop() {
-        return numberFromTop;
+    public Collection<Compartment> getCompartments() {
+        return compartments;
     }
 
-    public void setNumberFromTop(Integer numberFromTop) {
-        this.numberFromTop = numberFromTop;
+    public void setCompartments(Collection<Compartment> compartments) {
+        this.compartments = compartments;
     }
-
 }

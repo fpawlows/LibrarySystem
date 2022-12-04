@@ -14,6 +14,14 @@ public class Copy {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne
+    @JoinColumns({
+        @JoinColumn(name = "compartment_position", nullable = false),
+        @JoinColumn(name = "shelf_number_from_top", nullable = false),
+        @JoinColumn(name = "location_id", nullable = false)
+    })
+    private Compartment compartment;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateCreated;
 }

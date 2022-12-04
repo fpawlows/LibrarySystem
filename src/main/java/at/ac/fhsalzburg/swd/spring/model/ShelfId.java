@@ -1,46 +1,41 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
+@NoArgsConstructor
+@Data //Getters, setters, constructors
 public class ShelfId implements Serializable {
-    private Long locationId;
-    private Integer shelfRowNumber;
 
-    public ShelfId() {
-    }
+    //TOCHECK @Column(name = "LOCATION_ID_FK", nullable = false)
+    @Column(nullable = false)
+    private Integer shelfNumberFromTop;
 
-    public ShelfId(Long locationId, Integer shelfRowNumber) {
-        this.locationId = locationId;
-        this.shelfRowNumber = shelfRowNumber;
-    }
+//    @Column(name = "SHELF_NUMBER_FROM_TOP", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
-    }
-
-    public Integer getShelfRowNumber() {
-        return shelfRowNumber;
-    }
-
-    public void setShelfRowNumber(Integer shelfRowNumber) {
-        this.shelfRowNumber = shelfRowNumber;
+    public ShelfId(Integer shelfNumberFromTop, Location location) {
+        this.shelfNumberFromTop = shelfNumberFromTop;
+        this.location = location;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompartmentId)) return false;
-        CompartmentId shelfId = (CompartmentId) o;
-        return Objects.equals(getLocationId(), shelfId.getCompartmentPosition()) && Objects.equals(getShelfRowNumber(), shelfId.getShelfRowNumber());
+        if (!(o instanceof ShelfId)) return false;
+        ShelfId shelfId = (ShelfId) o;
+        return Objects.equals(getShelfNumberFromTop(), shelfId.getShelfNumberFromTop()) && Objects.equals(getLocation(), shelfId.getLocation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLocationId(), getShelfRowNumber());
+        return Objects.hash(getShelfNumberFromTop(), getLocation());
     }
 }
