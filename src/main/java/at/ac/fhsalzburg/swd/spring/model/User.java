@@ -1,8 +1,10 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,8 +21,10 @@ public class User {
     private String password;
     private String role;
     private String jwttoken;
-    
-    
+
+    @OneToMany
+    private Collection<Reservation> reservations;
+
     protected User() {}
 
     public User(String username, String fullname, String eMail, String tel, Date birth, String password, String role, String jwtToken) {
@@ -32,7 +36,7 @@ public class User {
         this.setCredit((long) 0);
         this.password = password;
         this.role = role;
-        this.jwttoken = jwtToken;        
+        this.jwttoken = jwtToken;
 
     }
 
@@ -71,11 +75,11 @@ public class User {
     public void setCredit(Long credit) {
         this.credit = credit;
     }
-    
+
     public String getUsername() {
         return username;
     }
-    
+
     public String getPassword() {
         return password;
     }
@@ -83,7 +87,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public Date getBirthDate() {
         return birthDate;
     }
@@ -108,4 +112,11 @@ public class User {
 		this.jwttoken = jwttoken;
 	}
 
+    public Collection<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }

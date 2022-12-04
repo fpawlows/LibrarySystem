@@ -10,9 +10,9 @@ import java.util.Date;
 @Entity
 public class Copy {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @EmbeddedId
+    private CopyId copyId;
+
 
     @OneToOne
     @JoinColumns({

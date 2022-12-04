@@ -2,6 +2,7 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,7 +10,8 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Media {
 
     @Id
@@ -29,6 +31,9 @@ public class Media {
 
     @OneToMany
     private Collection<Copy> copies;
+
+    @OneToMany
+    private Collection<Reservation> reservations;
 
     protected Media() {}
 
@@ -73,5 +78,37 @@ public class Media {
 
     public void setGenres(Collection<Genre> genres) {
         this.genres = genres;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Date getDatePublished() {
+        return datePublished;
+    }
+
+    public void setDatePublished(Date datePublished) {
+        this.datePublished = datePublished;
+    }
+
+    public Collection<Copy> getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Collection<Copy> copies) {
+        this.copies = copies;
+    }
+
+    public Collection<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
