@@ -1,6 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import com.sun.xml.bind.v2.TODO;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 
 import javax.persistence.*;
 

@@ -1,10 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.Year;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity

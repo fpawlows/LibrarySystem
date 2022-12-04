@@ -1,10 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 public class Reservation {

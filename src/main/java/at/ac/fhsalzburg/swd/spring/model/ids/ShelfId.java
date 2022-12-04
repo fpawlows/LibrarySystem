@@ -1,5 +1,6 @@
-package at.ac.fhsalzburg.swd.spring.model;
+package at.ac.fhsalzburg.swd.spring.model.ids;
 
+import at.ac.fhsalzburg.swd.spring.model.Location;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

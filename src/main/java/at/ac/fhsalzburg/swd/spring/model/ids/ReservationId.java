@@ -1,5 +1,6 @@
-package at.ac.fhsalzburg.swd.spring.model;
+package at.ac.fhsalzburg.swd.spring.model.ids;
 
+import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import lombok.AllArgsConstructor;
 import lombok.Data;

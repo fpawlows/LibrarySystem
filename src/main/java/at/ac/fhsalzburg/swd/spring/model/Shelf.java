@@ -1,5 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
+
 import javax.persistence.*;
 import java.util.Collection;
 
