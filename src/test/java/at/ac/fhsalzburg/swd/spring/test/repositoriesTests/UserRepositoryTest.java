@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.test;
+package at.ac.fhsalzburg.swd.spring.test.repositoriesTests;
 
 import static org.junit.Assert.assertEquals;
 import java.util.Date;
