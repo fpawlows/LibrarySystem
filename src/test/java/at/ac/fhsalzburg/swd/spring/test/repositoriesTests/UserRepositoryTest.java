@@ -1,9 +1,12 @@
 package at.ac.fhsalzburg.swd.spring.test.repositoriesTests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.Optional;
 
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,60 +70,72 @@ public class UserRepositoryTest {
     @Test
     public void whenFindById_thenReturnGenre() {
         // given
-        Genre givenGenre = new Genre(1, "Horror");
-        Genre foundGenre = null;
+        Genre givenGenre = new Genre(null, "Horror");
         entityManager.persist(givenGenre);
         entityManager.flush();
 
         // when
         Optional<Genre> optionalFoundGenre = genreRepository.findById(givenGenre.getId());
 
-        if(optionalFoundGenre.isPresent())
-            foundGenre = optionalFoundGenre.get();
+        if (optionalFoundGenre.isPresent()) {
+            Genre foundGenre = optionalFoundGenre.get();
 
-        // then
-        assertEquals(givenGenre, foundGenre);
-
+            // then
+            assertEquals(givenGenre, foundGenre);
+        }
+        else {
+            assertTrue(false);
+        }
     }
 
     @Test
     public void whenFindById_thenReturnShelf() {
         // given
-        //Location loc = new Location((long) 1, "Bib");
-        //ShelfId sId = new ShelfId(1, loc);
-        Shelf givenShelf = new Shelf();
-        Shelf foundShelf = null;
+        Location loc = new Location(null, "Main Library");
+        Shelf givenShelf = new Shelf(new ShelfId(0, loc));
+        entityManager.persist(loc);
         entityManager.persist(givenShelf);
         entityManager.flush();
 
         // when
         Optional<Shelf> optionalFoundShelf = shelfRepository.findById(givenShelf.getId());
 
-        if(optionalFoundShelf.isPresent())
-            foundShelf = optionalFoundShelf.get();
+        if (optionalFoundShelf.isPresent()) {
+            Shelf foundShelf = optionalFoundShelf.get();
 
-        // then
-        assertEquals(givenShelf, foundShelf);
-
+            // then
+            assertEquals(givenShelf, foundShelf);
+        }
+        else {
+            assertTrue(false);
+        }
     }
 
     @Test
     public void whenFindById_thenReturnCompartment() {
         // given
-        Compartment givenCompartment = new Compartment();
-        Compartment foundCompartment = null;
+
+        Location loc = new Location(null, "Main Library");
+        ShelfId shelfid = new ShelfId(0, loc);
+        Shelf givenShelf = new Shelf(shelfid);
+        Compartment givenCompartment = new Compartment(new CompartmentId(1, givenShelf), 10);
+        entityManager.persist(loc);
+        entityManager.persist(givenShelf);
         entityManager.persist(givenCompartment);
         entityManager.flush();
 
         // when
         Optional<Compartment> optionalFoundCompartment = compartmentRepository.findById(givenCompartment.getCompartmentId());
 
-        if(optionalFoundCompartment.isPresent())
-            foundCompartment = optionalFoundCompartment.get();
+        if(optionalFoundCompartment.isPresent()) {
+            Compartment foundCompartment = optionalFoundCompartment.get();
 
-        // then
-        assertEquals(givenCompartment, foundCompartment);
-
+            // then
+            assertEquals(givenCompartment, foundCompartment);
+        }
+        else {
+            assertTrue(false);
+        }
     }
 
     @Test

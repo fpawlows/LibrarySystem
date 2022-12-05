@@ -25,7 +25,6 @@ public class Media {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date datePublished;
 
-
     @ManyToMany
     private Collection<Genre> genres;
 
