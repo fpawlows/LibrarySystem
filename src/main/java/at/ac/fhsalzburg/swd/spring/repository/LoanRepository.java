@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface LoanRepository extends CrudRepository <Loan, LoanId> {
 
     @Transactional(timeout = 10)
-    List<Loan> findByName(Date dateBorrowed);
+    List<Loan> findByDateBorrowed (Date dateBorrowed);
 
     @Transactional(timeout = 10)
     Optional<Loan> findById(LoanId id);
