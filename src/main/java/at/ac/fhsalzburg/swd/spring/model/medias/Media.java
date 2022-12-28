@@ -3,12 +3,14 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Queue;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -32,7 +34,7 @@ public class Media {
     private Collection<Copy> copies;
 
     @OneToMany
-    private Collection<Reservation> reservations;
+    private Queue<Reservation> reservations;
 
     protected Media() {}
 
@@ -103,11 +105,11 @@ public class Media {
         this.copies = copies;
     }
 
-    public Collection<Reservation> getReservations() {
+    public Queue<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Collection<Reservation> reservations) {
+    public void setReservations(Queue<Reservation> reservations) {
         this.reservations = reservations;
     }
 }

@@ -13,6 +13,6 @@ import at.ac.fhsalzburg.swd.spring.model.Location;
 public interface LocationRepository extends CrudRepository<Location, Long> {
 
 	@Transactional(timeout = 10)
-    Optional<Location> findById(Long id);
+    Optional <Location> findById(Long id);
 
 }

@@ -8,7 +8,7 @@ import java.security.Timestamp;
 
 @Entity
 public class Payment {
-    static enum states {successful, failed, inProgress, initialized};
+    enum states {successful, failed, inProgress, initialized};
 
     @EmbeddedId
     private PaymentId paymentId;
