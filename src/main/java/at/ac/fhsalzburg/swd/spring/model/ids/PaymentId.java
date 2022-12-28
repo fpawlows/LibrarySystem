@@ -1,5 +1,4 @@
 package at.ac.fhsalzburg.swd.spring.model.ids;
-
 import at.ac.fhsalzburg.swd.spring.model.Loan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ public class PaymentId implements Serializable {
     @ManyToOne
     @JoinColumns({
         @JoinColumn(name = "copy_nr", nullable = false),
-        @JoinColumn(name = "media_id", nullable = false), //here is id of an id
+        @JoinColumn(name = "media_id", nullable = false),
         @JoinColumn(name = "username", nullable = false) //here is id of an id
     })
     private Loan loan;
