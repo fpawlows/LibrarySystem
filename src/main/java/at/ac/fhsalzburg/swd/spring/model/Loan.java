@@ -6,17 +6,35 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.util.Date;
 
+enum loanState {Waiting_For_PickUp, Borrowed, Returned};
+
 @Entity
 public class Loan {
     @EmbeddedId
     private LoanId loanId;
     private Date dateBorrowed;
+    private loanState state;
 
     public Loan() {}
 
     public Loan(LoanId loanId, Date dateBorrowed) {
         this.loanId = loanId;
         this.dateBorrowed = dateBorrowed;
+        this.state = loanState.Waiting_For_PickUp;
+    }
+
+    public Loan(LoanId loanId, Date dateBorrowed, loanState state) {
+        this.loanId = loanId;
+        this.dateBorrowed = dateBorrowed;
+        this.state = state;
+    }
+
+    public loanState getState() {
+        return state;
+    }
+
+    public void setState(loanState state) {
+        this.state = state;
     }
 
     public LoanId getLoanId() {
