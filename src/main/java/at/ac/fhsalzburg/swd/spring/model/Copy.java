@@ -4,6 +4,7 @@ import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,4 @@ public class Copy {
         @JoinColumn(name = "location_id", nullable = false)
     })
     private Compartment compartment;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date dateCreated;
 }

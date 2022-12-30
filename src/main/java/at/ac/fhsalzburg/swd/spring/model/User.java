@@ -1,11 +1,10 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
+
+
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "USERS")
@@ -22,7 +21,7 @@ public class User {
     private String role;
     private String jwttoken;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reservationId.user")
     private Collection<Reservation> reservations;
 
     protected User() {}

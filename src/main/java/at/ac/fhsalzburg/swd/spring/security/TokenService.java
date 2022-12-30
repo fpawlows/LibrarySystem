@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.security;
 
 import java.security.Key;
 import java.time.Instant;
+
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class TokenService implements TokenServiceInterface {
 	private String JWT_SECRET;
 
 	UserDetailService userDetailService; // autowired using setter/field injection
-	
+
     public TokenService() {
 
     }
@@ -37,8 +38,8 @@ public class TokenService implements TokenServiceInterface {
         Date expirationDate = Date.from(expirationTime);
 
         Key key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
-        
-        String compactTokenString = "Bearer " 
+
+        String compactTokenString = "Bearer "
         		+ Jwts.builder()
         		.claim("id", user.getUsername())
                 .claim("sub", user.getUsername())
@@ -55,19 +56,19 @@ public class TokenService implements TokenServiceInterface {
 	@Override
 	public DemoPrincipal parseToken(String token) {
 		byte[] secretBytes = JWT_SECRET.getBytes();
-		
+
 		if (!token.startsWith("Bearer ")) return null;
 		token = token.substring(6);
-        
+
 		Jws<Claims> jwsClaims = Jwts.parserBuilder()
                 .setSigningKey(secretBytes)
                 .build()
                 .parseClaimsJws(token);
 
         String username = jwsClaims.getBody()
-                .getSubject();               
-        
-        return (DemoPrincipal) userDetailService.loadUserByUsername(username);        
+                .getSubject();
+
+        return (DemoPrincipal) userDetailService.loadUserByUsername(username);
 	}
 
 	@Autowired

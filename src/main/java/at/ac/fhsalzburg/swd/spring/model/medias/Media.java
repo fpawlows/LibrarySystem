@@ -3,12 +3,15 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+
 import java.util.Collection;
 import java.util.Date;
+import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -31,7 +34,7 @@ public class Media {
     @OneToMany
     private Collection<Copy> copies;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reservationId.media")
     private Collection<Reservation> reservations;
 
     protected Media() {}

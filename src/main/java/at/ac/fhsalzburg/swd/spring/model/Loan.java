@@ -4,6 +4,7 @@ import at.ac.fhsalzburg.swd.spring.model.ids.LoanId;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+
 import java.util.Date;
 
 enum loanState {Waiting_For_PickUp, Borrowed, Returned};
