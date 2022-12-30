@@ -8,9 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+
 import java.util.Collection;
 import java.util.Date;
-import java.util.Queue;
+import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -33,8 +34,8 @@ public class Media {
     @OneToMany
     private Collection<Copy> copies;
 
-    @OneToMany
-    private Queue<Reservation> reservations;
+    @OneToMany(mappedBy = "reservationId.media")
+    private Collection<Reservation> reservations;
 
     protected Media() {}
 
@@ -105,11 +106,11 @@ public class Media {
         this.copies = copies;
     }
 
-    public Queue<Reservation> getReservations() {
+    public Collection<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Queue<Reservation> reservations) {
+    public void setReservations(Collection<Reservation> reservations) {
         this.reservations = reservations;
     }
 }

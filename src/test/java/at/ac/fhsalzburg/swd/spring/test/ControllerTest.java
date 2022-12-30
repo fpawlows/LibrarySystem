@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -62,8 +64,8 @@ public class ControllerTest {
         // init webcontext
         this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
-        		.build();       
-	
+        		.build();
+
     }
 
 
@@ -82,7 +84,7 @@ public class ControllerTest {
 
 
         mvc.perform(MockMvcRequestBuilders.get("/").session(session) // set the mocked session
-                .contentType(MediaType.TEXT_HTML))        
+                .contentType(MediaType.TEXT_HTML))
         		.andExpect(status().isOk())
                 .andExpect(model().attributeExists("users")).andExpect(view().name("index"))
                 .andExpect(request().sessionAttribute("count", is(4))); // check if session

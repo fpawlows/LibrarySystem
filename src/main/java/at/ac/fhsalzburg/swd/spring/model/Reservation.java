@@ -7,7 +7,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import java.time.LocalDate;
+
+
 import java.util.Date;
 
 @Entity
