@@ -15,8 +15,8 @@ public class Movie extends Media {
         this.format = format;
     }
 
-    public Movie(String name, String description, Short fsk, Float price, Integer duration, String format) {
-        super(name, description, fsk, price);
+    public Movie(String name, String description, Integer fsk, Integer duration, String format) {
+        super(name, description, fsk);
         this.duration = duration;
         this.format = format;
     }

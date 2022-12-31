@@ -24,6 +24,12 @@ public class Loan {
         this.state = loanState.Waiting_For_PickUp;
     }
 
+    public Loan(LoanId loanId) {
+        this.loanId = loanId;
+        this.dateBorrowed = new Date();
+        this.state = loanState.Waiting_For_PickUp;
+    }
+
     public Loan(LoanId loanId, Date dateBorrowed, loanState state) {
         this.loanId = loanId;
         this.dateBorrowed = dateBorrowed;

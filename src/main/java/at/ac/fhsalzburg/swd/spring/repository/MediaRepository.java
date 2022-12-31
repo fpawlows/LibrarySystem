@@ -7,8 +7,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 
 public interface MediaRepository extends CrudRepository<Media, Long> {
 
+    @Override
+    Iterable<Media> findAll();
+
+    @Override
+    Optional<Media> findById(Long Long);
+
+    Iterable<Media> findByFsk(Integer fsk);
+
+    List<Media> findByName(String name);
 }
+

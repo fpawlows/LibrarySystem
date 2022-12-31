@@ -13,7 +13,6 @@ public class Copy {
     @EmbeddedId
     private CopyId copyId;
 
-
     @OneToOne
     @JoinColumns({
         @JoinColumn(name = "compartment_position", nullable = false),
@@ -21,4 +20,29 @@ public class Copy {
         @JoinColumn(name = "location_id", nullable = false)
     })
     private Compartment compartment;
+    private Boolean isAvailable;
+
+    public CopyId getCopyId() {
+        return copyId;
+    }
+
+    public void setCopyId(CopyId copyId) {
+        this.copyId = copyId;
+    }
+
+    public Compartment getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(Compartment compartment) {
+        this.compartment = compartment;
+    }
+
+    public Boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
 }

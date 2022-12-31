@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main-layout}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <title>Medias</title>
+</head>
+
+<body>
+
+<main layout:fragment="content" th:remove="tag">
+
+    <h1>Hello !</h1>
+<p>Welcome to <span th:text="${appName}">Our App</span></p>
+
+    </main>
+</body>
+
+</html></html>

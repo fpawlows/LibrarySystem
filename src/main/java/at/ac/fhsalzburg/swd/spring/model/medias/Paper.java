@@ -12,8 +12,8 @@ public class Paper extends Media {
         this.edition = edition;
     }
 
-    public Paper(String name, String description, Short fsk, Float price, Integer edition) {
-        super(name, description, fsk, price);
+    public Paper(String name, String description, Integer fsk, Integer edition) {
+        super(name, description, fsk);
         this.edition = edition;
     }
 

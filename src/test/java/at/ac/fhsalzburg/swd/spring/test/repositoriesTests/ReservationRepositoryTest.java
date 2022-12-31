@@ -38,8 +38,8 @@ public class ReservationRepositoryTest {
     @Test
     public void whenFindReservationsByMedia_thenOrderRetained() {
         // given
-        final Integer N_MEDIAS = 4000;
-        final Integer N_FIRST_MEDIAS_FOR_QUEUES = 15;
+        final Integer N_MEDIAS = 40;
+        final Integer N_FIRST_MEDIAS_FOR_QUEUES = 3;
 
         ArrayList<ArrayList<Reservation>> givenReservations = new ArrayList<>();
         ArrayList<Media> givenMedias = new ArrayList<Media>();

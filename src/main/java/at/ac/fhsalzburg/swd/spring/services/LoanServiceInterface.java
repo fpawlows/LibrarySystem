@@ -10,7 +10,9 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 public interface LoanServiceInterface {
     public abstract Loan loanMedia (Copy copy, User user); //TODO concurrent - check .available setAvailable
     public abstract Boolean returnMedia (LoanId loanId);
+    public abstract Boolean isLoanAllowedFor (Copy copy, User user);
     public abstract Iterable<Copy> getAvailableCopies (Media media);
+    public abstract Boolean isDateExceeded (Loan loan);
     public abstract Boolean pay(Loan loan);
     public abstract Reservation reserveMedia (Media media);
     public abstract void cancelReservation (Reservation reservation);
