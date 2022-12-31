@@ -43,6 +43,12 @@ public class HomeController {
     @RequestMapping("/home")
     public String home(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
+        // check if user is logged in
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            model.addAttribute("user",currentUserName);
+        }
+
         Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("authenticated", lauthentication);
 
@@ -82,4 +88,25 @@ public class HomeController {
         return "register";
     }
 
+
+    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
+    public String addUser(Model model, //
+                          @ModelAttribute("UserForm") UserDTO userDTO) { // The @ModelAttribute is
+        // an annotation that binds
+        // a method parameter or
+        // method return value to a
+        // named model attribute
+        // and then exposes it to a
+        // web view:
+
+        // merge instances
+        User user = ObjectMapperUtils.map(userDTO, User.class);
+
+        // if user already existed in DB, new information is already merged and saved
+        // a new user must be persisted (because not managed by entityManager yet)
+        if (!entityManager.contains(user)) userService.addUser(user);
+
+        return "redirect:/login";
+    }
 }
+
