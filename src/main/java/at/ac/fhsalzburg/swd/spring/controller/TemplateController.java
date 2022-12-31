@@ -129,7 +129,6 @@ public class TemplateController {
     	UserDTO userDto = new UserDTO();
 
     	if (username!=null) {
-            System.out.println(username);
     		modUser = userService.getByUsername(username);
     	}
 
