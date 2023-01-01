@@ -5,6 +5,7 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public interface MediaServiceInterface {
 
@@ -14,8 +15,13 @@ public interface MediaServiceInterface {
 
     public abstract Collection<Media> getAll();
 
+    public abstract Collection<Media> getByAllOptional(String name, Integer fsk, Long genre);
+
     public abstract Media getById(Long id);
 
     public abstract void deleteById(Long id);
+
+    public abstract List<Genre> getAllGenres();
+
 
 }

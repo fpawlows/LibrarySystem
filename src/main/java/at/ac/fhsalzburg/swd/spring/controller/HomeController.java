@@ -6,6 +6,9 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
+import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,10 +18,7 @@ import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import at.ac.fhsalzburg.swd.spring.TestBean;
 import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
@@ -40,27 +40,41 @@ public class HomeController {
     @Autowired
     UserServiceInterface userService;
 
-    @RequestMapping(path = {"/home", "/search"})
+    @Autowired
+    MediaServiceInterface mediaService;
+
+    @RequestMapping("/home")
     //TODO change 'home' to '/'
-    public String home(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    public String home(
 
-        // check if user is logged in
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            model.addAttribute("user", currentUserName);
-        }
+        Model model, HttpSession session,
+                       @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
-        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("authenticated", lauthentication);
-
-
-
-
-
-
-
-        //TODO Display statistics in footer
+        List<Genre> allGenres = mediaService.getAllGenres();
+        model.addAttribute("allGenres", allGenres);
 
         return "home";
     }
+
+//TODO maybe change this to DTO
+    @GetMapping(value={"/search"})
+    public String showSearchedMedia(
+        @RequestParam (value = "searchMediaId", required = false) Long searchMediaId,
+        @RequestParam (value = "searchMediaName", required = false) String searchMediaName,
+        @RequestParam (value = "searchMediaFsk", required = false) Integer searchMediaFsk,
+        @RequestParam (value = "searchMediaGenreId", required = false) Long searchMediaGenreId,
+        Model model) {
+        if (searchMediaId!=null) {
+            model.addAttribute("searchedMediasList", mediaService.getById(searchMediaId));
+        } else {
+            model.addAttribute("searchedMediasList", mediaService.getByAllOptional(searchMediaName, searchMediaFsk, searchMediaGenreId));
+        }
+        return "home";
+
+    }
+
+
+
+            //TODO Display statistics in footer
+
 }
