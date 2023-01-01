@@ -14,8 +14,7 @@ public class Genre {
 
     public Genre() {};
 
-    public Genre(Integer id_, String name_) {
-        id = id_;
+    public Genre (String name_) {
         name = name_;
     }
 

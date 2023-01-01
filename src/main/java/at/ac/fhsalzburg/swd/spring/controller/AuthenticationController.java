@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 
 @Controller
-public class UserController {
+public class AuthenticationController {
 
     @Autowired
     private ApplicationContext context;

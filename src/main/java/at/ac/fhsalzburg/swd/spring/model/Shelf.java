@@ -20,6 +20,7 @@ public class Shelf {
     public Shelf(ShelfId id) {
         this.id = id;
     }
+    //TODO change all constructors of Business objects -. there shouldn be ID passed to the constructor _> see in Product, Genre classes
 
     public Shelf(ShelfId id, Collection<Compartment> compartments) {
         this.id = id;

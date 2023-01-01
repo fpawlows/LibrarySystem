@@ -5,6 +5,7 @@ package at.ac.fhsalzburg.swd.spring.startup;
 import java.util.ArrayList;
 import java.util.Date;
 
+import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
@@ -57,15 +58,18 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         final Integer N_MEDIAS = 40;
         final Integer N_FIRST_MEDIAS_FOR_QUEUES = 3;
 
+        //TODO change below to setting using services
         ArrayList<ArrayList<Reservation>> givenReservations = new ArrayList<>();
         ArrayList<Media> givenMedias = new ArrayList<Media>();
         ArrayList<User> givenUsers = new ArrayList<User>();
+        ArrayList<Genre> givenGenres= new ArrayList<Genre>();
 
         for (int i = 0; i < N_FIRST_MEDIAS_FOR_QUEUES; i++) {
             givenReservations.add(new ArrayList<Reservation>());
         }
 
         for (int i = 0; i < N_MEDIAS; i++) {
+            givenGenres.add(new Genre("asdsad" + i));
             givenMedias.add(new Book(i, Integer.toString(i)));
             //Reservation reservation = new Reservation(new ReservationId(givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i)), (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES));
             //givenReservations.get(i % N_FIRST_MEDIAS_FOR_QUEUES).add(reservation);

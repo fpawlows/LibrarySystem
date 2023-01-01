@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("//media")
+@RequestMapping("/media")
 public class MediaController {
 
     @Autowired
     private MediaRepository mediaRepository;
 
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public Iterable findAll() {
         return mediaRepository.findAll();

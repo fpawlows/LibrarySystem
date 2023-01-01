@@ -71,7 +71,7 @@ public class UserRepositoryTest {
     @Test
     public void whenFindById_thenReturnGenre() {
         // given
-        Genre givenGenre = new Genre(null, "Horror");
+        Genre givenGenre = new Genre("Horror");
         entityManager.persist(givenGenre);
         entityManager.flush();
 
