@@ -2,7 +2,9 @@ package at.ac.fhsalzburg.swd.spring.repository;
 
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

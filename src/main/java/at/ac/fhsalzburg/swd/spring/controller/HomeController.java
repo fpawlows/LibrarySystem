@@ -40,73 +40,27 @@ public class HomeController {
     @Autowired
     UserServiceInterface userService;
 
-    @RequestMapping("/home")
+    @RequestMapping(path = {"/home", "/search"})
+    //TODO change 'home' to '/'
     public String home(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
         // check if user is logged in
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
-            model.addAttribute("user",currentUserName);
+            model.addAttribute("user", currentUserName);
         }
 
         Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("authenticated", lauthentication);
 
-        //TODO Display statistics
+
+
+
+
+
+
+        //TODO Display statistics in footer
 
         return "home";
     }
-
-    @RequestMapping(value = {"/login_dwa"})
-    public String login_dwa(Model model) {return "login";}
-
-    @RequestMapping(value = {"/login-error_dwa"})
-    public String loginError_dwa(Model model) {
-        model.addAttribute("error", "Login error");
-        return "login";
-    }
-
-    @RequestMapping(value = {"/register"}, method = RequestMethod.GET)
-    public String register(Model model, @RequestParam(value = "username", required = false) String username) {
-
-        User modUser = null;
-        UserDTO userDTO = new UserDTO();
-
-        if (username!=null) {
-            modUser = userService.getByUsername(username);
-        }
-
-        if (modUser!=null) {
-            userDTO = ObjectMapperUtils.map(modUser, UserDTO.class);
-        }
-        else {
-            userDTO = new UserDTO();
-        }
-
-        model.addAttribute("user", userDTO);
-
-        return "register";
-    }
-
-
-    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
-    public String addUser(Model model, //
-                          @ModelAttribute("UserForm") UserDTO userDTO) { // The @ModelAttribute is
-        // an annotation that binds
-        // a method parameter or
-        // method return value to a
-        // named model attribute
-        // and then exposes it to a
-        // web view:
-
-        // merge instances
-        User user = ObjectMapperUtils.map(userDTO, User.class);
-
-        // if user already existed in DB, new information is already merged and saved
-        // a new user must be persisted (because not managed by entityManager yet)
-        if (!entityManager.contains(user)) userService.addUser(user);
-
-        return "redirect:/login";
-    }
 }
-

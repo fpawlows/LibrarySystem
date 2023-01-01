@@ -111,17 +111,6 @@ public class TemplateController {
         return "index";
     }
 
-    @RequestMapping(value = {"/login"})
-    public String login(Model model) {
-    	return "login";
-    }
-
-    @RequestMapping(value = {"/login-error"})
-    public String loginError(Model model) {
-    	model.addAttribute("error","Login error");
-    	return "login";
-    }
-
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model, @RequestParam(value = "username", required = false) String username) {
 

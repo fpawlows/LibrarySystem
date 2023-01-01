@@ -47,7 +47,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean addUser(String username, String fullName, String eMail, String Tel,
                            Date BirthDate, String password, String role) {
-
+//TODO disable overwriting users by creating a new one with the same username (e.g. admin) + tests
         if (username != null && username.length() > 0 //
                 && fullName != null && fullName.length() > 0) {
         	DemoPrincipal userDetails = new DemoPrincipal(username, password, role, null);

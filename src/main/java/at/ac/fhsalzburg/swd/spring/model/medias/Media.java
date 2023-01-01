@@ -23,7 +23,6 @@ public class Media {
     private String name;
     private String description;
     private Integer fsk;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date datePublished;
 

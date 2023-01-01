@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("//media")
-public class MediaController {
+@RequestMapping("/admin")
+public class ManagementController {
 
     @Autowired
     private MediaRepository mediaRepository;

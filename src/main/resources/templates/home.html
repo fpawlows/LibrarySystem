@@ -10,10 +10,16 @@
 
 <body>
 <main layout:fragment="content" th:remove="tag">
+    <hr/>
+    <br/><br/>
 
     <h2>Library System online</h2>
     <hr/>
     <br/><br/>
+
+    <form sec::authorize="'hasRole('ADMIN') "></form>
+
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/addMedia" class="btn btn-primary">Management</a>
 
 </main>
 
