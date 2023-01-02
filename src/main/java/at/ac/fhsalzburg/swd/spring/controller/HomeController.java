@@ -57,16 +57,20 @@ public class HomeController {
         model.addAttribute("fskValues", MediaDTO.possibleFskValues);
 
         //User modUser = null;
-        MediaDTO mediaDTO = new MediaDTO();
-        model.addAttribute("mediaDTO", mediaDTO);
+        if (model.getAttribute("mediaDTO") == null) {
+            MediaDTO mediaDTO = new MediaDTO();
+            model.addAttribute("mediaDTO", mediaDTO);
+            //TODO should be changed to session?
+            //
+        }
 
         return "home";
     }
 
-//TODO maybe change this to DTO
+    //TODO maybe change this to DTO
     @PostMapping(value={"/search"})
-    public String showSearchedMedia(
-        Model model,
+    public String searchMedia(
+        Model model, HttpSession session,
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
         if (mediaDTO.getId()!=null) {
             model.addAttribute("searchedMediasList", mediaService.getById(mediaDTO.getId()));
@@ -75,7 +79,6 @@ public class HomeController {
             //TODO temporary solution for names
             model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
         }
-        System.out.println("AAAAAAAAAAAAAAAAAAAAA " + mediaDTO.getId() +mediaDTO.getName()+ mediaDTO.getFsk()+ mediaDTO.getGenres());
         return "home";
 
     }

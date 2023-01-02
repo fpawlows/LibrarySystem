@@ -39,17 +39,19 @@
             <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
                 <option th:each="genre : ${allGenres}"
                         th:value="${genre}"
-                        <!--Maybe {{genre}}-->
                         th:text="${genre.name}">
                     Genre
                 </option>
+                <!--Maybe {{genre}} -->
+
             </select>
-<!--TODO LIST FSK-->
+
         <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}">
             <option th:each="fsk_ : ${fskValues}"
                     th:text="${fsk_}"
                     th:value="${fsk_}">
             </option>
+            <!-- TODO th:selected = "${mediaDTO?.getFsk()==fsk_}"-->
         </select>
 
         <!--
