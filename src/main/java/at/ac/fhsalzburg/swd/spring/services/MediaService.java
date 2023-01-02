@@ -24,7 +24,7 @@ public class MediaService implements MediaServiceInterface {
     private GenreRepository genreRepository;
 
     @Override
-    public boolean addMedia(String name, String description, Integer fsk, Date datePublished, Collection<Genre> genres) {
+    public boolean addMedia(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
         if (name != null && name.length() > 0 && Media.possibleFskValues.contains(fsk)) {
         description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
 
@@ -54,6 +54,23 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
+    public boolean addGenre(Genre genre) {
+        genreRepository.save(genre);
+        return true;
+    }
+
+    @Override
+    public boolean addGenre(String name) {
+        if (name != null && name.length() > 0 ) {
+            Genre genre = new Genre (name);
+            genreRepository.save(genre);
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
     public Collection<Media> getAll() {
         List<Media> medias = new ArrayList<>();
 
@@ -72,10 +89,10 @@ public class MediaService implements MediaServiceInterface {
         }
     }
 
-    public Collection<Media> getByAllOptional(String name, Integer fsk, Long genreId) {
+    public Collection<Media> getByAllOptional(String name, Integer fsk, List<Genre> genres) {
         List<Media> medias = new ArrayList<>();
 
-        mediaRepository.findAllOptionalLike(name, fsk, genreId).forEach(medias::add);
+        mediaRepository.findAllOptionalLike(name, fsk, genres).forEach(medias::add);
         return medias;
     }
 

@@ -8,7 +8,7 @@ public class Audio extends Media {
     private Integer duration;
 
     public Audio() {
-
+//TODO change them to protected?
     }
 
     public Audio(String codec, Integer duration) {

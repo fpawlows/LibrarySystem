@@ -11,10 +11,10 @@ import at.ac.fhsalzburg.swd.spring.model.Genre;
 
 
 @Repository
-public interface GenreRepository extends CrudRepository<Genre, Integer> {
+public interface GenreRepository extends CrudRepository<Genre, Long> {
 
     @Transactional(timeout = 10)
-    Optional<Genre> findById(Integer id);
+    Optional<Genre> findById(Long id);
 
     @Transactional(timeout = 10)
     List<Genre> findAll();

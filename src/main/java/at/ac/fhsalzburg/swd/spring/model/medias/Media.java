@@ -27,7 +27,7 @@ public class Media {
     private Date datePublished;
 
     @ManyToMany
-    private Collection<Genre> genres;
+    private List<Genre> genres;
 
     @OneToMany
     private Collection<Copy> copies;
@@ -43,7 +43,7 @@ public class Media {
         this.fsk = fsk;
     }
 
-    public Media(String name, String description, Integer fsk, Date datePublished, Collection<Genre> genres) {
+    public Media(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
         this.name = name;
         this.description = description;
         this.fsk = fsk;
@@ -51,7 +51,7 @@ public class Media {
         this.genres = genres;
     }
 
-    public Media(String name, String description, Integer fsk, Date datePublished, Collection<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+    public Media(String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         this.name = name;
         this.description = description;
         this.fsk = fsk;
@@ -75,7 +75,7 @@ public class Media {
 
     public Integer getFsk() { return fsk; }
 
-    public Collection<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
@@ -93,7 +93,7 @@ public class Media {
 
     public void setFsk(Integer fsk) {  this.fsk = fsk; }
 
-    public void setGenres(Collection<Genre> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MediaDTO {
+    public final static List<Integer> possibleFskValues = Arrays.asList( 0, 6, 12, 16 , 18);
 
     private Long id;
     private String name;
@@ -20,8 +21,8 @@ public class MediaDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date datePublished;
-
-    private Collection<Genre> genres;
+    //TODO in DTO objects all fields should also be towards other DTO objects? e.g. here Collection<GenreDTO> and also new Ids for all of them?
+    private List<Genre> genres;
 
     private Collection<Copy> copies;
 
@@ -41,7 +42,7 @@ public class MediaDTO {
 
     public Integer getFsk() { return fsk; }
 
-    public Collection<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
@@ -59,7 +60,7 @@ public class MediaDTO {
 
     public void setFsk(Integer fsk) {  this.fsk = fsk; }
 
-    public void setGenres(Collection<Genre> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
