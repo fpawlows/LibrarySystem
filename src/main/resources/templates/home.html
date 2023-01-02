@@ -36,8 +36,7 @@
         <!--TODO th:label and genres in autoload
 -->
         <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
-        <div class="form-check-inline blue-margin">
-            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" size="30" style="display: inline-block" multiple="multiple">
+            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple="multiple">
                 <option th:each="genre : ${allGenres}"
                         th:value="${{genre}}"
                         th:text="${genre.name}">
@@ -45,8 +44,7 @@
                 </option>
             </select>
 <!--TODO LIST FSK-->
-        </div>
-        <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}" size="30" style="display: inline-block">
+        <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}">
             <option th:each="fsk_ : ${fskValues}"
                     th:text="${fsk_}"
                     th:value="${fsk_}">
@@ -65,7 +63,7 @@
 
     <br/><br/>
 
-    <div th:if="${searchedMediasList != null}" class="table-responsive">
+    <div class="table-responsive">
         <table class="table table-hover table-bordered">
             <thead>
             <!--Should be as many tables as media subtypes with Headers with <subtype>.name-->

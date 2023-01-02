@@ -2,6 +2,7 @@ package at.ac.fhsalzburg.swd.spring.controller;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -59,7 +60,7 @@ public class HomeController {
         MediaDTO mediaDTO = new MediaDTO();
         model.addAttribute("mediaDTO", mediaDTO);
 
-        return "redirect:/home";
+        return "home";
     }
 
 //TODO maybe change this to DTO
@@ -71,9 +72,10 @@ public class HomeController {
             model.addAttribute("searchedMediasList", mediaService.getById(mediaDTO.getId()));
         } else {
             List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
+            //TODO temporary solution for names
             model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
         }
-        return "home";
+        return "redirect:/home";
 
     }
 
