@@ -25,12 +25,13 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
     @Transactional(timeout = 10)
     //TODO add in every repository this @Transactional
     @Query(value =
-        "select m from media m join genre g where (:name IS NULL or m.name LIKE '%'||:name||'%') " +
-            "or (:fsk IS NULL or m.fsk == :fsk)" +
-            "or (:genreId IS NULL or g.id == :genreId)"
-        , nativeQuery = true)
-    List<Media> findAllOptionalLike(String name, Integer fsk, Long genre);
+        //Maybe not m.genre but just genre
+        //TODO create all queries for all media types -now only for book
+        "select m from Media m left join m.genres g WHERE (:name IS NULL or m.name LIKE '%'||:name||'%') " +
+            "or (:fsk IS NULL or m.fsk = :fsk)" +
+            "or (:genres IS NULL or g IN :genres)")
+    List<Media> findAllOptionalLike(@Param("name") String name, @Param("fsk") Integer fsk, @Param("genres") List<Genre> genres);
     //Possible extension with date and more
-
+//TODO there are returnedduplicates - maybe make set or at least save only distinguished ID
 }
 

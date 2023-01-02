@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -43,31 +44,34 @@ public class HomeController {
     @Autowired
     MediaServiceInterface mediaService;
 
-    @RequestMapping("/home")
+    @RequestMapping( "/home")
     //TODO change 'home' to '/'
     public String home(
-
+        //@RequestParam(value = "id", required = false) Long id,
         Model model, HttpSession session,
-                       @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
+        model.addAttribute("fskValues", MediaDTO.possibleFskValues);
 
-        return "home";
+        //User modUser = null;
+        MediaDTO mediaDTO = new MediaDTO();
+        model.addAttribute("mediaDTO", mediaDTO);
+
+        return "redirect:/home";
     }
 
 //TODO maybe change this to DTO
-    @GetMapping(value={"/search"})
+    @PostMapping(value={"/search"})
     public String showSearchedMedia(
-        @RequestParam (value = "searchMediaId", required = false) Long searchMediaId,
-        @RequestParam (value = "searchMediaName", required = false) String searchMediaName,
-        @RequestParam (value = "searchMediaFsk", required = false) Integer searchMediaFsk,
-        @RequestParam (value = "searchMediaGenreId", required = false) Long searchMediaGenreId,
-        Model model) {
-        if (searchMediaId!=null) {
-            model.addAttribute("searchedMediasList", mediaService.getById(searchMediaId));
+        Model model,
+        @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
+        if (mediaDTO.getId()!=null) {
+            model.addAttribute("searchedMediasList", mediaService.getById(mediaDTO.getId()));
         } else {
-            model.addAttribute("searchedMediasList", mediaService.getByAllOptional(searchMediaName, searchMediaFsk, searchMediaGenreId));
+            List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
+            model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
         }
         return "home";
 

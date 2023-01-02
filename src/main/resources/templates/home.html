@@ -30,29 +30,75 @@
     <h3>What kind of media are you looking for?</h3>
     <br/>
 
-    <form th:action="@{/search}" th:method="get" style="display: inline-block">
-        <input th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-               type="number" min=0 name="searchMediaId" th:value="${searchMediaId}" placeholder="ID" size="20">
+    <form th:action="@{/search}" th:object="${mediaDTO}" th:method="post" style="display: inline-block">
+        <input class="form-check-inline" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+               type="number" min=0 name="searchMediaId" th:field="*{id}" placeholder="ID" size="10" style="display: inline-block">
         <!--TODO th:label and genres in autoload
 -->
-        <input type="text" name="searchMediaName" th:value="${searchMediaName}" placeholder="Name" size="30">
-        <div class="form-group blue-margin">
-            <!--
-            <select class="form-control" name="searchMediaGenreId" th:field="*{searchMediaGenreId}">
-                <option th:each="genre : ${genres}"
-                        th:text="${genre.name}"
-                        th:value="${genre.id}"></option>
+        <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
+        <div class="form-check-inline blue-margin">
+            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" size="30" style="display: inline-block" multiple="multiple">
+                <option th:each="genre : ${allGenres}"
+                        th:value="${{genre}}"
+                        th:text="${genre.name}">
+                    Genre
+                </option>
             </select>
-            -->
 <!--TODO LIST FSK-->
         </div>
-        <input type="number" min=0 name="searchMediaFsk" th:value="${searchMediaFsk}" placeholder="Name" size="30">
+        <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}" size="30" style="display: inline-block">
+            <option th:each="fsk_ : ${fskValues}"
+                    th:text="${fsk_}"
+                    th:value="${fsk_}">
+
+            </option>
+        </select>
+        <!--
+        <input type="number" min=0 name="searchMediaFsk" th:value="*{fsk}" placeholder="Fsk" size="30" style="display: inline-block">
+        -->
         <button type="submit" class="btn btn-info" >Search</button>
         <button type="reset" class="btn btn-info" >Reset</button>
     </form>
 
 
     <a sec:authorize="hasRole('ADMIN')" href="/admin/addMedia" class="btn btn-primary">Management</a>
+
+    <br/><br/>
+
+    <div th:if="${searchedMediasList != null}" class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <!--Should be as many tables as media subtypes with Headers with <subtype>.name-->
+            <tr >
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Fsk</th>
+                <th scope="col">Date Published</th>
+                <th scope="col">Genres</th>
+                <!-- add later - bool (anyCopyAvailable) TODO
+                <th scope="col">Available</th>
+                -->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each ="media : ${searchedMediasList}">
+
+                <td> <a th:href="@{/admin/addMedia(id=${media.id})}" th:utext="${media.id}"></a> </td>
+                <td> <a th:href="@{/loan(id=${media.id})}" th:utext="${media.name}"></a> </td>
+                <td th:utext="${media.description}">...</td>
+                <td th:utext="${media.fsk}">...</td>
+                <td th:utext="${media.datePublished}">...</td>
+                <td th:utext="${media.genres}">...</td>
+                <!--
+                .isEmpty() ? "" : media.genres.stream().map(media.genres.get(0).getClass()::getName)
+                <td th:utext="${media.genres.stream().map(Genre::getName).collect(Collectors.toList())}">...</td>
+            -->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 
 </main>
 
