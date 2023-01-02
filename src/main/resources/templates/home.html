@@ -36,9 +36,10 @@
         <!--TODO th:label and genres in autoload
 -->
         <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
-            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple="multiple">
+            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
                 <option th:each="genre : ${allGenres}"
-                        th:value="${{genre}}"
+                        th:value="${genre}"
+                        <!--Maybe {{genre}}-->
                         th:text="${genre.name}">
                     Genre
                 </option>
@@ -48,9 +49,9 @@
             <option th:each="fsk_ : ${fskValues}"
                     th:text="${fsk_}"
                     th:value="${fsk_}">
-
             </option>
         </select>
+
         <!--
         <input type="number" min=0 name="searchMediaFsk" th:value="*{fsk}" placeholder="Fsk" size="30" style="display: inline-block">
         -->

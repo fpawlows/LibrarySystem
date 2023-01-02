@@ -75,7 +75,8 @@ public class HomeController {
             //TODO temporary solution for names
             model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
         }
-        return "redirect:/home";
+        System.out.println("AAAAAAAAAAAAAAAAAAAAA " + mediaDTO.getId() +mediaDTO.getName()+ mediaDTO.getFsk()+ mediaDTO.getGenres());
+        return "home";
 
     }
 
