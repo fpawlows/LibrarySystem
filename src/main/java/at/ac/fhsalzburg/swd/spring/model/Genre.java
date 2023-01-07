@@ -33,4 +33,8 @@ public class Genre {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String toString(){
+        return this.getName();
+    }
 }

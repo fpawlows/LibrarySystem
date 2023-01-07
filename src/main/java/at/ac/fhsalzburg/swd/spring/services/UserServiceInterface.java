@@ -23,4 +23,9 @@ public interface UserServiceInterface {
 
     public abstract User getByUsername(String username);
 
+
+/////////////////////Mine \/
+
+
+
 }

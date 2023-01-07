@@ -67,23 +67,43 @@ public class HomeController {
         return "home";
     }
 
-    //TODO maybe change this to DTO
     @PostMapping(value={"/search"})
-    public String searchMedia(
-        Model model, HttpSession session,
+    public String showSearchedMedia(
+        Model model,
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
         if (mediaDTO.getId()!=null) {
             model.addAttribute("searchedMediasList", mediaService.getById(mediaDTO.getId()));
         } else {
             List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
-            //TODO temporary solution for names
             model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
         }
+
         return "home";
 
     }
 
 
+    @RequestMapping( value = {"/search"}, method = RequestMethod.GET)
+    //TODO change 'home' to '/'
+    public String getSearched(
+        //@RequestParam(value = "id", required = false) Long id,
+        Model model, HttpSession session,
+        @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+
+        List<Genre> allGenres = mediaService.getAllGenres();
+        model.addAttribute("allGenres", allGenres);
+        model.addAttribute("fskValues", MediaDTO.possibleFskValues);
+
+        //User modUser = null;
+        if (model.getAttribute("mediaDTO") == null) {
+            MediaDTO mediaDTO = new MediaDTO();
+            model.addAttribute("mediaDTO", mediaDTO);
+            //TODO should be changed to session?
+            //
+        }
+
+        return "home";
+    }
 
             //TODO Display statistics in footer
 

@@ -23,11 +23,12 @@ public class MediaService implements MediaServiceInterface {
     @Autowired
     private GenreRepository genreRepository;
 
+    //TODO change all those to addBook addAudio ... (media shouldnt be created itself)
     @Override
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
         if (name != null && name.length() > 0 && Media.possibleFskValues.contains(fsk)) {
         description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-
+        fsk = fsk==null ? 0 : fsk;
         Media media = new Media (name, description, fsk, datePublished, genres);
         mediaRepository.save(media);
         return true;
@@ -39,6 +40,7 @@ public class MediaService implements MediaServiceInterface {
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished) {
             if (name != null && name.length() > 0 && Media.possibleFskValues.contains(fsk)) {
                 description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
+                fsk = fsk==null ? 0 : fsk;
 
                 Media media = new Media (name, description, fsk, datePublished, null);
                 mediaRepository.save(media);

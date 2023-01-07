@@ -71,7 +71,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         for (int i = 0; i < N_MEDIAS; i++) {
             givenGenres.add(new Genre("asdsad" + i));
             mediaService.addGenre(givenGenres.get(i));
-            givenMedias.add(new Book(i, Integer.toString(i)));
+            givenMedias.add(new Book("Name" + i, null, null, i, Integer.toString(i)));
             givenMedias.get(i).setGenres(givenGenres);
             //Reservation reservation = new Reservation(new ReservationId(givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i)), (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES));
             //givenReservations.get(i % N_FIRST_MEDIAS_FOR_QUEUES).add(reservation);
