@@ -85,12 +85,12 @@
             <tbody>
             <tr th:each ="media : ${searchedMediasList}">
 
-                <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/addMedia(id=${media.id})}" th:utext="${media.id}"></a> </td>
-                <td> <a th:href="@{/loan(id=${media.id})}" th:utext="${media.name}"></a> </td>
-                <td th:utext="${media.description}">...</td>
-                <td th:utext="${media.fsk}">...</td>
-                <td th:utext="${media.datePublished}">...</td>
-                <td th:utext="${media.genres}">...</td>
+                <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/addMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>
+                <td> <a th:href="@{/loan(id=${media.getId()})}" th:utext="${media.getName()}"></a> </td>
+                <td th:utext="${media.getDescription()}">...</td>
+                <td th:utext="${media.getFsk()}">...</td>
+                <td th:utext="${media.getDatePublished()}">...</td>
+                <td th:utext="${media.getGenres()}">...</td>
                 <td>
                     <a th:href="@{/update/{id}(id=${media.getId()})}" ><i class="fa fa-edit" ></i></a>
                     <a th:href="@{/delete/{id}(id=${media.getId()})}" ><i class="fa fa-remove"></i></a>
