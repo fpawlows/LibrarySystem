@@ -80,13 +80,12 @@ public class ObjectMapperUtils {
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
         if (typeMapMedia == null) {
-            typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class);
+            typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class)
+                .include(BookDTO.class, Book.class)
+                .include(AudioDTO.class, Audio.class)
+                .include(PaperDTO.class, Paper.class)
+                .include(MovieDTO.class, Movie.class);
         }
-
-        typeMapMedia.include(BookDTO.class, Book.class)
-            .include(AudioDTO.class, Audio.class)
-            .include(PaperDTO.class, Paper.class)
-            .include(MovieDTO.class, Movie.class);
         // create a provider to be able to merge the dto data with the data in the database:
         // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {

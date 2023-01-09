@@ -38,21 +38,24 @@
         <!--TODO th:label and genres in autoload
 -->
         <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
-            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
-                <option th:each="genre : ${allGenres}"
-                        th:value="${genre}"
-                        th:text="${genre.name}">
-                    Genre
-                </option>
+        <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
+            <option selected th:value="${null}">-- Genre --</option>
+            <option th:each="genre : ${allGenres}"
+                    th:value="${genre}"
+                    th:text="${genre.name}">
+                Genre
+            </option>
                 <!--Maybe {{genre}} -->
 
             </select>
 
         <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}">
+            <option selected th:value="${null}">-- fsk --</option>
             <option th:each="fsk_ : ${fskValues}"
                     th:text="${fsk_}"
-                    th:value="${fsk_}">
+                    th:value="${fsk_}">Fsk
             </option>
+
             <!-- TODO th:selected = "${mediaDTO?.getFsk()==fsk_}"-->
         </select>
 
@@ -65,7 +68,8 @@
 
     <br/><br/>
 
-    <div class="table-responsive">
+    <label for="books">Books</label>
+    <div class="table-responsive" id="books">
         <table class="table table-hover table-bordered">
             <thead>
             <!--Should be as many tables as media subtypes with Headers with <subtype>.name-->
@@ -76,6 +80,8 @@
                 <th scope="col">Fsk</th>
                 <th scope="col">Date Published</th>
                 <th scope="col">Genres</th>
+                <th scope="col">ISBN</th>
+                <th scope="col">Author</th>
                 <th scope="col">Action</th>
                 <!-- add later - bool (anyCopyAvailable) TODO
                 <th scope="col">Available</th>
@@ -83,10 +89,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${searchedMediasList.isEmpty() || searchedMediasList==null}">
-                <td> No Media Searched </td>
+            <tr th:if="${searchedBooksCollection==null || searchedBooksCollection.isEmpty()}">
+                <td> No Books Searched </td>
             </tr>
-            <tr th:each ="media : ${searchedMediasList}">
+            <tr th:each ="media : ${searchedBooksCollection}">
 
                 <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/addMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>
                 <td> <a th:href="@{/loan(id=${media.getId()})}" th:utext="${media.getName()}"></a> </td>
@@ -94,9 +100,11 @@
                 <td th:utext="${media.getFsk()}">...</td>
                 <td th:utext="${media.getDatePublished()}">...</td>
                 <td th:utext="${media.getGenres()}">...</td>
+                <td th:utext="${media.getISBN()}">...</td>
+                <td th:utext="${media.getAuthor()}">...</td>
                 <td>
-                    <a th:href="@{/update/{id}(id=${media.getId()})}" ><i class="fa fa-edit" ></i></a>
-                    <a th:href="@{/delete/{id}(id=${media.getId()})}" ><i class="fa fa-remove"></i></a>
+                    <a th:href="@{/update/{id}(id=${media.getId()})}" ><i class="fa fa-edit" >Edit</i></a>
+                    <a th:href="@{/delete/{id}(id=${media.getId()})}" ><i class="fa fa-remove">Remove</i></a>
                 </td>
                 <!--
                 .isEmpty() ? "" : media.genres.stream().map(media.genres.get(0).getClass()::getName)
@@ -105,6 +113,7 @@
             </tr>
             </tbody>
         </table>
+        <!--TODO for the other types of media-->
     </div>
 
 

@@ -33,7 +33,7 @@ public class UserService implements UserServiceInterface {
 
     @Autowired
     private UserRepository repo;
-
+//TODO change to constructor ijection
     public UserService() {
         i = 0;
     }

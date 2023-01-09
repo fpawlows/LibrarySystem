@@ -5,6 +5,7 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.repository.GenreRepository;
 import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,21 +13,30 @@ import java.util.*;
 @Service
 public class MediaService implements MediaServiceInterface {
 
-    private final String DEFAULT_DESCRIPTION = "No description yet.";
+    private final String DEFAULT_DESCRIPTION;
+
+    private final List<Integer> possibleFskValues;
 
     //TODO maybe
     //private final Set<Class<? extends Object>> allClasses = (new Reflection("src/main/java/at/ac/fhsalzburg/swd/spring/model/medias")).getSubTypesOf(Media.class);
 
-    @Autowired
-    private MediaRepository mediaRepository;
+    private final MediaRepository mediaRepository;
 
-    @Autowired
-    private GenreRepository genreRepository;
+    private final GenreRepository genreRepository;
+
+    public MediaService(MediaRepository mediaRepository, GenreRepository genreRepository,
+                        @Value("myapp.media.default.description") String defaultDescription,
+                        @Value("#{'${myapp.media.possible.fsk.values}'.split(',')}") List<Integer> fskValues) {
+        this.possibleFskValues = fskValues;
+        this.DEFAULT_DESCRIPTION = defaultDescription;
+        this.mediaRepository = mediaRepository;
+        this.genreRepository = genreRepository;
+    }
 
     //TODO change all those to addBook addAudio ... (media shouldnt be created itself)
     @Override
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
-        if (name != null && name.length() > 0 && Media.getPossibleFskValues().contains(fsk)) {
+        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
         description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
         fsk = fsk==null ? 0 : fsk;
         Media media = new Media (name, description, fsk, datePublished, genres);
@@ -38,16 +48,16 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished) {
-            if (name != null && name.length() > 0 && Media.getPossibleFskValues().contains(fsk)) {
-                description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-                fsk = fsk==null ? 0 : fsk;
+        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
+            description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
+            fsk = fsk == null ? 0 : fsk;
 
-                Media media = new Media (name, description, fsk, datePublished, null);
-                mediaRepository.save(media);
-                return true;
-            }
-            return false;
+            Media media = new Media(name, description, fsk, datePublished, null);
+            mediaRepository.save(media);
+            return true;
         }
+        return false;
+    }
 
     @Override
     public boolean addMedia(Media media) {
@@ -113,5 +123,7 @@ public class MediaService implements MediaServiceInterface {
         return genres;
     }
 
-
+    public List<Integer> getPossibleFskValues(){
+        return possibleFskValues;
+    }
 }

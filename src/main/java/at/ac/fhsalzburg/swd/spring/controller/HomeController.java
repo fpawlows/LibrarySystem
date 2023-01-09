@@ -1,18 +1,15 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
-import at.ac.fhsalzburg.swd.spring.dto.medias.BookDTO;
-import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
+import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
-import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -61,7 +58,7 @@ public class HomeController {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
-        model.addAttribute("fskValues", MediaDTO.getPossibleFskValues());
+        model.addAttribute("fskValues", mediaService.getPossibleFskValues());
         model.addAttribute("searchedMediasList", new ArrayList<MediaDTO>());
 //              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
 //            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
@@ -82,15 +79,44 @@ public class HomeController {
         Model model,
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
 
-        List<MediaDTO> searchedMediasCollection = new ArrayList<MediaDTO>();
+//        Map<? extends Class<? extends Media>, ? extends List<? extends Media>> searchedRawMediasClassesMap = new HashMap<>();
+        Map<Class, List<Media>> searchedRawMediasClassesMap = new HashMap<>();
+
         if (mediaDTO.getId()!=null) {
-            MediaDTO searchedMedia = ObjectMapperUtils.map(mediaService.getById(mediaDTO.getId()), MediaDTO.class);
-            searchedMediasCollection.add(searchedMedia);
+            Media searchedMedia = mediaService.getById(mediaDTO.getId());
+            searchedRawMediasClassesMap.put(searchedMedia.getClass(), Collections.singletonList(searchedMedia));
         } else {
             List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
-            searchedMediasCollection = ObjectMapperUtils.mapAll(mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres), MediaDTO.class);
+            Collection<? extends Media> searchedRawMedias = mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres);
+            searchedRawMediasClassesMap = searchedRawMedias.stream().collect(Collectors.groupingBy(Media::getClass));
         }
-        model.addAttribute("searchedMediasList", searchedMediasCollection);
+
+        //TODO strategy or visitor pattern (actually modelmapper should just be working like that)
+//Since the data needs to be identified into different lists for the display anyway, this way it can be done in one place, which is considered better approach than basing on file structure in our project (and finding all classes names through reflection)
+            for (var entry: searchedRawMediasClassesMap.entrySet()) {
+                if (entry.getKey() == Book.class) {
+                    List<BookDTO> searchedBooksCollection = ObjectMapperUtils.mapAll(entry.getValue(), BookDTO.class);
+                    model.addAttribute("searchedBooksCollection", searchedBooksCollection);
+
+                } else {
+                    if (entry.getKey() == Audio.class) {
+                        List<AudioDTO> searchedAudiosCollection = ObjectMapperUtils.mapAll(entry.getValue(), AudioDTO.class);
+                        model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
+
+                    } else {
+                        if (entry.getKey() == Paper.class) {
+                            List<PaperDTO> searchedPapersCollection = ObjectMapperUtils.mapAll(entry.getValue(), PaperDTO.class);
+                            model.addAttribute("searchedPapersCollection", searchedPapersCollection);
+
+                        } else {
+                            if (entry.getKey() == Movie.class) {
+                                List<MovieDTO> searchedMoviesCollection = ObjectMapperUtils.mapAll(entry.getValue(), MovieDTO.class);
+                                model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
+                            }
+                        }
+                    }
+                }
+            }
 
         return "home";
 
@@ -109,7 +135,7 @@ public class HomeController {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
-        model.addAttribute("fskValues", MediaDTO.getPossibleFskValues());
+        model.addAttribute("fskValues", mediaService.getPossibleFskValues());
         model.addAttribute("searchedMediasList",
               (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
 //            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);

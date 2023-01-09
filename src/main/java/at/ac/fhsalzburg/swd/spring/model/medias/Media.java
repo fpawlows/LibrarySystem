@@ -16,11 +16,6 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Media {
 
-    @Value("#{'${myapp.possible.fsk.values}'.split(',')}")
-    private static List<Integer> possibleFskValues;
-
-    public static List<Integer> getPossibleFskValues() {return possibleFskValues;}
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

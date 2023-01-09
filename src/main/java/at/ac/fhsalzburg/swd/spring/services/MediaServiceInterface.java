@@ -25,5 +25,5 @@ public interface MediaServiceInterface {
 
     public abstract List<Genre> getAllGenres();
 
-
+    public abstract List<Integer> getPossibleFskValues();
 }

@@ -14,8 +14,6 @@ import java.util.List;
 
 //TODO MEdia adn MEDIADTO abstract - factory
 public class MediaDTO {
-    @Value("#{'${myapp.possible.fsk.values}'.split(',')}")
-    private static List<Integer> possibleFskValues;
 
     private Long id;
     private String name;
@@ -91,5 +89,4 @@ public class MediaDTO {
         this.reservations = reservations;
     }
 
-    public static List<Integer> getPossibleFskValues() {return possibleFskValues;}
 }
