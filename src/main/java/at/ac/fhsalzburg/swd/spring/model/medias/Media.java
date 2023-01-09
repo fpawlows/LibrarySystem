@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,7 +16,10 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Media {
 
-    public final static List<Integer> possibleFskValues = Arrays.asList( 0, 6, 12, 16 , 18);
+    @Value("#{'${myapp.possible.fsk.values}'.split(',')}")
+    private static List<Integer> possibleFskValues;
+
+    public static List<Integer> getPossibleFskValues() {return possibleFskValues;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -83,6 +83,9 @@
             </tr>
             </thead>
             <tbody>
+            <tr th:if="${searchedMediasList.isEmpty() || searchedMediasList==null}">
+                <td> No Media Searched </td>
+            </tr>
             <tr th:each ="media : ${searchedMediasList}">
 
                 <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/addMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>

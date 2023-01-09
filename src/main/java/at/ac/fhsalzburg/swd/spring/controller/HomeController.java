@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,12 +9,14 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import at.ac.fhsalzburg.swd.spring.dto.medias.BookDTO;
 import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -45,16 +48,23 @@ public class HomeController {
     @Autowired
     MediaServiceInterface mediaService;
 
-    @RequestMapping( "/home")
+    //@Autowired
+    //StatisticsService statisticsService;
+
+    @RequestMapping( value = {"/home"})
     //TODO change 'home' to '/'
     public String home(
         //@RequestParam(value = "id", required = false) Long id,
         Model model, HttpSession session,
-    @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+        @CurrentSecurityContext(expression = "authentication") Authentication authentication){
+//        @ModelAttribute("searchedMediasList") Collection<MediaDTO> searchedMediasList) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
-        model.addAttribute("fskValues", MediaDTO.possibleFskValues);
+        model.addAttribute("fskValues", MediaDTO.getPossibleFskValues());
+        model.addAttribute("searchedMediasList", new ArrayList<MediaDTO>());
+//              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
+//            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
 
         //User modUser = null;
         if (model.getAttribute("mediaDTO") == null) {
@@ -71,16 +81,22 @@ public class HomeController {
     public String showSearchedMedia(
         Model model,
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
+
+        List<MediaDTO> searchedMediasCollection = new ArrayList<MediaDTO>();
         if (mediaDTO.getId()!=null) {
-            model.addAttribute("searchedMediasList", mediaService.getById(mediaDTO.getId()));
+            MediaDTO searchedMedia = ObjectMapperUtils.map(mediaService.getById(mediaDTO.getId()), MediaDTO.class);
+            searchedMediasCollection.add(searchedMedia);
         } else {
             List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
-            model.addAttribute("searchedMediasList", mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres));
+            searchedMediasCollection = ObjectMapperUtils.mapAll(mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres), MediaDTO.class);
         }
+        model.addAttribute("searchedMediasList", searchedMediasCollection);
 
         return "home";
 
     }
+
+    //TODO Display statistics in footer
 
 
     @RequestMapping( value = {"/search"}, method = RequestMethod.GET)
@@ -88,11 +104,15 @@ public class HomeController {
     public String getSearched(
         //@RequestParam(value = "id", required = false) Long id,
         Model model, HttpSession session,
-        @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+        @CurrentSecurityContext(expression = "authentication") Authentication authentication,
+        @ModelAttribute("searchedMediasList") Collection<MediaDTO> searchedMediasList) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
-        model.addAttribute("fskValues", MediaDTO.possibleFskValues);
+        model.addAttribute("fskValues", MediaDTO.getPossibleFskValues());
+        model.addAttribute("searchedMediasList",
+              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
+//            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
 
         //User modUser = null;
         if (model.getAttribute("mediaDTO") == null) {

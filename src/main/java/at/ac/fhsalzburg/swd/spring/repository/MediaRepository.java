@@ -32,6 +32,5 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
             "or (:genres IS NULL or g IN :genres)")
     List<Media> findAllOptionalLike(@Param("name") String name, @Param("fsk") Integer fsk, @Param("genres") List<Genre> genres);
     //Possible extension with date and more
-//TODO there are returnedduplicates - maybe make set or at least save only distinguished ID
 }
 

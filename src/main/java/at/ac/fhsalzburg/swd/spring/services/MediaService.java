@@ -26,7 +26,7 @@ public class MediaService implements MediaServiceInterface {
     //TODO change all those to addBook addAudio ... (media shouldnt be created itself)
     @Override
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
-        if (name != null && name.length() > 0 && Media.possibleFskValues.contains(fsk)) {
+        if (name != null && name.length() > 0 && Media.getPossibleFskValues().contains(fsk)) {
         description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
         fsk = fsk==null ? 0 : fsk;
         Media media = new Media (name, description, fsk, datePublished, genres);
@@ -38,7 +38,7 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public boolean addMedia(String name, String description, Integer fsk, Date datePublished) {
-            if (name != null && name.length() > 0 && Media.possibleFskValues.contains(fsk)) {
+            if (name != null && name.length() > 0 && Media.getPossibleFskValues().contains(fsk)) {
                 description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
                 fsk = fsk==null ? 0 : fsk;
 

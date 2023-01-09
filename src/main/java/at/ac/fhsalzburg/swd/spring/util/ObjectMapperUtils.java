@@ -4,10 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import at.ac.fhsalzburg.swd.spring.dto.medias.BookDTO;
-import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
-import at.ac.fhsalzburg.swd.spring.model.medias.Book;
-import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+import at.ac.fhsalzburg.swd.spring.dto.medias.*;
+import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaService;
 import org.modelmapper.AbstractCondition;
 import org.modelmapper.Condition;
@@ -84,6 +82,11 @@ public class ObjectMapperUtils {
         if (typeMapMedia == null) {
             typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class);
         }
+
+        typeMapMedia.include(BookDTO.class, Book.class)
+            .include(AudioDTO.class, Audio.class)
+            .include(PaperDTO.class, Paper.class)
+            .include(MovieDTO.class, Movie.class);
         // create a provider to be able to merge the dto data with the data in the database:
         // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
@@ -100,28 +103,6 @@ public class ObjectMapperUtils {
         // a provider to fetch a user instance from a repository
         typeMapMedia.setProvider(mediaDelegatingProvider);
 
-
-        // create a typemap to override default behaviour for DTO to entity mapping
-        TypeMap<BookDTO, Book> typeMapBook = modelMapper.getTypeMap(BookDTO.class, Book.class);
-        if (typeMapBook == null) {
-            typeMapBook = modelMapper.createTypeMap(BookDTO.class, Book.class);
-        }
-        // create a provider to be able to merge the dto data with the data in the database:
-        // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
-        Provider<Book> bookDelegatingProvider = new Provider<Book>() {
-
-            public Book get(ProvisionRequest<Book> request) {
-                // it is also possible to get a service instance from the application context programmatically
-                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
-                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
-                    .getBean("mediaService");
-                return (Book)mediaService.getById(((BookDTO) request.getSource()).getId());
-                //TODO check if this works
-            }
-        };
-
-        // a provider to fetch a user instance from a repository
-        typeMapBook.setProvider(bookDelegatingProvider);
     }
 
     //public static ModelMapper getModelMapper() {
