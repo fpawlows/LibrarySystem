@@ -1,0 +1,12 @@
+<div class="form" th:fragment="form">
+    <div class="mb-3">
+        <label for="isbn" class="form-label">ISBN</label>
+        <input type="number" class="form-control" id="isbn" th:field="*{ISBN}">
+    </div>
+    <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <input type="text" class="form-control" id="author" th:field="*{Author}" >
+    </div>
+</div>
+
+<!--TODO same fragments for all medias types - look at editMedia to see the names of th:fragment-->

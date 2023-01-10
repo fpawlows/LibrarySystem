@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 
 @Entity
 public class Book extends Media {
+
+    final static String className = "Book";
+    public static String getClassName() {return className;}
+
     private Integer ISBN;
     private String Author;
 

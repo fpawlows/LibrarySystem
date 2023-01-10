@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.dto.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,6 +16,8 @@ import java.util.List;
 
 //TODO MEdia adn MEDIADTO abstract - factory
 public class MediaDTO implements Serializable {
+    final static String className = Media.getClassName();
+    public static String getClassName() {return className;}
 
     private Long id;
     private String name;

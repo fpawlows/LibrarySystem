@@ -16,6 +16,9 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Media {
 
+    final static String className = "Media";
+    public static String getClassName() {return className;}
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

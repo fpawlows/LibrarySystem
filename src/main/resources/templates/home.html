@@ -24,6 +24,7 @@
     <h2>Library System online</h2>
     <hr/>
     <br/>
+
     <a sec:authorize="hasRole('ADMIN')" href="/admin/editMedia" class="btn btn-primary">Add Media</a>
     <br/>
 
@@ -39,27 +40,21 @@
 -->
         <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
 
-   <!--//TODO table for all types of media
-        //TODO working search with genre-->
         <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
             <option selected disabled th:value="${null}">-- Genre --</option>
             <option th:each="genre : ${allGenres}"
-                    th:value="${genre}"
+                    th:value="${genre.id}"
                     th:text="${genre.name}">
                 Genre
             </option>
-                <!--Maybe {{genre}} -->
+        </select>
 
-            </select>
-
-        <select class="form-select" name="searchMediaGenreId" th:field="*{fsk}">
+        <select class="form-select" name="searchMediaFsk" th:field="*{fsk}">
             <option selected th:value="${null}">-- fsk --</option>
             <option th:each="fsk_ : ${fskValues}"
                     th:text="${fsk_}"
                     th:value="${fsk_}">Fsk
             </option>
-
-            <!-- TODO th:selected = "${mediaDTO?.getFsk()==fsk_}"-->
         </select>
 
         <!--

@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 
 @Entity
 public class Audio extends Media {
+
+    final static String className = "Audio";
+    public static String getClassName() {return className;}
+
     private String codec;
     private Integer duration;
 
@@ -30,7 +34,7 @@ public class Audio extends Media {
         this.codec = codec;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 

@@ -1,8 +1,13 @@
 package at.ac.fhsalzburg.swd.spring.dto.medias;
 
+import at.ac.fhsalzburg.swd.spring.model.medias.Audio;
+import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+
 import java.io.Serializable;
 
 public class AudioDTO extends MediaDTO {
+    final static String className = Audio.getClassName();
+    public static String getClassName() {return className;}
 
     private String codec;
     private Integer duration;
@@ -15,7 +20,7 @@ public class AudioDTO extends MediaDTO {
         this.codec = codec;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 

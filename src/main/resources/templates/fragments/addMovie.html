@@ -1,0 +1,12 @@
+<div class="form" th:fragment="form">
+    <div class="mb-3">
+        <label for="duration" class="form-label">Duration</label>
+        <input type="number" class="form-control" id="duration" th:field="*{duration}">
+    </div>
+    <div class="mb-3">
+        <label for="format" class="form-label">Format</label>
+        <input type="text" class="form-control" id="format" th:field="*{format}" >
+    </div>
+</div>
+
+<!--TODO same fragments for all medias types - look at editMedia to see the names of th:fragment-->

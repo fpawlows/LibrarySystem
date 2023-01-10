@@ -4,10 +4,14 @@ import javax.persistence.Entity;
 
 @Entity
 public class Movie extends Media {
+
+    final static String className = "Movie";
+    public static String getClassName() {return className;}
+
     private Integer duration;
     private String format;
 
-    Movie() {
+    public Movie() {
     }
 
     public Movie(Integer duration, String format) {

@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 
 @Entity
 public class Paper extends Media {
+
+    final static String className = "Paper";
+    public static String getClassName() {return className;}
+
     private Integer edition;
 
     public Paper(){}
