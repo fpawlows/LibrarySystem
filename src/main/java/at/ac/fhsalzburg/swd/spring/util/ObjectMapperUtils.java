@@ -12,6 +12,7 @@ import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.Provider;
 import org.modelmapper.TypeMap;
+import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -51,9 +52,10 @@ public class ObjectMapperUtils {
 
         // initial configuration
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT)
+            .setFieldMatchingEnabled(true)
+            .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
             .setSkipNullEnabled(true) // skip null fields
             .setPropertyCondition(isStringBlank); // skip empty strings
-
 
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<UserDTO, User> typeMapUser = modelMapper.getTypeMap(UserDTO.class, User.class);
@@ -81,11 +83,18 @@ public class ObjectMapperUtils {
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
         if (typeMapMedia == null) {
             typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class)
+//                .addMapping(MediaDTO::getName, Media::setName)
+//                .addMapping(MediaDTO::getDescription, Media::setDescription)
                 .include(BookDTO.class, Book.class)
                 .include(AudioDTO.class, Audio.class)
                 .include(PaperDTO.class, Paper.class)
-                .include(MovieDTO.class, Movie.class);
+                .include(MovieDTO.class, Movie.class)
+                .include(BookDTO.class, Media.class)
+                .include(AudioDTO.class, Media.class)
+                .include(PaperDTO.class, Media.class)
+                .include(MovieDTO.class, Media.class);
         }
+
         // create a provider to be able to merge the dto data with the data in the database:
         // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
@@ -132,8 +141,8 @@ public class ObjectMapperUtils {
      */
     public static <D, T> List<D> mapAll(final Collection<T> entityList, Class<D> outCLass) {
         return entityList.stream()
-                .map(entity -> map(entity, outCLass))
-                .collect(Collectors.toList());
+            .map(entity -> map(entity, outCLass))
+            .collect(Collectors.toList());
     }
 
     /**

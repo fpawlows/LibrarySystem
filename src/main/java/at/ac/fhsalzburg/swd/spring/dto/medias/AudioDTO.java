@@ -1,6 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.dto.medias;
 
+import java.io.Serializable;
+
 public class AudioDTO extends MediaDTO {
+
     private String codec;
     private Integer duration;
 

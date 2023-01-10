@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
@@ -27,10 +28,12 @@ import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring
 // will look at the methods of the class marked with the @Controller annotation and
 // establish the routing table to know which methods serve which endpoints.
+@RequestMapping( value = {"/home"})
 public class HomeController {
 
     @Autowired
@@ -48,19 +51,18 @@ public class HomeController {
     //@Autowired
     //StatisticsService statisticsService;
 
-    @RequestMapping( value = {"/home"})
+    //TODO take this beginning to the separeate method call
+
+    @RequestMapping
     //TODO change 'home' to '/'
     public String home(
-        //@RequestParam(value = "id", required = false) Long id,
         Model model, HttpSession session,
         @CurrentSecurityContext(expression = "authentication") Authentication authentication){
-//        @ModelAttribute("searchedMediasList") Collection<MediaDTO> searchedMediasList) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
-        model.addAttribute("searchedMediasList", new ArrayList<MediaDTO>());
-//              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
+        //              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
 //            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
 
         //User modUser = null;
@@ -74,12 +76,11 @@ public class HomeController {
         return "home";
     }
 
-    @PostMapping(value={"/search"})
-    public String showSearchedMedia(
-        Model model,
+    @PostMapping(value = {"/search"})
+    public String searchForMedia(
+        Model model, RedirectAttributes redirectAttributes,
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
 
-//        Map<? extends Class<? extends Media>, ? extends List<? extends Media>> searchedRawMediasClassesMap = new HashMap<>();
         Map<Class, List<Media>> searchedRawMediasClassesMap = new HashMap<>();
 
         if (mediaDTO.getId()!=null) {
@@ -95,51 +96,49 @@ public class HomeController {
 //Since the data needs to be identified into different lists for the display anyway, this way it can be done in one place, which is considered better approach than basing on file structure in our project (and finding all classes names through reflection)
             for (var entry: searchedRawMediasClassesMap.entrySet()) {
                 if (entry.getKey() == Book.class) {
+                    Media book = entry.getValue().get(0);
                     List<BookDTO> searchedBooksCollection = ObjectMapperUtils.mapAll(entry.getValue(), BookDTO.class);
-                    model.addAttribute("searchedBooksCollection", searchedBooksCollection);
+                    redirectAttributes.addFlashAttribute("searchedBooksCollection", searchedBooksCollection);
 
                 } else {
                     if (entry.getKey() == Audio.class) {
                         List<AudioDTO> searchedAudiosCollection = ObjectMapperUtils.mapAll(entry.getValue(), AudioDTO.class);
-                        model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
+                        redirectAttributes.addFlashAttribute("searchedAudiosCollection", searchedAudiosCollection);
 
                     } else {
                         if (entry.getKey() == Paper.class) {
                             List<PaperDTO> searchedPapersCollection = ObjectMapperUtils.mapAll(entry.getValue(), PaperDTO.class);
-                            model.addAttribute("searchedPapersCollection", searchedPapersCollection);
+                            redirectAttributes.addFlashAttribute("searchedPapersCollection", searchedPapersCollection);
 
                         } else {
                             if (entry.getKey() == Movie.class) {
                                 List<MovieDTO> searchedMoviesCollection = ObjectMapperUtils.mapAll(entry.getValue(), MovieDTO.class);
-                                model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
+                                redirectAttributes.addFlashAttribute("searchedMoviesCollection", searchedMoviesCollection);
                             }
                         }
                     }
                 }
             }
 
-        return "home";
+        return "redirect:/home/search";
 
     }
 
     //TODO Display statistics in footer
 
 
-    @RequestMapping( value = {"/search"}, method = RequestMethod.GET)
-    //TODO change 'home' to '/'
+    @GetMapping(value = {"/search"})
     public String getSearched(
-        //@RequestParam(value = "id", required = false) Long id,
         Model model, HttpSession session,
-        @CurrentSecurityContext(expression = "authentication") Authentication authentication,
-        @ModelAttribute("searchedMediasList") Collection<MediaDTO> searchedMediasList) {
+        @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+//        @ModelAttribute("searchedBooksCollection") List<BookDTO> searchedBooksCollection,
+  //      @ModelAttribute("searchedAudiosCollection") List<AudioDTO> searchedAudiosCollection,
+    //    @ModelAttribute("searchedPapersCollection") List<PaperDTO> searchedPapersCollection,
+      //  @ModelAttribute("searchedMoviesCollection") List<MovieDTO> searchedMoviesCollection) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
-        model.addAttribute("searchedMediasList",
-              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
-//            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
-
         //User modUser = null;
         if (model.getAttribute("mediaDTO") == null) {
             MediaDTO mediaDTO = new MediaDTO();
@@ -147,6 +146,12 @@ public class HomeController {
             //TODO should be changed to session?
             //
         }
+
+        List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");
+        model.addAttribute("searchedBooksCollection", searchedBooksCollection);
+//        model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
+  //      model.addAttribute("searchedPapersCollection", searchedPapersCollection);
+    //    model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
 
         return "home";
     }

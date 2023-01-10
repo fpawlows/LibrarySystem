@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 //TODO MEdia adn MEDIADTO abstract - factory
-public class MediaDTO {
+public class MediaDTO implements Serializable {
 
     private Long id;
     private String name;
@@ -51,7 +52,7 @@ public class MediaDTO {
         this.id = id;
     }
 
-    public void setName(String Name) {
+    public void setName(String name) {
         this.name = name;
     }
 

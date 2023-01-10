@@ -32,7 +32,7 @@
     <h3>What kind of media are you looking for?</h3>
     <br/>
 
-    <form th:action="@{/search}" th:object="${mediaDTO}" th:method="post" style="display: inline-block">
+    <form th:action="@{/home/search}" th:object="${mediaDTO}" th:method="post" style="display: inline-block">
         <input class="form-check-inline" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
                type="number" min=0 name="searchMediaId" th:field="*{id}" placeholder="ID" size="10" style="display: inline-block">
         <!--TODO th:label and genres in autoload

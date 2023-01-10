@@ -1,6 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.dto.medias;
 
+import java.io.Serializable;
+
 public class BookDTO extends MediaDTO {
+
     private Integer ISBN;
     private String Author;
 

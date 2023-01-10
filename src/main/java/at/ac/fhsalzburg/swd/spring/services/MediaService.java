@@ -92,7 +92,7 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public Media getById(Long id) {
-        Optional<Media> media = mediaRepository.findById((id));
+        Optional<Media> media = mediaRepository.findById(id);
         if (media.isEmpty()) {
             throw new NoSuchElementException("Wrong Id");
         }

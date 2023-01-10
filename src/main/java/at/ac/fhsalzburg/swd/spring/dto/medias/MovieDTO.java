@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.dto.medias;
 
 public class MovieDTO extends MediaDTO {
+
     private Integer duration;
     private String format;
 
