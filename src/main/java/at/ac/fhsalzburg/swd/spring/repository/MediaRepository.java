@@ -28,8 +28,8 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
         //Maybe not m.genre but just genre
         //TODO create all queries for all media types -now only for book
         "select distinct m from Media m left join m.genres g WHERE (:name IS NULL or m.name LIKE '%'||:name||'%') " +
-            "or (:fsk IS NULL or m.fsk = :fsk)" +
-            "or (:genres IS NULL or g IN :genres)")
+            "and (:fsk IS NULL or m.fsk = :fsk)" +
+            "and (:genres IS NULL or g IN :genres)")
     List<Media> findAllOptionalLike(@Param("name") String name, @Param("fsk") Integer fsk, @Param("genres") List<Genre> genres);
     //Possible extension with date and more
 }

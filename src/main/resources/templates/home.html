@@ -24,7 +24,7 @@
     <h2>Library System online</h2>
     <hr/>
     <br/>
-    <a sec:authorize="hasRole('ADMIN')" href="/admin/addMedia" class="btn btn-primary">AddMedia</a>
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/editMedia" class="btn btn-primary">Add Media</a>
     <br/>
 
     <!--TODO buttons to loan only available when logged in -->
@@ -97,22 +97,31 @@
             </tr>
             <tr th:each ="media : ${searchedBooksCollection}">
 
-                <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/addMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>
-                <td> <a th:href="@{/loan(id=${media.getId()})}" th:utext="${media.getName()}"></a> </td>
+                <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/editMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>
+                <td th:utext="${media.getName()}"> ... </td>
                 <td th:utext="${media.getDescription()}">...</td>
                 <td th:utext="${media.getFsk()}">...</td>
                 <td th:utext="${media.getDatePublished()}">...</td>
-                <td th:utext="${media.getGenres()}">...</td>
+                <td th:utext="${media.getGenres()==null ? '' : media.getGenres().toString().replace('[', '').replace(']', '')}">...</td>
                 <td th:utext="${media.getISBN()}">...</td>
                 <td th:utext="${media.getAuthor()}">...</td>
                 <td>
-                    <a th:href="@{/update/{id}(id=${media.getId()})}" ><i class="fa fa-edit" >Edit</i></a>
-                    <a th:href="@{/delete/{id}(id=${media.getId()})}" ><i class="fa fa-remove">Remove</i></a>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/admin/editMedia(id=${media.getId()})}">
+                        <button style="width: 100%" type="submit" class="fa fa-edit"> Edit </button>
+                    </form>
+
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/admin/deleteMedia(id=${media.getId()})}">
+                        <button style="width: 100%" type="submit" class="fa fa-remove"> Remove </button>
+                    </form>
+
+                    <form th:action="@{/reserve/(id=${media.getId()})}">
+                        <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || media.getCopies().contains(true))}" type="submit" class="fa fa-calendar"> Reserve </button>
+                    </form>
+                    <form th:action="@{/loan/{id}(id=${media.getId()})}">
+                        <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || !media.getCopies().contains(true))}" type="submit" class="fa fa-book"> Loan</button>
+                    </form>
+
                 </td>
-                <!--
-                .isEmpty() ? "" : media.genres.stream().map(media.genres.get(0).getClass()::getName)
-                <td th:utext="${media.genres.stream().map(Genre::getName).collect(Collectors.toList())}">...</td>
-            -->
             </tr>
             </tbody>
         </table>

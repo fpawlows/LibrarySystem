@@ -24,7 +24,7 @@
     <h2>Add User</h2>
     <hr/>
 
-    <form th:action="@{/admin/addMedia}" th:object="${mediaDTO}" method="POST">
+    <form th:action="@{/admin/editMedia}" th:object="${mediaDTO}" method="POST">
         <div class="mb-3">
             <label for="name" class="form-label">Media name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" th:readonly='${not #strings.isEmpty(user.username)}'>
