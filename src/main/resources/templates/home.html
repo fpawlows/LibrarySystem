@@ -38,8 +38,11 @@
         <!--TODO th:label and genres in autoload
 -->
         <input type="text" class="form-check-inline" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
+
+   <!--//TODO table for all types of media
+        //TODO working search with genre-->
         <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
-            <option selected th:value="${null}">-- Genre --</option>
+            <option selected disabled th:value="${null}">-- Genre --</option>
             <option th:each="genre : ${allGenres}"
                     th:value="${genre}"
                     th:text="${genre.name}">

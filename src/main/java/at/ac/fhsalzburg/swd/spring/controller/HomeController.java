@@ -62,8 +62,6 @@ public class HomeController {
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
-        //              (searchedMediasList==null) ? new ArrayList<MediaDTO>() : searchedMediasList);
-//            (searchedMediasList==null || searchedMediasList.isEmpty()) ? statisticsService.getTopBorrowed(5) : searchedMediasList);
 
         //User modUser = null;
         if (model.getAttribute("mediaDTO") == null) {
@@ -131,10 +129,6 @@ public class HomeController {
     public String getSearched(
         Model model, HttpSession session,
         @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-//        @ModelAttribute("searchedBooksCollection") List<BookDTO> searchedBooksCollection,
-  //      @ModelAttribute("searchedAudiosCollection") List<AudioDTO> searchedAudiosCollection,
-    //    @ModelAttribute("searchedPapersCollection") List<PaperDTO> searchedPapersCollection,
-      //  @ModelAttribute("searchedMoviesCollection") List<MovieDTO> searchedMoviesCollection) {
 
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
@@ -148,10 +142,13 @@ public class HomeController {
         }
 
         List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");
+        List<BookDTO> searchedAudiosCollection = (List<BookDTO>) model.asMap().get("searchedAudiosCollection");
+        List<BookDTO> searchedPapersCollection = (List<BookDTO>) model.asMap().get("searchedPapersCollection");
+        List<BookDTO> searchedMoviesCollection = (List<BookDTO>) model.asMap().get("searchedMoviesCollection");
         model.addAttribute("searchedBooksCollection", searchedBooksCollection);
-//        model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
-  //      model.addAttribute("searchedPapersCollection", searchedPapersCollection);
-    //    model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
+        model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
+        model.addAttribute("searchedPapersCollection", searchedPapersCollection);
+        model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
 
         return "home";
     }
