@@ -40,51 +40,10 @@
     <div th:if="${editedStatus != null}" class="alert alert-success" role="alert">
         <span th:text="${editedStatus}"></span>
     </div>
-
-    <form class="form" th:if="${mediaDTO!=null}" th:action="@{/admin/editMedia(className=${mediaDTO.getClassName()})}" th:object="${mediaDTO}" method="POST">
-        <div class="mb-3">
-            <label for="name" class="form-label">Media name</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}">
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" th:field="*{description}" >
-        </div>
-
-        <div class="mb-3">
-            <label for="genres" class="form-label">Genres</label>
-            <select class="form-select" id="genres" name="genres" th:field="*{genres}" multiple>
-                <option selected disabled th:value="${null}">-- Genre --</option>
-                <option th:each="genre : ${allGenres}"
-                        th:value="${genre.id}"
-                        th:text="${genre.name}">
-                    Genre
-                </option>
-
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="fsk" class="form-label">Fsk</label>
-                <select class="form-select" id="fsk" name="fsk" th:field="*{fsk}">
-                    <option selected th:value="${null}">-- fsk --</option>
-                    <option th:each="fsk_ : ${fskValues}"
-                            th:text="${fsk_}"
-                            th:value="${fsk_}">Fsk
-                    </option>
-                </select>
-        </div>
-        <div class="mb-3">
-            <label for="datePublished" class="form-label">Date Published</label>
-            <input type="date" class="form-control" id="datePublished" th:field="*{datePublished}" >
-        </div>
-
-        <!--TODO add copy-->
-
+    <div th:if="${mediaDTO!=null}">
         <div th:replace="__${'fragments/add' + mediaDTO.getClassName()}__ :: form"></div>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="reset" class="btn btn-primary">Reset</button>
-    </form>
+    </div>
+
 </main>
 
 </body>
