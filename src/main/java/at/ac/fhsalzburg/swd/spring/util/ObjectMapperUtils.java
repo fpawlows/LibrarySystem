@@ -131,6 +131,53 @@ public class ObjectMapperUtils {
         // a provider to fetch a user instance from a repository
         typeMapMedia.setProvider(mediaDelegatingProvider);
 
+
+        Provider<Paper> paperDelegatingProvider = new Provider<Paper>() {
+
+            public Paper get(ProvisionRequest<Paper> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return ((PaperDTO) request.getSource()).getId()!=null ? (Paper) mediaService.getById(((PaperDTO) request.getSource()).getId()) : new Paper();
+            }
+        };
+
+        Provider<Movie> movieDelegatingProvider = new Provider<Movie>() {
+
+            public Movie get(ProvisionRequest<Movie> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return ((MovieDTO) request.getSource()).getId()!=null ? (Movie) mediaService.getById(((MovieDTO) request.getSource()).getId()) : new Movie();
+            }
+        };
+
+        Provider<Audio> audioDelegatingProvider = new Provider<Audio>() {
+
+            public Audio get(ProvisionRequest<Audio> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return ((AudioDTO) request.getSource()).getId()!=null ? (Audio) mediaService.getById(((AudioDTO) request.getSource()).getId()) : new Audio();
+            }
+        };
+
+        Provider<Book> bookDelegatingProvider = new Provider<Book>() {
+
+            public Book get(ProvisionRequest<Book> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return ((BookDTO) request.getSource()).getId()!=null ? (Book) mediaService.getById(((BookDTO) request.getSource()).getId()) : new Book();
+            }
+        };
+
+        typeMapBook.setProvider(bookDelegatingProvider);
+        typeMapAudio.setProvider(audioDelegatingProvider);
+        typeMapMovie.setProvider(movieDelegatingProvider);
+        typeMapPaper.setProvider(paperDelegatingProvider);
+
+
     }
 
     //public static ModelMapper getModelMapper() {
