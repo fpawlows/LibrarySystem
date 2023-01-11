@@ -40,8 +40,20 @@
     <div th:if="${editedStatus != null}" class="alert alert-success" role="alert">
         <span th:text="${editedStatus}"></span>
     </div>
-    <div th:if="${mediaDTO!=null}">
-        <div th:replace="__${'fragments/add' + mediaDTO.getClassName()}__ :: form"></div>
+    <div th:if="${bookDTO!=null}">
+        <div th:replace="__${'fragments/add' + bookDTO.getClassName()}__ :: form"></div>
+    </div>
+
+    <div th:if="${paperDTO!=null}">
+        <div th:replace="__${'fragments/add' + paperDTO.getClassName()}__ :: form"></div>
+    </div>
+
+    <div th:if="${audioDTO!=null}">
+        <div th:replace="__${'fragments/add' + audioDTO.getClassName()}__ :: form"></div>
+    </div>
+
+    <div th:if="${movieDTO!=null}">
+        <div th:replace="__${'fragments/add' + movieDTO.getClassName()}__ :: form"></div>
     </div>
 
 </main>

@@ -93,19 +93,19 @@ public class ManagementController {
         }
 
         if (mediaDTO instanceof BookDTO) {
-            model.addAttribute("mediaDTO", (BookDTO) mediaDTO);
+            model.addAttribute("bookDTO", (BookDTO) mediaDTO);
         } else {
 
             if (mediaDTO instanceof AudioDTO) {
-                model.addAttribute("mediaDTO", (AudioDTO) mediaDTO);
+                model.addAttribute("audioDTO", (AudioDTO) mediaDTO);
             } else {
 
                 if (mediaDTO instanceof PaperDTO) {
-                    model.addAttribute("mediaDTO", (PaperDTO) mediaDTO);
+                    model.addAttribute("paperDTO", (PaperDTO) mediaDTO);
                 } else {
 
                     if (mediaDTO instanceof MovieDTO) {
-                        model.addAttribute("mediaDTO", (MovieDTO) mediaDTO);
+                        model.addAttribute("movieDTO", (MovieDTO) mediaDTO);
                     }
                 }
             }
@@ -116,10 +116,17 @@ public class ManagementController {
 
     @PostMapping("/editMedia")
     public String saveMedia(Model model, RedirectAttributes redirectAttributes,
-                            @ModelAttribute("mediaDTO") MediaDTO mediaDTO,
+                            @ModelAttribute("bookDTO") BookDTO bookDTO,
+                            @ModelAttribute("audioDTO") AudioDTO audioDTO,
+                            @ModelAttribute("paperDTO") PaperDTO paperDTO,
+                            @ModelAttribute("movieDTO") MovieDTO movieDTO,
                             @RequestParam(value = "className", required = false) String className)
     {
-        Media media = ObjectMapperUtils.map(mediaDTO, mediaService.getMediaClasses().get(className));
+        Media media = null;
+        if (bookDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(bookDTO.getClassName()));
+        if (audioDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(audioDTO.getClassName()));
+        if (paperDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(paperDTO.getClassName()));
+        if (movieDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(movieDTO.getClassName()));
         //Media or ? extends
         if (!entityManager.contains(media)) mediaService.addMedia(media);
 
