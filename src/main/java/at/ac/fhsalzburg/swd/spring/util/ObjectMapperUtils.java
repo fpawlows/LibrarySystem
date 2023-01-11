@@ -78,50 +78,50 @@ public class ObjectMapperUtils {
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
         if (typeMapMedia == null) {
             typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class)
-                .addMappings(new PropertyMap<MediaDTO, Media>() {
-                    protected void configure() {
-                        skip(destination.getId());
-                    }
-                })
-//                .addMapping(MediaDTO::getName, Media::setName)
-//                .addMapping(MediaDTO::getDescription, Media::setDescription)
-                .include(BookDTO.class, Book.class)
+                .addMappings(mapper -> mapper.skip(Media::setId))
+  /*              .include(BookDTO.class, Book.class)
                 .include(AudioDTO.class, Audio.class)
                 .include(PaperDTO.class, Paper.class)
-                .include(MovieDTO.class, Movie.class);
+                .include(MovieDTO.class, Movie.class)
+                */;
         }
 
-        TypeMap<Media, MediaDTO> typeMapMediaDTO = modelMapper.getTypeMap(Media.class, MediaDTO.class);
-        if (typeMapMediaDTO == null) {
-            typeMapMediaDTO = modelMapper.createTypeMap(Media.class, MediaDTO.class)
-                .addMappings(new PropertyMap<Media, MediaDTO>() {
-                    protected void configure() {
-                        skip(destination.getId());
-                    }
-                })
-//                .addMapping(MediaDTO::getName, Media::setName)
-//                .addMapping(MediaDTO::getDescription, Media::setDescription)
-                .include(Book.class, BookDTO.class)
-                .include(Audio.class, AudioDTO.class)
-                .include(Paper.class, PaperDTO.class)
-                .include(Movie.class, MovieDTO.class);
+        TypeMap<BookDTO, Book> typeMapBook = modelMapper.getTypeMap(BookDTO.class, Book.class);
+        if (typeMapBook == null) {
+            typeMapBook = modelMapper.createTypeMap(BookDTO.class, Book.class)
+                .addMappings(mapper -> mapper.skip(Book::setId));
         }
 
-        // create a provider to be able to merge the dto data with the data in the database:
-        // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
+        TypeMap<AudioDTO, Audio> typeMapAudio = modelMapper.getTypeMap(AudioDTO.class, Audio.class);
+        if (typeMapAudio == null) {
+            typeMapAudio = modelMapper.createTypeMap(AudioDTO.class, Audio.class)
+                .addMappings(mapper -> mapper.skip(Audio::setId));
+        }
+
+        TypeMap<MovieDTO, Movie> typeMapMovie = modelMapper.getTypeMap(MovieDTO.class, Movie.class);
+        if (typeMapMovie == null) {
+            typeMapMovie = modelMapper.createTypeMap(MovieDTO.class, Movie.class)
+                .addMappings(mapper -> mapper.skip(Movie::setId));
+        }
+
+        TypeMap<PaperDTO, Paper> typeMapPaper = modelMapper.getTypeMap(PaperDTO.class, Paper.class);
+        if (typeMapPaper == null) {
+            typeMapPaper = modelMapper.createTypeMap(PaperDTO.class, Paper.class)
+                .addMappings(mapper -> mapper.skip(Paper::setId));
+        }
+
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
 
             public Media get(ProvisionRequest<Media> request) {
-                // it is also possible to get a service instance from the application context programmatically
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
                 if (((MediaDTO) request.getSource()).getId()!=null) return mediaService.getById(((MediaDTO) request.getSource()).getId());
                 else {
-                    return request.getSource() instanceof BookDTO ? new Book(null, null)
-                        : request.getSource() instanceof PaperDTO ? new Paper(null)
-                        : request.getSource() instanceof AudioDTO ? new Audio(null, null)
-                        : request.getSource() instanceof MovieDTO ? new Movie(null, null)
+                    return request.getSource() instanceof BookDTO ? new Book()
+                        : request.getSource() instanceof PaperDTO ? new Paper()
+                        : request.getSource() instanceof AudioDTO ? new Audio()
+                        : request.getSource() instanceof MovieDTO ? new Movie()
                         : null;
                 }
                 //return ((MediaDTO) request.getSource()).getId()!=null ? mediaService.getById(((MediaDTO) request.getSource()).getId()) : new Media(null, null, null);
