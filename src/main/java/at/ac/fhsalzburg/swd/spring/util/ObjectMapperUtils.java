@@ -7,11 +7,7 @@ import java.util.stream.Collectors;
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaService;
-import org.modelmapper.AbstractCondition;
-import org.modelmapper.Condition;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.Provider;
-import org.modelmapper.TypeMap;
+import org.modelmapper.*;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
@@ -52,8 +48,6 @@ public class ObjectMapperUtils {
 
         // initial configuration
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT)
-            .setFieldMatchingEnabled(true)
-            .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
             .setSkipNullEnabled(true) // skip null fields
             .setPropertyCondition(isStringBlank); // skip empty strings
 
@@ -94,6 +88,11 @@ public class ObjectMapperUtils {
                 .include(PaperDTO.class, Media.class)
                 .include(MovieDTO.class, Media.class);
         }
+        modelMapper.addMappings(new PropertyMap<MediaDTO, Media>() {
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
 
         // create a provider to be able to merge the dto data with the data in the database:
         // whenever we are mapping UserDTO to User, the data from UserDTO and the existing User in the database are merged
@@ -104,7 +103,7 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return mediaService.getById(((MediaDTO) request.getSource()).getId());
+                return ((MediaDTO) request.getSource()).getId()!=null ? mediaService.getById(((MediaDTO) request.getSource()).getId()) : new Media(null, null, null);
             }
         };
 

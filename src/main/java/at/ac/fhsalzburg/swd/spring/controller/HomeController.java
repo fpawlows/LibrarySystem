@@ -137,8 +137,6 @@ public class HomeController {
         if (model.getAttribute("mediaDTO") == null) {
             MediaDTO mediaDTO = new MediaDTO();
             model.addAttribute("mediaDTO", mediaDTO);
-            //TODO should be changed to session?
-            //
         }
 
         List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");

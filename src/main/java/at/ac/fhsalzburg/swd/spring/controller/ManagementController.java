@@ -70,6 +70,7 @@ public class ManagementController {
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
+        model.addAttribute("editedStatus", (String) model.asMap().get("editedStatus"));
 
         if (id != null) {
             modMedia = mediaService.getById(id);
@@ -111,4 +112,27 @@ public class ManagementController {
         }
         return "editMedia";
     }
+
+
+    @PostMapping("/editMedia")
+    public String saveMedia(Model model, RedirectAttributes redirectAttributes,
+                            @ModelAttribute("mediaDTO") MediaDTO mediaDTO,
+                            @RequestParam(value = "className", required = false) String className)
+    {
+        Media media = ObjectMapperUtils.map(mediaDTO, mediaService.getMediaClasses().get(className));
+        //Media or ? extends
+        if (!entityManager.contains(media)) mediaService.addMedia(media);
+
+        redirectAttributes.addFlashAttribute("editedStatus", "Media edited successfully!");
+        return "redirect:/editMedia";
+    }
+
+    @DeleteMapping("/deleteMedia")
+    public String deleteMedia(Model model,
+                       @RequestParam(value = "id", required = false) Long id) {
+        mediaService.deleteById(id);
+   return "redirect:/editMedia";
+    }
+
 }
+

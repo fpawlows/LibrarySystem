@@ -35,23 +35,13 @@
                 </a>
             </li>
         </ul>
-<!--
-        <form th:action="@{/admin/editMedia(className='Audio')}" method="get">
-            <button style="width: 100%" type="submit" class="btn btn-secondary"> Add Audio </button>
-        </form>
-
-        <form th:action="@{/admin/editMedia(className='Paper')}" method="get">
-            <button style="width: 100%" type="submit" class="btn btn-secondary"> Add Paper </button>
-        </form>
-
-        <form th:action="@{/admin/editMedia(className='Movie')}" method="get">
-            <button style="width: 100%" type="submit" class="btn btn-secondary"> Add Movie </button>
-        </form>
--->
     </div>
 
+    <div th:if="${editedStatus != null}" class="alert alert-success" role="alert">
+        <span th:text="${editedStatus}"></span>
+    </div>
 
-    <form class="form" th:if="${mediaDTO!=null}" th:action="@{/admin/editMedia}" th:object="${mediaDTO}" method="POST">
+    <form class="form" th:if="${mediaDTO!=null}" th:action="@{/admin/editMedia(className=${mediaDTO.getClassName()})}" th:object="${mediaDTO}" method="POST">
         <div class="mb-3">
             <label for="name" class="form-label">Media name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}">
