@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.Location;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
@@ -77,6 +79,15 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
             mediaService.addMedia(givenMedias.get(i));
 
+            String name = "Library"+i;
+            mediaService.addLocation(name);
+            for (int j=0; j<i+3; j++) {
+                Location location = mediaService.getLocationByName(name).stream().iterator().next();
+                mediaService.addShelf(j, location.getId());
+                for (int k=0; k<j+3; k++) {
+                    mediaService.addCompartment(k+j, k, new ShelfId(j, location));
+                }
+            }
             //reservationService.persist(reservation);
         }
     }

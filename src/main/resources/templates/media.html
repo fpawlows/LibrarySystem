@@ -21,18 +21,18 @@
     <hr/>
 
     <div sec:authorize="hasRole('ADMIN')">
-        <a  th:href="@{/admin/editCopy(mediaId=${mediaDTO?.getId()})}" class="active btn btn-primary">Add Copy</a>
+        <form class="form" th:action="@{/admin/editCopy}">
+            <button type="submit" class="active btn btn-primary" th:name="mediaId" th:value="${mediaDTO.getId()}">Add Copy</button>
+        </form>
+        <!--a  th:href="@{/admin/editCopy(mediaId=${mediaDTO?.getId()})}" class="active btn btn-primary">Add Copy</a-->
         <br/>
     </div>
 
-    <div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
-        <span> No Copies found </span>
-    </div>
-
-    <div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive">
-        <form id="createCopy" th:object="${copy}" th:action="@/admin/editCopy">
+    <!--div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive"-->
+    <div class="table-responsive">
+        <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy}">
         <div th:if="${editable}">
-            <button type="submit" class="btn btn-info" >Search</button>
+            <button type="submit" class="btn btn-info" >Submit</button>
             <button type="reset" class="btn btn-info" >Reset</button>
         </div>
             <table class="table table-hover table-bordered">
@@ -49,12 +49,10 @@
         <tbody>
         <tr th:if="${editable}">
             <td>
-                <label for="copyNr">Copy number</label>
-                <input th:readonly="${true}" id="copyNr" type="text" th:field="*{copyId.copyNr}"/>
+                <input th:text="${copy.copyId.copyNr}" th:utext="${copy.copyId.copyNr}" th:value="${copy.copyId.copyNr}" th:readonly="${true}" id="copyNr" type="text" th:field="*{copyId.copyNr}"/>
                 <!--TODO see if works-->
             </td>
             <td colspan="3">
-                <label for="locationId">Location</label>
                 <select id="locationId" th:field="*{compartment}">
                     <option th:each="compartment : ${allCompartments}"
                             th:if="${compartment.getNumberOfFreePlaces()>0}"
@@ -96,6 +94,9 @@
     </form>
     </div>
 
+    <div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
+        <span> No Copies found </span>
+    </div>
 
     </main>
 </body>

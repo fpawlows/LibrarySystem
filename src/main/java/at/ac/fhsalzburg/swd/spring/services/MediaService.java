@@ -2,7 +2,9 @@ package at.ac.fhsalzburg.swd.spring.services;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.*;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
+import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +152,113 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public boolean addCopy(Media media) {
-        return false;
+        CopyId copyId = new CopyId(null, media);
+        Copy copy = new Copy(copyId, null, true);
+        Collection<Copy> copies = media.getCopies();
+        if(copies.add(copy)) {
+            media.setCopies(copies);
+            copyRepository.save(copy);
+            mediaRepository.save(media);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addLocation(Location location) {
+        locationRepository.save(location);
+        return true;
+    }
+
+    @Override
+    public boolean addLocation(String name) {
+        if (name!=null && !name.equals("")) {
+            locationRepository.save(new Location(null, name));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addShelf(Shelf shelf, Long locationId) {
+
+        Optional<Location> location = locationRepository.findById(locationId);
+        if (location.isEmpty()) return false;
+        if (shelf==null) return false;
+        Location location_valid = location.get();
+        if(location_valid.getShelves()==null || !location_valid.getShelves().contains(shelf)) {
+            List<Shelf> shelves_arg = Arrays.asList(shelf);
+            Collection<Shelf> shelves = location_valid.getShelves();
+            if (shelves==null) {shelves = shelves_arg;}
+            else {
+                if (shelves.addAll(shelves_arg)) return false;
+            }
+            //location_valid.setShelves(shelves);
+        }
+        locationRepository.save(location_valid);
+        shelfRepository.save(shelf);
+        return true;
+    }
+
+    @Override
+    public boolean addShelf(Integer shelfNumber, Long locationId) {
+        Optional<Location> location = locationRepository.findById(locationId);
+        if (location.isEmpty()) return false;
+        if (shelfNumber == null) return false;
+        Location location_valid = location.get();
+        Shelf shelf = new Shelf(new ShelfId(shelfNumber, location_valid));
+        if(location_valid.getShelves()==null || !location_valid.getShelves().contains(shelf)) {
+            Collection<Shelf> shelves_arg = Arrays.asList(shelf);
+            Collection<Shelf> shelves = location_valid.getShelves();
+            if (shelves==null) {shelves = shelves_arg;}
+            else {
+                if (shelves.addAll(shelves_arg)) return false;
+            }
+            //location_valid.setShelves(shelves);
+        }
+        shelfRepository.save(shelf);
+        locationRepository.save(location_valid);
+        return true;
+    }
+
+    @Override
+    public boolean addCompartment(Compartment compartment, ShelfId shelfId) {
+        Optional<Shelf> shelf_optional = shelfRepository.findById(shelfId);
+        if (shelf_optional.isEmpty()) return false;
+        if (compartment == null) return false;
+        Shelf shelf = shelf_optional.get();
+        if(shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
+            Collection<Compartment> compartments_args = Arrays.asList(compartment);
+            Collection<Compartment> compartments = shelf.getCompartments();
+            if (compartments==null) {compartments = compartments_args;}
+            else {
+                if (compartments.addAll(compartments_args)) return false;
+            }
+            //shelf.setCompartments(compartments);
+        }
+        shelfRepository.save(shelf);
+        compartmentRepository.save(compartment);
+        return true;
+    }
+
+    @Override
+    public boolean addCompartment(Integer numberOfCompartmentPlaces, Integer compartmentPosition, ShelfId shelfId)  {
+        Optional<Shelf> shelf_optional = shelfRepository.findById(shelfId);
+        if (shelf_optional.isEmpty()) return false;
+        if (numberOfCompartmentPlaces==null || numberOfCompartmentPlaces<1) return false;
+
+        Shelf shelf = shelf_optional.get();
+        Compartment compartment = new Compartment(new CompartmentId(compartmentPosition, shelf), numberOfCompartmentPlaces);
+        if(shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
+            Collection<Compartment> compartments_args = Arrays.asList(compartment);
+            Collection<Compartment> compartments = shelf.getCompartments();
+            if (compartments==null) {compartments = compartments_args;}
+            else {
+                if (compartments.addAll(compartments_args)) return false;
+            }
+            //shelf.setCompartments(compartments);
+        }
+        shelfRepository.save(shelf);
+        compartmentRepository.save(compartment);
+        return true;
     }
 
 
@@ -243,6 +351,31 @@ public class MediaService implements MediaServiceInterface {
 
     public List<Integer> getPossibleFskValues(){
         return possibleFskValues;
+    }
+
+    @Override
+    public Collection<Location> getLocationByName(String name) {
+        Collection<Location> location = locationRepository.findByName(name);
+        return location;
+    }
+
+    @Override
+    public Location getLocationById(Long id) {
+        Optional<Location> location = locationRepository.findById(id);
+        return location.isEmpty() ? null : location.get();
+    }
+
+    @Override
+    public Shelf getShelfById(ShelfId shelfId) {
+        Optional<Shelf> shelf = shelfRepository.findById(shelfId);
+        return shelf.isEmpty() ? null : shelf.get();
+
+    }
+
+    @Override
+    public Compartment getCompartmentById(CompartmentId compartmentId) {
+        Optional<Compartment> compartment = compartmentRepository.findById(compartmentId);
+        return compartment.isEmpty() ? null : compartment.get();
     }
 
     public Map<String, PairBusiness_DTO> getMediaClasses() { return mediaClassesPairs;}

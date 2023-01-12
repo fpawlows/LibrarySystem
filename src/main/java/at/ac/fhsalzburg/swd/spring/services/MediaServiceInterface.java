@@ -2,7 +2,9 @@ package at.ac.fhsalzburg.swd.spring.services;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
 import at.ac.fhsalzburg.swd.spring.model.*;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
+import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,14 @@ public interface MediaServiceInterface {
     public abstract boolean addGenre(String name);
     public abstract boolean addCopy(Media media);
 
+    public abstract boolean addLocation(Location location);
+    public abstract boolean addLocation(String name);
+    public abstract boolean addShelf(Shelf shelf, Long locationId);
+    public abstract boolean addShelf(Integer shelfNumber, Long locationId);
+    public abstract boolean addCompartment(Compartment compartment, ShelfId shelfId);
+
+    public abstract boolean addCompartment(Integer numberOfCompartmentPlaces, Integer compartmentPosition, ShelfId shelfId);
+
     public abstract Collection<Media> getAll();
 
     public abstract void setAvailibility(CopyId copyId, Boolean isAvailable);
@@ -46,6 +56,10 @@ public interface MediaServiceInterface {
 
     public abstract List<Integer> getPossibleFskValues();
 
+    public abstract Collection<Location> getLocationByName(String name);
+    public abstract Location getLocationById(Long id);
+    public abstract Shelf getShelfById(ShelfId shelfId);
+    public abstract Compartment getCompartmentById(CompartmentId compartmentId);
     public abstract Map<String, MediaService.PairBusiness_DTO> getMediaClasses();
 
 }

@@ -11,7 +11,7 @@ public class Shelf {
     @EmbeddedId
     private ShelfId id;
 
-    @OneToMany(mappedBy = "compartmentId.shelf")
+    @OneToMany(mappedBy = "compartmentId.shelf", fetch = FetchType.LAZY)
     private Collection<Compartment> compartments;
 
     public Shelf() {

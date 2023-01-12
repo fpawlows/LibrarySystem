@@ -8,12 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Media implements VisitableMedia {
+public abstract class Media implements VisitableMedia, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,10 +28,10 @@ public abstract class Media implements VisitableMedia {
     @ManyToMany
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "copyId.media")
+    @OneToMany(mappedBy = "copyId.media", fetch = FetchType.LAZY)
     private Collection<Copy> copies;
 
-    @OneToMany(mappedBy = "reservationId.media")
+    @OneToMany(mappedBy = "reservationId.media", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 
     protected Media() {}

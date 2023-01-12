@@ -172,7 +172,7 @@ public class ManagementController {
         }
             redirectAttributes.addFlashAttribute("copy", copy);
             redirectAttributes.addFlashAttribute("editable", true);
-            return "redirect:/media" + mediaId;
+            return "redirect:/media/" + mediaId;
     }
 
     @PostMapping("/editCopy")

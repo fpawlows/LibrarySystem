@@ -12,7 +12,7 @@ public class Compartment {
     private CompartmentId compartmentId;
     private Integer numberOfPlaces;
 
-    @OneToMany(mappedBy="compartment")
+    @OneToMany(mappedBy="compartment", fetch = FetchType.LAZY)
     private List<Copy> copies;
 
     public Compartment() {

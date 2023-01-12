@@ -13,7 +13,7 @@ public class Location {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "id.location")
+    @OneToMany(mappedBy = "id.location", fetch = FetchType.LAZY)
     private Collection<Shelf> shelves;
 
     public Location() {}
