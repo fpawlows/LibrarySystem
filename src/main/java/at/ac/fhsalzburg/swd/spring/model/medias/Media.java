@@ -27,7 +27,7 @@ public abstract class Media implements VisitableMedia {
     @ManyToMany
     private List<Genre> genres;
 
-    @OneToMany
+    @OneToMany(mappedBy = "copyId.media")
     private Collection<Copy> copies;
 
     @OneToMany(mappedBy = "reservationId.media")

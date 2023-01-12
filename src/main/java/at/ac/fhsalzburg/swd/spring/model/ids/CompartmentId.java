@@ -18,7 +18,7 @@ public class CompartmentId implements Serializable {
 
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "shelf_number_from_top", nullable = false),
+        @JoinColumn(name = "shelf_number", nullable = false),
         @JoinColumn(name = "location_id", nullable = false)
     })
     //TOCHECK i think they should be nullable actually

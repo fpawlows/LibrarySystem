@@ -7,17 +7,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Copy {
+public class Copy implements Serializable {
+    //Seriazible because of transfering to flashmap - in fully proper way i would do this with DTO
 
     @EmbeddedId
     private CopyId copyId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumns({
         @JoinColumn(name = "compartment_position", nullable = false),
         @JoinColumn(name = "shelf_number_from_top", nullable = false),

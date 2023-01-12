@@ -82,7 +82,7 @@
     </div>
 
     <div class="alert alert-success" role="alert" th:if="${(searchedAudiosCollection==null || searchedAudiosCollection.isEmpty()) && (searchedMoviesCollection==null || searchedMoviesCollection.isEmpty()) && (searchedPapersCollection==null || searchedPapersCollection.isEmpty()) && (searchedBooksCollection==null || searchedBooksCollection.isEmpty())}">
-        <span>No media searched</span>
+        <span th:text="${result}"></span>
     </div>
 </main>
 

@@ -48,6 +48,7 @@ public class HomeController {
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
+        model.addAttribute("result", "No media searched.");
 
         //User modUser = null;
         if (model.getAttribute("mediaDTO") == null) {
@@ -66,10 +67,14 @@ public class HomeController {
         @ModelAttribute("mediaDTO") MediaDTO mediaDTO) {
 
         Map<Class, List<Media>> searchedRawMediasClassesMap = new HashMap<>();
+        String result = null;
 
         if (mediaDTO.getId()!=null) {
             Media searchedMedia = mediaService.getMediaById(mediaDTO.getId());
-            searchedRawMediasClassesMap.put(searchedMedia.getClass(), Collections.singletonList(searchedMedia));
+            if (searchedMedia != null) {
+                searchedRawMediasClassesMap.put(searchedMedia.getClass(), Collections.singletonList(searchedMedia));
+                result = "None media with ID = " + mediaDTO.getId() + " found";
+            }
         } else {
             List<Genre> genres = mediaDTO.getGenres().isEmpty() ? null : mediaDTO.getGenres();
             Collection<? extends Media> searchedRawMedias = mediaService.getByAllOptional(mediaDTO.getName(), mediaDTO.getFsk(), genres);
@@ -78,7 +83,9 @@ public class HomeController {
 
         //TODO strategy or visitor pattern (actually modelmapper should just be working like that)
 //Since the data needs to be identified into different lists for the display anyway, this way it can be done in one place, which is considered better approach than basing on file structure in our project (and finding all classes names through reflection)
-            for (var entry: searchedRawMediasClassesMap.entrySet()) {
+
+        if (searchedRawMediasClassesMap.size() == 0) result = "None media meeting provided requirements found";
+        for (var entry: searchedRawMediasClassesMap.entrySet()) {
                 if (entry.getKey() == Book.class) {
                     Media book = entry.getValue().get(0);
                     List<BookDTO> searchedBooksCollection = ObjectMapperUtils.mapAll(entry.getValue(), BookDTO.class);
@@ -103,7 +110,7 @@ public class HomeController {
                     }
                 }
             }
-
+        redirectAttributes.addFlashAttribute("result", result);
         return "redirect:/home/search";
 
     }
@@ -116,6 +123,7 @@ public class HomeController {
         Model model, HttpSession session,
         @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
+        String result = (String)model.asMap().get("result")!=null ? (String)model.asMap().get("result") : "No media searched";
         List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
@@ -133,6 +141,8 @@ public class HomeController {
         model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
         model.addAttribute("searchedPapersCollection", searchedPapersCollection);
         model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
+
+        model.addAttribute("result", result);
 
         return "home";
     }

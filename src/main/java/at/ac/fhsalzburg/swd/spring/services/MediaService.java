@@ -1,14 +1,10 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
-import at.ac.fhsalzburg.swd.spring.model.Copy;
-import at.ac.fhsalzburg.swd.spring.model.Genre;
-import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.*;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
-import at.ac.fhsalzburg.swd.spring.repository.CopyRepository;
-import at.ac.fhsalzburg.swd.spring.repository.GenreRepository;
-import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
+import at.ac.fhsalzburg.swd.spring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,9 +45,16 @@ public class MediaService implements MediaServiceInterface {
 
     private final CopyRepository copyRepository;
 
+    private final LocationRepository locationRepository;
+
+    private final CompartmentRepository compartmentRepository;
+
+    private final ShelfRepository shelfRepository;
+
     private final GenreRepository genreRepository;
 
-    public MediaService(MediaRepository mediaRepository, CopyRepository copyRepository, GenreRepository genreRepository,
+    public MediaService(MediaRepository mediaRepository, CopyRepository copyRepository, LocationRepository locationRepository,
+                        CompartmentRepository compartmentRepository, ShelfRepository shelfRepository, GenreRepository genreRepository,
                         @Value("myapp.media.default.description") String defaultDescription,
                         @Value("#{'${myapp.media.possible.fsk.values}'.split(',')}") List<Integer> fskValues) {
         this.possibleFskValues = fskValues;
@@ -59,6 +62,9 @@ public class MediaService implements MediaServiceInterface {
         this.mediaRepository = mediaRepository;
         this.genreRepository = genreRepository;
         this.copyRepository = copyRepository;
+        this.locationRepository = locationRepository;
+        this.shelfRepository = shelfRepository;
+        this.compartmentRepository = compartmentRepository;
     }
 
 
@@ -212,6 +218,27 @@ public class MediaService implements MediaServiceInterface {
         genreRepository.findAll().forEach(genres::add);
 
         return genres;
+    }
+
+    @Override
+    public List<Shelf> getAllShelves() {
+        List<Shelf> shelves = new ArrayList<>();
+        shelfRepository.findAll().forEach(shelves::add);
+        return shelves;
+    }
+
+    @Override
+    public List<Location> getAllLocations() {
+        List<Location> shelves = new ArrayList<>();
+        locationRepository.findAll().forEach(shelves::add);
+        return shelves;
+    }
+
+    @Override
+    public List<Compartment> getAllCompartments() {
+        List<Compartment> shelves = new ArrayList<>();
+        compartmentRepository.findAll().forEach(shelves::add);
+        return shelves;
     }
 
     public List<Integer> getPossibleFskValues(){

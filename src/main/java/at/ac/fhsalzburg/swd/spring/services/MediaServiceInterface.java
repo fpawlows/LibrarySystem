@@ -1,9 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.services;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
-import at.ac.fhsalzburg.swd.spring.model.Copy;
-import at.ac.fhsalzburg.swd.spring.model.Genre;
-import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.*;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
@@ -42,6 +40,9 @@ public interface MediaServiceInterface {
     public abstract void deleteById(Long id);
 
     public abstract List<Genre> getAllGenres();
+    public abstract List<Shelf> getAllShelves();
+    public abstract List<Location> getAllLocations();
+    public abstract List<Compartment> getAllCompartments();
 
     public abstract List<Integer> getPossibleFskValues();
 

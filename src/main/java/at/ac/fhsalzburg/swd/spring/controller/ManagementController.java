@@ -140,39 +140,49 @@ public class ManagementController {
         return "redirect:/admin/editMedia";
     }
 
-    @DeleteMapping("/deleteMedia")
+    @RequestMapping("/deleteMedia")
     public String deleteMedia(Model model,
                               @RequestParam(value = "id", required = false) Long id) {
         mediaService.deleteById(id);
-        return "redirect:/admin/editMedia";
+        return "redirect:/home/search";
     }
 
 
-    @GetMapping("/addCopy")
-    public String addCopy(Model model,
-                          @RequestParam(value = "id", required = false) Long id) {
-        if (id != null) {
-            Copy copy = new Copy();
-            Media media = mediaService.getMediaById(id);
-            copy.setCopyId(new CopyId(null, media));
-            model.addAttribute("copy", copy);
+    @GetMapping("/editCopy")
+    public String addCopy(Model model, RedirectAttributes redirectAttributes,
+                      @RequestParam(value = "mediaId", required = false) Long mediaId,
+                    @RequestParam(value = "copyId", required = false) CopyId copyId) {
+        Copy copy = null;
+        Media media = null;
+        MediaDTO mediaDTO = null;
+
+        if (copyId == null) {
+            if(mediaId == null ) {
+                throw new IllegalArgumentException("Have to provide either mediaId or copyId");
+            } else {
+                media = mediaService.getMediaById(mediaId);
+                if (media != null) {
+                    mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
+                    copy = new Copy();
+                    copy.setCopyId(new CopyId(null, media));
+                }
+            }
+        } else {
+            copy = mediaService.getCopyById(copyId);
         }
-        return "addCopy";
+            redirectAttributes.addFlashAttribute("copy", copy);
+            redirectAttributes.addFlashAttribute("editable", true);
+            return "redirect:/media" + mediaId;
     }
 
-    @PostMapping("/addCopy")
+    @PostMapping("/editCopy")
     public String addCopy(Model model,
-                          @ModelAttribute("copyDTO") CopyDTO copyDTO,
-                          @RequestParam(value = "id", required = false) Long id) {
-        if (copyDTO != null) {
-            Media media = mediaService.getMediaById(id);
+                          @ModelAttribute("copy") Copy copy) {
+        if (copy != null) {
 
         } else {
-            if (id != null) {
-
-            }
         }
-        return "redirect:/media/" + id;
+        return "redirect:/media/" + copy.getCopyId().getMedia().getId();
     }
 }
 
