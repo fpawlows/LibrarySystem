@@ -27,6 +27,7 @@ public interface MediaServiceInterface {
     public abstract boolean addMedia(Media media);
     public abstract boolean addGenre(Genre genre);
     public abstract boolean addGenre(String name);
+    public abstract boolean addCopy(Media media);
 
     public abstract Collection<Media> getAll();
 
@@ -34,7 +35,8 @@ public interface MediaServiceInterface {
 
     public abstract Collection<Media> getByAllOptional(String name, Integer fsk, List<Genre> genres);
 
-    public abstract Media getById(Long id);
+    public abstract Media getMediaById(Long id);
+    public abstract Copy getCopyById(CopyId copyId);
 //    public abstract Media getByName(String name);
 
     public abstract void deleteById(Long id);

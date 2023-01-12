@@ -12,20 +12,63 @@
 
 <main layout:fragment="content" th:remove="tag">
 
-    <h1 th:text="${mediaDTO.getName()}"></h1>
+    <h1 class="card-title" th:text="${mediaDTO?.getName()}"></h1>
     <br/>
 
-    <h2>Deiscription: </h2>
-    <span th:text="${mediaDTO.getDescription()}"></span>
+    <h3>Deiscription: </h3>
+    <span th:text="${mediaDTO?.getDescription()}"></span>
+    <br/>
+    <hr/>
+
+    <form sec:authorize="hasRole('ADMIN')" action="@{/admin/addCopy(id=${mediaDTO?.getId()})}" method="post" class="active btn btn-primary">
+        <button type="button" style="width: 100%" name="addCopy" class="fa fa-check">Add Copy</button>
+    </form>
+
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/addCopy(id=${mediaDTO?.getId()})}" class="active btn btn-primary">Add Media</a>
     <br/>
 
     <div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
-        <span> No Copies </span>
+        <span> No Copies found </span>
     </div>
 
-    <ul class="horizontal" style="list-style: none" th:each ="copy : ${mediaDTO.getCopies()}">
-        <li></li>
-    </ul>
+    <div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive">
+        <table class="table table-hover table-bordered">
+
+        <thead>
+        <tr>
+            <th> Copy number </th>
+            <th> Location </th>
+            <th> Shelf number from top </th>
+            <th> Compartment position </th>
+            <th> Available </th>
+            <th> Action </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="copy : ${mediaDTO.getCopies()}">
+            <td> <span th:text="${copy.copyId.copyNr}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.location.roomName}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.shelfNumberFromTop}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.position}"> </span> </td>
+            <td> <span th:text="${copy.isAvailable}" th:classappend="${copy.isAvailable ? 'bg-success' : 'bg-warning'}"> </span> </td>
+            <td>
+                <form sec:authorize="hasRole('ADMIN')" action="@{/admin/setAvailability/{copyId}(copyId=${copy.copyId}, availability=${!copy.isAvailable})}" method="put">
+                    <button type="button" style="width: 100%" name="isAvailable" class="fa fa-check">Change availablity</button>
+                </form>
+
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/deleteCopy(id=${copy.copyId})}" th:method="delete">
+                    <button style="width: 100%" type="button" class="fa fa-remove"> Remove </button>
+                </a>
+
+                <a th:href="@{/loan/{id}(id=${copy.copyId})}">
+                    <button style="width: 100%" th:disabled="${(mediaDTO.getCopies() == null || mediaDTO.getCopies().isEmpty() || !mediaDTO.getCopies().contains(true))}" type="button" class="fa fa-book"> Loan</button>
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
 
 
     </main>

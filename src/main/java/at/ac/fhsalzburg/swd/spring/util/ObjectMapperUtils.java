@@ -4,11 +4,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import at.ac.fhsalzburg.swd.spring.dto.CopyDTO;
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
+import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaService;
 import org.modelmapper.*;
-import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -100,13 +101,18 @@ public class ObjectMapperUtils {
             typeMapPaper = modelMapper.createTypeMap(PaperDTO.class, Paper.class);
         }
 
+        TypeMap<CopyDTO, Copy> typeMapCopy = modelMapper.getTypeMap(CopyDTO.class, Copy.class);
+        if (typeMapCopy == null) {
+            typeMapCopy = modelMapper.createTypeMap(CopyDTO.class, Copy.class);
+        }
+
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
 
             public Media get(ProvisionRequest<Media> request) {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                if (((MediaDTO) request.getSource()).getId()!=null) return mediaService.getById(((MediaDTO) request.getSource()).getId());
+                if (((MediaDTO) request.getSource()).getId()!=null) return mediaService.getMediaById(((MediaDTO) request.getSource()).getId());
                 else {
                     return request.getSource() instanceof BookDTO ? new Book()
                         : request.getSource() instanceof PaperDTO ? new Paper()
@@ -129,7 +135,7 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return ((PaperDTO) request.getSource()).getId()!=null ? (Paper) mediaService.getById(((PaperDTO) request.getSource()).getId()) : new Paper();
+                return ((PaperDTO) request.getSource()).getId()!=null ? (Paper) mediaService.getMediaById(((PaperDTO) request.getSource()).getId()) : new Paper();
             }
         };
 
@@ -139,7 +145,7 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return ((MovieDTO) request.getSource()).getId()!=null ? (Movie) mediaService.getById(((MovieDTO) request.getSource()).getId()) : new Movie();
+                return ((MovieDTO) request.getSource()).getId()!=null ? (Movie) mediaService.getMediaById(((MovieDTO) request.getSource()).getId()) : new Movie();
             }
         };
 
@@ -149,7 +155,7 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return ((AudioDTO) request.getSource()).getId()!=null ? (Audio) mediaService.getById(((AudioDTO) request.getSource()).getId()) : new Audio();
+                return ((AudioDTO) request.getSource()).getId()!=null ? (Audio) mediaService.getMediaById(((AudioDTO) request.getSource()).getId()) : new Audio();
             }
         };
 
@@ -159,7 +165,17 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return ((BookDTO) request.getSource()).getId()!=null ? (Book) mediaService.getById(((BookDTO) request.getSource()).getId()) : new Book();
+                return ((BookDTO) request.getSource()).getId()!=null ? (Book) mediaService.getMediaById(((BookDTO) request.getSource()).getId()) : new Book();
+            }
+        };
+
+        Provider<Copy> copyDelegatingProvider = new Provider<Copy>() {
+
+            public Copy get(ProvisionRequest<Copy> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return ((CopyDTO) request.getSource()).getCopyId()!=null ? (Copy) mediaService.getCopyById(((CopyDTO) request.getSource()).getCopyId()) : new Copy();
             }
         };
 
@@ -167,7 +183,7 @@ public class ObjectMapperUtils {
         typeMapAudio.setProvider(audioDelegatingProvider);
         typeMapMovie.setProvider(movieDelegatingProvider);
         typeMapPaper.setProvider(paperDelegatingProvider);
-
+        typeMapCopy.setProvider(copyDelegatingProvider);
 
     }
 

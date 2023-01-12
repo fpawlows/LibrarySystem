@@ -1,0 +1,55 @@
+<div class="form" >
+    <form class="form" th:action="@{/admin/addCopy}" th:object="${copy}" method="POST">
+        <div class="mb-3">
+            <label for="media" class="form-label">Media id</label>
+            <input type="number" class="form-control" id="media" th:field="*{copyId.media}">
+        </div>
+        <div class="mb-3">
+            <label for="compartmentPosition" class="form-label">Description</label>
+            <input type="number" class="form-control" id="compartmentPosition" th:field="*{compartment.compartmentId.position}" >
+        </div>
+
+        <div class="mb-3">
+            <label for="genres" class="form-label">Genres</label>
+            <select class="form-select" id="genres" name="genres" th:field="*{genres}" multiple>
+                <option selected disabled th:value="${null}">-- Genre --</option>
+                <option th:each="genre : ${allGenres}"
+                        th:value="${genre.id}"
+                        th:text="${genre.name}">
+                    Genre
+                </option>
+
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="fsk" class="form-label">Fsk</label>
+            <select class="form-select" id="fsk" name="fsk" th:field="*{fsk}">
+                <option selected th:value="${null}">-- fsk --</option>
+                <option th:each="fsk_ : ${fskValues}"
+                        th:text="${fsk_}"
+                        th:value="${fsk_}">Fsk
+                </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="datePublished" class="form-label">Date Published</label>
+            <input type="date" class="form-control" id="datePublished" th:field="*{datePublished}" >
+        </div>
+
+        <div class="mb-3">
+        <label for="isbn" class="form-label">ISBN</label>
+        <input type="number" class="form-control" id="isbn" th:field="*{ISBN}">
+    </div>
+    <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <input type="text" class="form-control" id="author" th:field="*{Author}" >
+    </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-primary">Reset</button>
+    </form>
+
+</div>
+
+<!--TODO same fragments for all medias types - look at editMedia to see the names of th:fragment-->

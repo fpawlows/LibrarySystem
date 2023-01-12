@@ -1,5 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import at.ac.fhsalzburg.swd.spring.dto.CopyDTO;
+import at.ac.fhsalzburg.swd.spring.model.Copy;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
+import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import io.jsonwebtoken.security.InvalidKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +58,7 @@ public class ManagementController {
         model.addAttribute("editedStatus", (String) model.asMap().get("editedStatus"));
 
         if (id != null) {
-            modMedia = mediaService.getById(id);
+            modMedia = mediaService.getMediaById(id);
         }
 
         if (modMedia != null) {
@@ -66,7 +70,7 @@ public class ManagementController {
                 model.addAttribute("mediaClassesNames", mediaClassesNames);
             } else {
                 try {
-                    if (className.substring(className.length()-3).equals("DTO")) {
+                    if (className.substring(className.length() - 3).equals("DTO")) {
                         className = className.substring(0, className.length() - 3);
                     }
                     //TODO Maybe here problems cause no constructors
@@ -105,14 +109,29 @@ public class ManagementController {
                             @ModelAttribute("audioDTO") AudioDTO audioDTO,
                             @ModelAttribute("paperDTO") PaperDTO paperDTO,
                             @ModelAttribute("movieDTO") MovieDTO movieDTO,
-                            @RequestParam(value = "className", required = false) String className)
-    {
+                            @RequestParam(value = "className", required = false) String className) throws NamingException {
         Media media = null;
-        if (bookDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(bookDTO.getClass().getSimpleName()).Business);
-        if (audioDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(audioDTO.getClass().getSimpleName()).Business);
-        if (paperDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(paperDTO.getClass().getSimpleName()).Business);
-        if (movieDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(movieDTO.getClass().getSimpleName()).Business);
+
+        if (bookDTO.getClass().getSimpleName().equals(className))
+            media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(
+                className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
+                .Business);
+        if (audioDTO.getClass().getSimpleName().equals(className))
+            media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(
+                className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
+            .Business);
+        if (paperDTO.getClass().getSimpleName().equals(className))
+            media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(
+                className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
+                .Business);
+        if (movieDTO.getClass().getSimpleName().equals(className))
+            media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(
+                className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
+                .Business);
         //Media or ? extends
+        if (media==null) {
+            throw new NamingException("Probably wrong DTO objects names");
+        }
         if (!entityManager.contains(media)) {
             mediaService.addMedia(media);
         }
@@ -123,10 +142,38 @@ public class ManagementController {
 
     @DeleteMapping("/deleteMedia")
     public String deleteMedia(Model model,
-                       @RequestParam(value = "id", required = false) Long id) {
+                              @RequestParam(value = "id", required = false) Long id) {
         mediaService.deleteById(id);
-   return "redirect:/admin/editMedia";
+        return "redirect:/admin/editMedia";
     }
 
+
+    @GetMapping("/addCopy")
+    public String addCopy(Model model,
+                          @RequestParam(value = "id", required = false) Long id) {
+        if (id != null) {
+            Copy copy = new Copy();
+            Media media = mediaService.getMediaById(id);
+            copy.setCopyId(new CopyId(null, media));
+            model.addAttribute("copy", copy);
+        }
+        return "addCopy";
+    }
+
+    @PostMapping("/addCopy")
+    public String addCopy(Model model,
+                          @ModelAttribute("copyDTO") CopyDTO copyDTO,
+                          @RequestParam(value = "id", required = false) Long id) {
+        if (copyDTO != null) {
+            Media media = mediaService.getMediaById(id);
+
+        } else {
+            if (id != null) {
+
+            }
+        }
+        return "redirect:/media/" + id;
+    }
 }
+
 

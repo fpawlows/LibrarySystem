@@ -142,6 +142,11 @@ public class MediaService implements MediaServiceInterface {
         return false;
     }
 
+    @Override
+    public boolean addCopy(Media media) {
+        return false;
+    }
+
 
     @Override
     public Collection<Media> getAll() {
@@ -165,13 +170,24 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
-    public Media getById(Long id) {
+    public Media getMediaById(Long id) {
         Optional<Media> media = mediaRepository.findById(id);
         if (media.isEmpty()) {
             return null;
         }
         else {
             return media.get();
+        }
+    }
+
+    @Override
+    public Copy getCopyById(CopyId copyId) {
+        Optional<Copy> copy = copyRepository.findById(copyId);
+        if (copy.isEmpty()) {
+            return null;
+        }
+        else {
+            return copy.get();
         }
     }
 

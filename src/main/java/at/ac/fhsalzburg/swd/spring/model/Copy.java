@@ -1,6 +1,8 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -8,6 +10,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Copy {
 
     @EmbeddedId
