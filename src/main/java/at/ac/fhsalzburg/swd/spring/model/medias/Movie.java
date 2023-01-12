@@ -3,7 +3,7 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
-import at.ac.fhsalzburg.swd.spring.model.visitors.MediaVisitor;
+import at.ac.fhsalzburg.swd.spring.model.medias.visitors.MediaVisitor;
 
 import javax.persistence.Entity;
 import java.util.Collection;
@@ -12,9 +12,6 @@ import java.util.List;
 
 @Entity
 public class Movie extends Media {
-
-    final static String className = "Movie";
-    public static String getClassName() {return className;}
 
     private Integer duration;
     private String format;

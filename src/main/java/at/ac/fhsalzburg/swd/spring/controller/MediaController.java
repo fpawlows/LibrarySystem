@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import at.ac.fhsalzburg.swd.spring.dto.medias.MediaDTO;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
 import at.ac.fhsalzburg.swd.spring.services.MediaService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -31,8 +33,14 @@ public class MediaController {
     public String getById(
         Model model, @PathVariable Long id) {
 
+        MediaDTO mediaDTO = null;
         Media media = mediaService.getById(id);
-        ObjectMapperUtils.map(mediaService.getById(id), mediaService.getMediaDTOClasses().get(mediaService.getById(id).getClassName()));
+        if (media != null) {
+             mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
+            model.addAttribute("mediaDTO", mediaDTO);
+            //Not sure if it will work always
+            model.addAttribute("searched"+mediaDTO.getClass().getSimpleName()+"sCollection", Arrays.asList(mediaDTO));
+        }
 
         return "media";
     }

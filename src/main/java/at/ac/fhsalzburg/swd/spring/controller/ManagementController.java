@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
@@ -58,17 +59,20 @@ public class ManagementController {
 
         if (modMedia != null) {
             //TODO split based on types
-            mediaDTO = ObjectMapperUtils.map(modMedia, mediaService.getMediaDTOClasses().get(modMedia.getClassName()));
+            mediaDTO = ObjectMapperUtils.map(modMedia, mediaService.getMediaClasses().get(modMedia.getClass().getSimpleName()).DTO);
         } else {
             if (className == null) {
                 List<String> mediaClassesNames = mediaService.getMediaClasses().keySet().stream().toList();
                 model.addAttribute("mediaClassesNames", mediaClassesNames);
             } else {
                 try {
+                    if (className.substring(className.length()-3).equals("DTO")) {
+                        className = className.substring(0, className.length() - 3);
+                    }
                     //TODO Maybe here problems cause no constructors
-                    mediaDTO = mediaService.getMediaDTOClasses().get(className).getConstructor().newInstance();
+                    mediaDTO = mediaService.getMediaClasses().get(className).DTO.getConstructor().newInstance();
                 } catch (Exception e) {
-                    throw new InvalidKeyException("Media doesn't fit to provided name");
+                    throw new InvalidKeyException("Class name not registered in media service");
                 }
             }
         }
@@ -104,10 +108,10 @@ public class ManagementController {
                             @RequestParam(value = "className", required = false) String className)
     {
         Media media = null;
-        if (bookDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(bookDTO.getClassName()));
-        if (audioDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(audioDTO.getClassName()));
-        if (paperDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(paperDTO.getClassName()));
-        if (movieDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(movieDTO.getClassName()));
+        if (bookDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(bookDTO.getClass().getSimpleName()).Business);
+        if (audioDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(audioDTO.getClass().getSimpleName()).Business);
+        if (paperDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(paperDTO.getClass().getSimpleName()).Business);
+        if (movieDTO.getClass().getSimpleName().equals(className)) media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(movieDTO.getClass().getSimpleName()).Business);
         //Media or ? extends
         if (!entityManager.contains(media)) {
             mediaService.addMedia(media);

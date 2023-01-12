@@ -4,8 +4,6 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.model.medias.Movie;
 
 public class MovieDTO extends MediaDTO {
-    final static String className = Movie.getClassName();
-    public static String getClassName() {return className;}
 
     private Integer duration;
     private String format;

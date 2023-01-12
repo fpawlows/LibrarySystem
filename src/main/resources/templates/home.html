@@ -33,31 +33,33 @@
     <br/>
 
     <form class="form-horizontal" th:action="@{/home/search}" th:object="${mediaDTO}" th:method="post" style="display: inline-block">
-        <input class="form-control" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-               type="number" min=0 name="searchMediaId" th:field="*{id}" placeholder="ID" size="10" style="display: inline-block">
-        <!--TODO th:label and genres in autoload
--->
-        <input type="text" class="form-control" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
+        <fieldset>
+            <input class="form-control" th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                   type="number" min=0 name="searchMediaId" th:field="*{id}" placeholder="ID" size="10" style="display: inline-block">
+            <!--TODO th:label and genres in autoload
+    -->
+            <input type="text" class="form-control" name="searchMediaName" th:field="*{name}" placeholder="Name" size="30" style="display: inline-block">
 
-        <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
-            <option selected disabled th:value="${null}">-- Genre --</option>
-            <option th:each="genre : ${allGenres}"
-                    th:value="${genre.id}"
-                    th:text="${genre.name}">
-                Genre
-            </option>
-        </select>
+            <select class="form-select" name="searchMediaGenreId" th:field="*{genres}" multiple>
+                <option selected disabled th:value="${null}">-- Genre --</option>
+                <option th:each="genre : ${allGenres}"
+                        th:value="${genre.id}"
+                        th:text="${genre.name}">
+                    Genre
+                </option>
+            </select>
 
-        <select class="form-select" name="searchMediaFsk" th:field="*{fsk}">
-            <option selected th:value="${null}">-- fsk --</option>
-            <option th:each="fsk_ : ${fskValues}"
-                    th:text="${fsk_}"
-                    th:value="${fsk_}">Fsk
-            </option>
-        </select>
+            <select class="form-select" name="searchMediaFsk" th:field="*{fsk}">
+                <option selected th:value="${null}">-- fsk --</option>
+                <option th:each="fsk_ : ${fskValues}"
+                        th:text="${fsk_}"
+                        th:value="${fsk_}">Fsk
+                </option>
+            </select>
 
-        <button type="submit" class="btn btn-info" >Search</button>
-        <button type="reset" class="btn btn-info" >Reset</button>
+            <button type="submit" class="btn btn-info" >Search</button>
+            <button type="reset" class="btn btn-info" >Reset</button>
+        </fieldset>
     </form>
 
     <hr/>

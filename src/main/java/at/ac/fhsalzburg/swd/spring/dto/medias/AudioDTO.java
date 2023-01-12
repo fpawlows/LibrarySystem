@@ -6,8 +6,6 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import java.io.Serializable;
 
 public class AudioDTO extends MediaDTO {
-    final static String className = Audio.getClassName();
-    public static String getClassName() {return className;}
 
     private String codec;
     private Integer duration;

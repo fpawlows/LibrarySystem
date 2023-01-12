@@ -1,5 +1,5 @@
 <div class="form" th:fragment="form">
-    <form class="form" th:if="${bookDTO!=null}" th:action="@{/admin/editMedia(className=${bookDTO.getClassName()})}" th:object="${bookDTO}" method="POST">
+    <form class="form" th:if="${bookDTO!=null}" th:action="@{/admin/editMedia(className=${bookDTO.getClass().getSimpleName()})}" th:object="${bookDTO}" method="POST">
         <div class="mb-3">
             <label for="name" class="form-label">Media name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}">

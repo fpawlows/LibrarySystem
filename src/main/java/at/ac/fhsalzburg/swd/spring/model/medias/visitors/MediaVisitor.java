@@ -1,4 +1,4 @@
-package at.ac.fhsalzburg.swd.spring.model.visitors;
+package at.ac.fhsalzburg.swd.spring.model.medias.visitors;
 
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 

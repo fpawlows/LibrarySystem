@@ -43,7 +43,6 @@ public interface MediaServiceInterface {
 
     public abstract List<Integer> getPossibleFskValues();
 
-    public abstract Map<String, Class<? extends Media>> getMediaClasses();
-    public abstract Map<String, Class<? extends MediaDTO>> getMediaDTOClasses();
+    public abstract Map<String, MediaService.PairBusiness_DTO> getMediaClasses();
 
 }

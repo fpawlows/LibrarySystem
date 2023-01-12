@@ -16,8 +16,6 @@ import java.util.List;
 
 //TODO MEdia adn MEDIADTO abstract - factory
 public class MediaDTO implements Serializable {
-    final static String className = Media.getClassName();
-    public static String getClassName() {return className;}
 
     private Long id;
     private String name;

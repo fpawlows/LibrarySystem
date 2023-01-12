@@ -4,8 +4,6 @@ import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.model.medias.Paper;
 
 public class PaperDTO extends MediaDTO {
-    final static String className = Paper.getClassName();
-    public static String getClassName() {return className;}
 
     private Integer edition;
 

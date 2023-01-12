@@ -3,12 +3,10 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
-import at.ac.fhsalzburg.swd.spring.model.visitors.VisitableMedia;
-import org.springframework.beans.factory.annotation.Value;
+import at.ac.fhsalzburg.swd.spring.model.medias.visitors.VisitableMedia;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 import java.util.*;
 import java.util.Collection;
@@ -16,9 +14,6 @@ import java.util.Collection;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Media implements VisitableMedia {
-
-    final static String className = "Media";
-    public static String getClassName() {return className;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

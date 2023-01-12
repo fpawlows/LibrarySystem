@@ -23,23 +23,24 @@ public class MediaService implements MediaServiceInterface {
 
     private final List<Integer> possibleFskValues;
 
+    public class PairBusiness_DTO {
+        public Class<? extends Media> Business;
+        public Class<? extends MediaDTO> DTO;
+
+        public PairBusiness_DTO(Class Business, Class DTO) {
+            this.Business = Business;
+            this.DTO = DTO;
+        }
+    }
+
     //TODO delete
-    private final Map<String, Class<? extends Media>> mediaClasses = new HashMap<>(){
+    private final Map<String, PairBusiness_DTO> mediaClassesPairs = new HashMap<>(){
         {
-            put(Book.getClassName(), Book.class);
-            put(Audio.getClassName(), Audio.class);
-            put(Paper.getClassName(), Paper.class);
-            put(Movie.getClassName(), Movie.class);
+            put(Book.class.getSimpleName(), new PairBusiness_DTO(Book.class, BookDTO.class));
+            put(Audio.class.getSimpleName(), new PairBusiness_DTO(Audio.class, AudioDTO.class));
+            put(Paper.class.getSimpleName(), new PairBusiness_DTO(Paper.class, PaperDTO.class));
+            put(Movie.class.getSimpleName(), new PairBusiness_DTO(Movie.class, MovieDTO.class));
         }};
-
-    private final Map<String, Class<? extends MediaDTO>> mediaDTOClasses = new HashMap<>(){
-        {
-            put(BookDTO.getClassName(), BookDTO.class);
-            put(AudioDTO.getClassName(), AudioDTO.class);
-            put(PaperDTO.getClassName(), PaperDTO.class);
-            put(MovieDTO.getClassName(), MovieDTO.class);
-        }};
-
 
     //TODO maybe
     //private final Set<Class<? extends Object>> allClasses = (new Reflection("src/main/java/at/ac/fhsalzburg/swd/spring/model/medias")).getSubTypesOf(Media.class);
@@ -201,7 +202,6 @@ public class MediaService implements MediaServiceInterface {
         return possibleFskValues;
     }
 
-    public Map<String, Class<? extends Media>> getMediaClasses() { return mediaClasses;}
-    public Map<String, Class<? extends MediaDTO>> getMediaDTOClasses() { return mediaDTOClasses;}
+    public Map<String, PairBusiness_DTO> getMediaClasses() { return mediaClassesPairs;}
 
     }
