@@ -2,12 +2,13 @@ package at.ac.fhsalzburg.swd.spring.dto;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private String username;
     private String fullname;

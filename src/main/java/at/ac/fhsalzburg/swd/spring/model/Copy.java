@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Copy implements Serializable {
+public class Copy {
     //Seriazible because of transfering to flashmap - in fully proper way i would do this with DTO
 
     @EmbeddedId

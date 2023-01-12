@@ -18,8 +18,10 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
     @Transactional(timeout = 10)
     Optional<Media> findById(Long Long);
 
+    @Transactional(timeout = 10)
     Iterable<Media> findByFsk(Integer fsk);
 
+    @Transactional(timeout = 10)
     List<Media> findByName(String name);
 
     @Transactional(timeout = 10)

@@ -134,9 +134,9 @@ public class HomeController {
         }
 
         List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");
-        List<BookDTO> searchedAudiosCollection = (List<BookDTO>) model.asMap().get("searchedAudiosCollection");
-        List<BookDTO> searchedPapersCollection = (List<BookDTO>) model.asMap().get("searchedPapersCollection");
-        List<BookDTO> searchedMoviesCollection = (List<BookDTO>) model.asMap().get("searchedMoviesCollection");
+        List<AudioDTO> searchedAudiosCollection = (List<AudioDTO>) model.asMap().get("searchedAudiosCollection");
+        List<PaperDTO> searchedPapersCollection = (List<PaperDTO>) model.asMap().get("searchedPapersCollection");
+        List<MovieDTO> searchedMoviesCollection = (List<MovieDTO>) model.asMap().get("searchedMoviesCollection");
         model.addAttribute("searchedBooksCollection", searchedBooksCollection);
         model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
         model.addAttribute("searchedPapersCollection", searchedPapersCollection);
