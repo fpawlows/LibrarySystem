@@ -1,0 +1,55 @@
+<br/><hr/>
+
+<label th:fragment="table" for="books" class="sub-title">Books</label>
+<div class="table-responsive" id="books">
+    <table class="table table-hover table-bordered">
+        <thead>
+        <!--Should be as many tables as media subtypes with Headers with <subtype>.name-->
+        <tr >
+            <th scope="col" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Fsk</th>
+            <th scope="col">Date Published</th>
+            <th scope="col">Genres</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Author</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${searchedBooksCollection==null || searchedBooksCollection.isEmpty()}">
+            <td> No Books Searched </td>
+        </tr>
+        <tr th:each ="media : ${searchedBooksCollection}">
+
+            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}"> <a th:href="@{/admin/editMedia(id=${media.getId()})}" th:utext="${media.getId()}"></a> </td>
+            <td th:utext="${media.getName()}"> ... </td>
+            <td th:utext="${media.getDescription()}">...</td>
+            <td th:utext="${media.getFsk()}">...</td>
+            <td th:utext="${#dates.format(media.getDatePublished(), 'dd-MMM-yyyy')}">...</td>
+            <td th:utext="${media.getGenres()==null ? '' : media.getGenres().toString().replace('[', '').replace(']', '')}">...</td>
+            <td th:utext="${media.getISBN()}">...</td>
+            <td th:utext="${media.getAuthor()}">...</td>
+            <td>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/editMedia(id=${media.getId()})}">
+                    <button style="width: 100%" type="button" class="fa fa-edit"> Edit </button>
+                </a>
+
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/deleteMedia(id=${media.getId()})}" th:method="delete">
+                    <button style="width: 100%" type="button" class="fa fa-remove"> Remove </button>
+                </a>
+
+                <a th:href="@{/reserve/(id=${media.getId()})}">
+                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || media.getCopies().contains(true))}" type="button" class="fa fa-calendar"> Reserve </button>
+                </a>
+                <a th:href="@{/loan/{id}(id=${media.getId()})}">
+                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || !media.getCopies().contains(true))}" type="button" class="fa fa-book"> Loan</button>
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--TODO for the other types of media-->
+</div>
