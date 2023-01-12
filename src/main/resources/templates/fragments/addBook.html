@@ -1,6 +1,10 @@
 <div class="form" th:fragment="form">
     <form class="form" th:if="${bookDTO!=null}" th:action="@{/admin/editMedia(className=${bookDTO.getClass().getSimpleName()})}" th:object="${bookDTO}" method="POST">
         <div class="mb-3">
+            <label for="id" class="form-label"></label>
+            <input type="hidden" class="form-control" id="id" th:field="*{id}">
+        </div>
+        <div class="mb-3">
             <label for="name" class="form-label">Media name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}">
         </div>
