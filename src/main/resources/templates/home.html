@@ -69,15 +69,23 @@
     -->
 
     <div th:unless="${searchedBooksCollection==null || searchedBooksCollection.isEmpty()}">
+        <h2>Books</h2>
+        <br>
         <div th:replace="fragments/mediaTables/bookTable :: table"></div>
     </div>
     <div th:unless="${searchedAudiosCollection==null || searchedAudiosCollection.isEmpty()}">
+        <h2>Audios</h2>
+        <br>
         <div th:replace="fragments/mediaTables/audioTable :: table"></div>
     </div>
     <div th:unless="${searchedMoviesCollection==null || searchedMoviesCollection.isEmpty()}">
+        <h2>Movies</h2>
+        <br>
         <div th:replace="fragments/mediaTables/movieTable :: table"></div>
     </div>
     <div th:unless="${searchedPapersCollection==null || searchedPapersCollection.isEmpty()}">
+        <h2>Papers</h2>
+        <br>
         <div th:replace="fragments/mediaTables/paperTable :: table"></div>
     </div>
 
