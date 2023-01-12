@@ -35,6 +35,7 @@ public interface MediaServiceInterface {
     public abstract Collection<Media> getByAllOptional(String name, Integer fsk, List<Genre> genres);
 
     public abstract Media getById(Long id);
+//    public abstract Media getByName(String name);
 
     public abstract void deleteById(Long id);
 

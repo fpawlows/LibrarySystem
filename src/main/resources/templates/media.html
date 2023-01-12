@@ -12,8 +12,19 @@
 
 <main layout:fragment="content" th:remove="tag">
 
-    <h1>Hello !</h1>
-<p>Welcome to <span th:text="${appName}">Our App</span></p>
+    <h1 th:text="${mediaDTO.getName()}"></h1>
+    <br/>
+
+    <h2>Deiscription: </h2>
+    <span th:text="${mediaDTO.getDescription()}"></span>
+    <br/>
+
+    <div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
+        <span> No Copies </span>
+    </div>
+
+    <tr th:each ="copy : ${mediaDTO.getCopies()}">
+
 
     </main>
 </body>

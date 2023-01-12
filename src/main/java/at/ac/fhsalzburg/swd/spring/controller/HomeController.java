@@ -37,19 +37,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class HomeController {
 
     @Autowired
-    private ApplicationContext context;
-
-    @Autowired
     private EntityManager entityManager;
 
     @Autowired
-    UserServiceInterface userService;
+    private UserServiceInterface userService;
 
     @Autowired
-    MediaServiceInterface mediaService;
+    private MediaServiceInterface mediaService;
 
-    //@Autowired
-    //StatisticsService statisticsService;
 
     //TODO take this beginning to the separeate method call
 

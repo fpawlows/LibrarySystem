@@ -174,6 +174,7 @@ public class MediaService implements MediaServiceInterface {
         }
     }
 
+
     public Collection<Media> getByAllOptional(String name, Integer fsk, List<Genre> genres) {
         List<Media> medias = new ArrayList<>();
 

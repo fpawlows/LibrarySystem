@@ -16,13 +16,10 @@ import javax.persistence.EntityManager;
 public class AuthenticationController {
 
     @Autowired
-    private ApplicationContext context;
-
-    @Autowired
     private EntityManager entityManager;
 
     @Autowired
-    UserServiceInterface userService;
+    private UserServiceInterface userService;
 
     @RequestMapping(value = {"/login"})
     public String login_dwa(Model model) {return "login";}
