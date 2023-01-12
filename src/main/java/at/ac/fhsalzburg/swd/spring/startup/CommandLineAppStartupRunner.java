@@ -7,7 +7,6 @@ import java.util.Date;
 
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
-import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;

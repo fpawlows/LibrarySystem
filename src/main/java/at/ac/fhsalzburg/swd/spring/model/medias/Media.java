@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.model.medias;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.visitors.VisitableMedia;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,7 +15,7 @@ import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Media {
+public abstract class Media implements VisitableMedia {
 
     final static String className = "Media";
     public static String getClassName() {return className;}
@@ -85,7 +86,7 @@ public class Media {
         this.id = id;
     }
 
-    public void setName(String Name) {
+    public void setName(String name) {
         this.name = name;
     }
 

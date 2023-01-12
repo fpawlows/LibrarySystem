@@ -90,7 +90,7 @@
                 <td th:utext="${media.getName()}"> ... </td>
                 <td th:utext="${media.getDescription()}">...</td>
                 <td th:utext="${media.getFsk()}">...</td>
-                <td th:utext="${media.getDatePublished()}">...</td>
+                <td th:utext="${#dates.format(media.getDatePublished(), 'dd-MMM-yyyy')}">...</td>
                 <td th:utext="${media.getGenres()==null ? '' : media.getGenres().toString().replace('[', '').replace(']', '')}">...</td>
                 <td th:utext="${media.getISBN()}">...</td>
                 <td th:utext="${media.getAuthor()}">...</td>

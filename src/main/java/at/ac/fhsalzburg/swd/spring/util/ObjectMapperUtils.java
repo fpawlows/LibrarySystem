@@ -77,37 +77,27 @@ public class ObjectMapperUtils {
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
         if (typeMapMedia == null) {
-            typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class)
-                .addMappings(mapper -> mapper.skip(Media::setId))
-  /*              .include(BookDTO.class, Book.class)
-                .include(AudioDTO.class, Audio.class)
-                .include(PaperDTO.class, Paper.class)
-                .include(MovieDTO.class, Movie.class)
-                */;
+            typeMapMedia = modelMapper.createTypeMap(MediaDTO.class, Media.class);
         }
 
         TypeMap<BookDTO, Book> typeMapBook = modelMapper.getTypeMap(BookDTO.class, Book.class);
         if (typeMapBook == null) {
-            typeMapBook = modelMapper.createTypeMap(BookDTO.class, Book.class)
-                .addMappings(mapper -> mapper.skip(Book::setId));
+            typeMapBook = modelMapper.createTypeMap(BookDTO.class, Book.class);
         }
 
         TypeMap<AudioDTO, Audio> typeMapAudio = modelMapper.getTypeMap(AudioDTO.class, Audio.class);
         if (typeMapAudio == null) {
-            typeMapAudio = modelMapper.createTypeMap(AudioDTO.class, Audio.class)
-                .addMappings(mapper -> mapper.skip(Audio::setId));
+            typeMapAudio = modelMapper.createTypeMap(AudioDTO.class, Audio.class);
         }
 
         TypeMap<MovieDTO, Movie> typeMapMovie = modelMapper.getTypeMap(MovieDTO.class, Movie.class);
         if (typeMapMovie == null) {
-            typeMapMovie = modelMapper.createTypeMap(MovieDTO.class, Movie.class)
-                .addMappings(mapper -> mapper.skip(Movie::setId));
+            typeMapMovie = modelMapper.createTypeMap(MovieDTO.class, Movie.class);
         }
 
         TypeMap<PaperDTO, Paper> typeMapPaper = modelMapper.getTypeMap(PaperDTO.class, Paper.class);
         if (typeMapPaper == null) {
-            typeMapPaper = modelMapper.createTypeMap(PaperDTO.class, Paper.class)
-                .addMappings(mapper -> mapper.skip(Paper::setId));
+            typeMapPaper = modelMapper.createTypeMap(PaperDTO.class, Paper.class);
         }
 
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
@@ -124,6 +114,7 @@ public class ObjectMapperUtils {
                         : request.getSource() instanceof MovieDTO ? new Movie()
                         : null;
                 }
+                //TODO usun to i tam ponizej gdize jest new Book()
                 //return ((MediaDTO) request.getSource()).getId()!=null ? mediaService.getById(((MediaDTO) request.getSource()).getId()) : new Media(null, null, null);
             }
         };

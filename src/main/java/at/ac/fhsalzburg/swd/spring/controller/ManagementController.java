@@ -1,42 +1,22 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
-import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
 import io.jsonwebtoken.security.InvalidKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import at.ac.fhsalzburg.swd.spring.TestBean;
-import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
-import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -77,7 +57,8 @@ public class ManagementController {
         }
 
         if (modMedia != null) {
-            mediaDTO = ObjectMapperUtils.map(modMedia, MediaDTO.class);
+            //TODO split based on types
+            mediaDTO = ObjectMapperUtils.map(modMedia, mediaService.getMediaDTOClasses().get(modMedia.getClassName()));
         } else {
             if (className == null) {
                 List<String> mediaClassesNames = mediaService.getMediaClasses().keySet().stream().toList();
@@ -128,17 +109,19 @@ public class ManagementController {
         if (paperDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(paperDTO.getClassName()));
         if (movieDTO.getClassName().equals(className)) media = ObjectMapperUtils.map(movieDTO, mediaService.getMediaClasses().get(movieDTO.getClassName()));
         //Media or ? extends
-        if (!entityManager.contains(media)) mediaService.addMedia(media);
+        if (!entityManager.contains(media)) {
+            mediaService.addMedia(media);
+        }
 
         redirectAttributes.addFlashAttribute("editedStatus", "Media edited successfully!");
-        return "redirect:/editMedia";
+        return "redirect:/admin/editMedia";
     }
 
     @DeleteMapping("/deleteMedia")
     public String deleteMedia(Model model,
                        @RequestParam(value = "id", required = false) Long id) {
         mediaService.deleteById(id);
-   return "redirect:/editMedia";
+   return "redirect:/admin/editMedia";
     }
 
 }

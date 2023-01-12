@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.services;
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.repository.CopyRepository;
@@ -59,31 +60,64 @@ public class MediaService implements MediaServiceInterface {
         this.copyRepository = copyRepository;
     }
 
-    //TODO change all those to addBook addAudio ... (media shouldnt be created itself)
-    @Override
-    public boolean addMedia(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {
-        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
-        description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-        fsk = fsk==null ? 0 : fsk;
-        Media media = new Media (name, description, fsk, datePublished, genres);
-        mediaRepository.save(media);
-        return true;
-        }
-    return false;
-    }
 
     @Override
-    public boolean addMedia(String name, String description, Integer fsk, Date datePublished) {
+    public boolean addMedia(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
             description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-            fsk = fsk == null ? 0 : fsk;
-
-            Media media = new Media(name, description, fsk, datePublished, null);
+            fsk = fsk==null ? 0 : fsk;
+            Book media = new Book (ISBN, author, name, description, fsk, datePublished, genres, copies, reservations);
             mediaRepository.save(media);
             return true;
         }
-        return false;
+        else {
+            return false;
+        }
     }
+
+
+    @Override
+    public boolean addPaper(Integer edition, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
+            description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
+            fsk = fsk==null ? 0 : fsk;
+            Paper media = new Paper (edition, name, description, fsk, datePublished, genres, copies, reservations);
+            mediaRepository.save(media);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean addMovie(Integer duration, String format, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
+            description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
+            fsk = fsk==null ? 0 : fsk;
+            Movie media = new Movie (duration, format, name, description, fsk, datePublished, genres, copies, reservations);
+            mediaRepository.save(media);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean addAudio(Integer duration, String codec, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+        if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
+            description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
+            fsk = fsk==null ? 0 : fsk;
+            Audio media = new Audio (duration, codec, name, description, fsk, datePublished, genres, copies, reservations);
+            mediaRepository.save(media);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 
     @Override
     public boolean addMedia(Media media) {
@@ -133,7 +167,7 @@ public class MediaService implements MediaServiceInterface {
     public Media getById(Long id) {
         Optional<Media> media = mediaRepository.findById(id);
         if (media.isEmpty()) {
-            throw new NoSuchElementException("Wrong Id");
+            return null;
         }
         else {
             return media.get();
