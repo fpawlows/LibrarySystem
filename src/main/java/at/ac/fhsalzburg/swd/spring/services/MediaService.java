@@ -350,9 +350,9 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public List<Compartment> getAllCompartments() {
-        List<Compartment> shelves = new ArrayList<>();
-        compartmentRepository.findAll().forEach(shelves::add);
-        return shelves;
+        List<Compartment> compartments = new ArrayList<>();
+        compartmentRepository.findAll().forEach(compartments::add);
+        return compartments;
     }
 
     public List<Integer> getPossibleFskValues(){

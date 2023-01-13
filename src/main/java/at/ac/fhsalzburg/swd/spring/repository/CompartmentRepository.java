@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -15,5 +16,9 @@ public interface CompartmentRepository extends CrudRepository<Compartment, Compa
 
 	@Transactional(timeout = 10)
     Optional<Compartment> findById(CompartmentId id);
+
+
+    @Transactional(timeout = 10)
+    List<Compartment> findAll();
 
 }

@@ -53,12 +53,14 @@
                 <!--TODO see if works-->
             </td>
             <td colspan="3">
-                <select id="locationId" th:field="*{compartment.compartmentId}">
+                <select id="locationId" th:field="*{compartment}">
                     <option th:each="compartment_ : ${allCompartments}"
                             th:if="${compartment_.getNumberOfFreePlaces()>0}"
                             th:value="${compartment_.compartmentId}"
+                            th:text="${compartment_.describe()}">
+                            <!--
                             th:selected="${compartment_ == copy.compartment}"
-                    th:text="${compartment_.toString()}">
+                            -->
                     </option>
                 </select>
             </td>

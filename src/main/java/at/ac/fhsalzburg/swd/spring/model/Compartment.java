@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
 import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
+import lombok.AllArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.List;
 
 
 @Entity
+@AllArgsConstructor
 public class Compartment implements Serializable {
     //TODO usually Serializable would be DTO but bc of time except for media we used business objects in forms
     @EmbeddedId
@@ -25,7 +27,7 @@ public class Compartment implements Serializable {
         this.numberOfPlaces = numberOfPlaces;
     }
 
-    public Integer getNumberOfFreePlaces() {return numberOfPlaces - copies.size();}
+    public Integer getNumberOfFreePlaces() {return numberOfPlaces - (copies==null? 0 : copies.size());}
     public List<Copy> getCopies() {
         return copies;
     }
@@ -50,8 +52,7 @@ public class Compartment implements Serializable {
         this.numberOfPlaces = numberOfPlaces;
     }
 
-    @Override
-    public String toString() {
+    public String describe() {
         return "Location: " + compartmentId.getShelf().getId().getLocation().getName() + ", Shelf number: " + compartmentId.getShelf().getId().getShelfNumber() +
             ", Compartment position: " + compartmentId.getPosition();
     }
