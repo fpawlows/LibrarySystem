@@ -9,10 +9,12 @@ import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.expression.EvaluationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class MediaService implements MediaServiceInterface {
@@ -59,6 +61,7 @@ public class MediaService implements MediaServiceInterface {
                         CompartmentRepository compartmentRepository, ShelfRepository shelfRepository, GenreRepository genreRepository,
                         @Value("myapp.media.default.description") String defaultDescription,
                         @Value("#{'${myapp.media.possible.fsk.values}'.split(',')}") List<Integer> fskValues) {
+        //TODO check default description set
         this.possibleFskValues = fskValues;
         this.DEFAULT_DESCRIPTION = defaultDescription;
         this.mediaRepository = mediaRepository;
@@ -160,6 +163,38 @@ public class MediaService implements MediaServiceInterface {
             copyRepository.save(copy);
             mediaRepository.save(media);
         }
+        return true;
+    }
+
+
+    @Override
+    public boolean addCopy(Media media, Compartment compartment) {
+        if (compartment == null || media == null) {
+            return false;
+        }
+        CopyId copyId = new CopyId(null, media);
+        Copy copy = new Copy(copyId, compartment, true);
+        Collection<Copy> copies = media.getCopies();
+
+        if (copies==null) {
+            copies = new ArrayList<Copy>();
+            copies.add(copy);
+        } else {
+            if (!copies.add (copy)) {
+                throw new IllegalArgumentException("Cannot add copy to the list");
+            }
+        }
+        List<Copy> copies_compartment = compartment.getCopies();
+        if (copies_compartment==null) {
+            copies_compartment = Arrays.asList(copy);
+        } else {
+            copies_compartment.add(copy);
+        }
+        compartment.setCopies(copies_compartment);
+        media.setCopies(copies);
+        copyRepository.save(copy);
+//        mediaRepository.save(media);
+//        compartmentRepository.save(compartment);
         return true;
     }
 
