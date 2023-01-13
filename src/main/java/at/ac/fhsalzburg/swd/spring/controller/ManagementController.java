@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
 import at.ac.fhsalzburg.swd.spring.dto.CopyDTO;
+import at.ac.fhsalzburg.swd.spring.model.Compartment;
 import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
@@ -157,14 +158,13 @@ public class ManagementController {
         MediaDTO mediaDTO = null;
 
         if (copyId == null) {
-            if(mediaId == null ) {
-                throw new IllegalArgumentException("Have to provide either mediaId or copyId");
-            } else {
+            if(mediaId != null )  {
                 media = mediaService.getMediaById(mediaId);
                 if (media != null) {
                     mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
                     copy = new Copy();
                     copy.setCopyId(new CopyId(null, media));
+                    copy.setCompartment(new Compartment(new CompartmentId(null,null), null));
                 }
             }
         } else {
@@ -176,11 +176,21 @@ public class ManagementController {
     }
 
     @PostMapping("/editCopy")
-    public String addCopy(Model model,
+    public String addCopy(Model model, RedirectAttributes redirectAttributes,
                           @ModelAttribute("copy") Copy copy) {
         if (copy != null) {
+            Compartment compartment = mediaService.getCompartmentById(copy.getCompartment().getCompartmentId());
+            if (compartment!=null) {
+                redirectAttributes.addFlashAttribute("message", "No compartment with chosen Id");
+            }
+            else {
+                copy.setCompartment(compartment);
+                if (mediaService.addCopy(copy)) {
+                    redirectAttributes.addFlashAttribute("message", "Couldn't add copy");
+                }
+                redirectAttributes.addFlashAttribute("message", "Copy successfully added");
+            }
 
-        } else {
         }
         return "redirect:/media/" + copy.getCopyId().getMedia().getId();
     }

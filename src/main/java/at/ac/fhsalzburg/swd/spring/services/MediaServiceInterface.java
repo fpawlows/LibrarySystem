@@ -28,6 +28,7 @@ public interface MediaServiceInterface {
     public abstract boolean addGenre(Genre genre);
     public abstract boolean addGenre(String name);
     public abstract boolean addCopy(Media media);
+    public abstract boolean addCopy(Copy copy);
 
     public abstract boolean addLocation(Location location);
     public abstract boolean addLocation(String name);

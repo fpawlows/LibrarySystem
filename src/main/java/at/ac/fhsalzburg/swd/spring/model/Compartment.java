@@ -3,11 +3,13 @@ package at.ac.fhsalzburg.swd.spring.model;
 import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
 @Entity
-public class Compartment {
+public class Compartment implements Serializable {
+    //TODO usually Serializable would be DTO but bc of time except for media we used business objects in forms
     @EmbeddedId
     private CompartmentId compartmentId;
     private Integer numberOfPlaces;

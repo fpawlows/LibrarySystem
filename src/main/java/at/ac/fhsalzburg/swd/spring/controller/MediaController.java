@@ -33,15 +33,17 @@ public class MediaController {
         Model model, @PathVariable Long id) {
 
 
-        String message = "There is no media with ID: " + id;
+        String message = model.asMap().get("message") != null ? (String) model.asMap().get("message") : "No Copies found";
         MediaDTO mediaDTO = null;
         Media media = mediaService.getMediaById(id);
         List<Compartment> compartmets = mediaService.getAllCompartments();
         model.addAttribute("allCompartments", compartmets);
 
-        media = mediaService.getMediaById(id);
         if (media != null) {
             mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
+        }
+        else {
+            message = message = "There is no media with ID: " + id;
         }
         model.addAttribute("mediaDTO", mediaDTO);
 

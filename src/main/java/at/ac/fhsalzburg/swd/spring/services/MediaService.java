@@ -164,6 +164,12 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
+    public boolean addCopy(Copy copy) {
+        copyRepository.save(copy);
+        return true;
+    }
+
+    @Override
     public boolean addLocation(Location location) {
         locationRepository.save(location);
         return true;

@@ -30,10 +30,10 @@
 
     <!--div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive"-->
     <div class="table-responsive">
-        <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy}">
+        <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy/}" method="post">
         <div th:if="${editable}">
-            <button type="submit" class="btn btn-info" >Submit</button>
-            <button type="reset" class="btn btn-info" >Reset</button>
+            <button type="submit" class="btn btn-info" form="createCopy" >Submit</button>
+            <button type="reset" class="btn btn-info" form="createCopy" >Reset</button>
         </div>
             <table class="table table-hover table-bordered">
         <thead>
@@ -48,16 +48,17 @@
         </thead>
         <tbody>
         <tr th:if="${editable}">
-            <td>
-                <input th:text="${copy.copyId.copyNr}" th:utext="${copy.copyId.copyNr}" th:value="${copy.copyId.copyNr}" th:readonly="${true}" id="copyNr" type="text" th:field="*{copyId.copyNr}"/>
+            <td th:text="${copy.copyId.copyNr}">
+                <input th:text="${copy.copyId.copyNr}" th:value="${copy.copyId}" th:field="*{copyId}"/>
                 <!--TODO see if works-->
             </td>
             <td colspan="3">
-                <select id="locationId" th:field="*{compartment}">
-                    <option th:each="compartment : ${allCompartments}"
-                            th:if="${compartment.getNumberOfFreePlaces()>0}"
-                            th:value="${compartment}"
-                    th:text="${compartment.toString()}">
+                <select id="locationId" th:field="*{compartment.compartmentId}">
+                    <option th:each="compartment_ : ${allCompartments}"
+                            th:if="${compartment_.getNumberOfFreePlaces()>0}"
+                            th:value="${compartment_.compartmentId}"
+                            th:selected="${compartment_ == copy.compartment}"
+                    th:text="${compartment_.toString()}">
                     </option>
                 </select>
             </td>
@@ -94,10 +95,12 @@
     </form>
     </div>
 
-    <div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
+    <!--div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
         <span> No Copies found </span>
+    </div-->
+    <div class="alert alert-success" role="alert" th:if="${message!=null}">
+        <span th:text="${message}"></span>
     </div>
-
     </main>
 </body>
 
