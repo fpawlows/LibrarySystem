@@ -9,10 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Reservation {
+public class Reservation  implements Serializable {
 
     @EmbeddedId
     private ReservationId reservationId;

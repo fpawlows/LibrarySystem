@@ -1,11 +1,12 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "LOCATION")
-public class Location {
+public class Location implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

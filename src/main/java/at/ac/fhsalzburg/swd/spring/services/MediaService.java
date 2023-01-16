@@ -168,11 +168,18 @@ public class MediaService implements MediaServiceInterface {
 
 
     @Override
-    public boolean addCopy(Media media, Compartment compartment) {
-        if (compartment == null || media == null) {
+    public boolean addCopy(Media media, Compartment compartment, Integer copyNr) {
+        if (copyNr == null || compartment == null || media == null) {
             return false;
         }
-        CopyId copyId = new CopyId(null, media);
+        Collection<Integer> copyNumbers = new ArrayList<>();
+        for (Copy copy_ : (media.getCopies()!=null ? media.getCopies() : new ArrayList<Copy>())){
+            copyNumbers.add(copy_.getCopyId().getCopyNr());
+        }
+        if (copyNumbers.contains(copyNr)) {
+            return false;
+        }
+        CopyId copyId = new CopyId(copyNr, media);
         Copy copy = new Copy(copyId, compartment, true);
         Collection<Copy> copies = media.getCopies();
 

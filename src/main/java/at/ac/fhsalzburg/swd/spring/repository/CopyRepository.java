@@ -1,7 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
+import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

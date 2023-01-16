@@ -73,8 +73,8 @@
         </tr>
         <tr th:each="copy : ${mediaDTO.getCopies()}">
             <td> <span th:text="${copy.copyId.copyNr}"> </span> </td>
-            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.location.roomName}"> </span> </td>
-            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.shelfNumberFromTop}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.location.name}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.shelfNumber}"> </span> </td>
             <td> <span th:text="${copy.compartment.compartmentId.position}"> </span> </td>
             <td> <span th:text="${copy.isAvailable}" th:classappend="${copy.isAvailable ? 'bg-success' : 'bg-warning'}"> </span> </td>
             <td>
@@ -100,7 +100,7 @@
     <!--div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
         <span> No Copies found </span>
     </div-->
-    <div class="alert alert-success" role="alert" th:if="${message!=null}">
+    <div class="alert alert-success" role="alert" th:if="${message!=null && !mediaDTO.getCopies().isEmpty()}">
         <span th:text="${message}"></span>
     </div>
     </main>

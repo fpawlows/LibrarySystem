@@ -3,10 +3,11 @@ package at.ac.fhsalzburg.swd.spring.model;
 import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
-public class Shelf {
+public class Shelf implements Serializable {
 
     @EmbeddedId
     private ShelfId id;

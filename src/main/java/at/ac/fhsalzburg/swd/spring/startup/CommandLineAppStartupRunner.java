@@ -4,10 +4,11 @@ package at.ac.fhsalzburg.swd.spring.startup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
-import at.ac.fhsalzburg.swd.spring.model.Genre;
-import at.ac.fhsalzburg.swd.spring.model.Location;
-import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.*;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import at.ac.fhsalzburg.swd.spring.model.ids.ShelfId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
-import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.OrderServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.ProductServiceInterface;
 
@@ -69,6 +69,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
             givenReservations.add(new ArrayList<Reservation>());
         }
 
+        String name = "Library";
+
         for (int i = 0; i < N_MEDIAS; i++) {
             givenGenres.add(new Genre("Horror" + i));
             mediaService.addGenre(givenGenres.get(i));
@@ -79,16 +81,28 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
             mediaService.addMedia(givenMedias.get(i));
 
-            String name = "Library"+i;
-            mediaService.addLocation(name);
-            for (int j=0; j<i+3; j++) {
+
+            name = "Library"+i;
+            if(!mediaService.addLocation(name)) throw new ExceptionInInitializerError();
+            for (int j=0; j<6; j++) {
                 Location location = mediaService.getLocationByName(name).stream().iterator().next();
-                mediaService.addShelf(j, location.getId());
-                for (int k=0; k<j+3; k++) {
-                    mediaService.addCompartment(k+j, k, new ShelfId(j, location));
+                if(!mediaService.addShelf(j, location.getId())) {
+                    throw new ExceptionInInitializerError();
+                }
+
+                for (int k=0; k<6; k++) {
+                    ShelfId shelfId = new ShelfId(j, location);
+                    if(!mediaService.addCompartment(k+j+1, k, shelfId)) {
+                        throw new ExceptionInInitializerError();
+                    }
+
+                    CompartmentId compartmentId = new CompartmentId(k, mediaService.getShelfById(shelfId));
+                    Compartment compartment = mediaService.getCompartmentById( compartmentId);
+                    if(!mediaService.addCopy(givenMedias.get(i), compartment, RandomGenerator.getDefault().nextInt(213454)));
+                    }
                 }
             }
             //reservationService.persist(reservation);
         }
     }
-}
+

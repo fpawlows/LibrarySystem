@@ -3,11 +3,12 @@ package at.ac.fhsalzburg.swd.spring.model;
 import at.ac.fhsalzburg.swd.spring.model.ids.PaymentId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.Timestamp;
 
 @Entity
-public class Payment {
+public class Payment implements Serializable {
     enum states {successful, failed, inProgress, initialized};
 
     @EmbeddedId

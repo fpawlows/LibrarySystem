@@ -24,6 +24,7 @@ public interface MediaRepository extends CrudRepository<Media, Long> {
     @Transactional(timeout = 10)
     List<Media> findByName(String name);
 
+
     @Transactional(timeout = 10)
     //TODO add in every repository this @Transactional
     @Query(value =
