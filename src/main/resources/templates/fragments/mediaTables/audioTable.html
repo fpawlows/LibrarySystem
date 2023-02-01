@@ -12,7 +12,7 @@
             <th scope="col">Genres</th>
             <th scope="col">Duration</th>
             <th scope="col">Codec</th>
-            <th scope="col">Action</th>
+            <th sec:authorize="isAuthenticated()" scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
             <td th:utext="${media.getGenres()==null ? '' : media.getGenres().toString().replace('[', '').replace(']', '')}">...</td>
             <td th:utext="${media.getDuration()}">...</td>
             <td th:utext="${media.getCodec()}">...</td>
-            <td>
+            <td sec:authorize="isAuthenticated()">
                 <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/editMedia(id=${media.getId()})}">
                     <button style="width: 100%" type="button" class="fa fa-edit"> Edit </button>
                 </a>

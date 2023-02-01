@@ -109,7 +109,7 @@ public class ObjectMapperUtils {
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
 
             public Media get(ProvisionRequest<Media> request) {
-                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                    MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
                 if (((MediaDTO) request.getSource()).getId()!=null) return mediaService.getMediaById(((MediaDTO) request.getSource()).getId());
