@@ -112,6 +112,7 @@ public class ManagementController {
                             @ModelAttribute("movieDTO") MovieDTO movieDTO,
                             @RequestParam(value = "className", required = false) String className) throws NamingException {
         Media media = null;
+        String editedStatus = "None action performed.";
 
         if (bookDTO.getClass().getSimpleName().equals(className))
             media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(
@@ -134,10 +135,15 @@ public class ManagementController {
             throw new NamingException("Probably wrong DTO objects names");
         }
         if (!entityManager.contains(media)) {
-            mediaService.addMedia(media);
+            if (mediaService.addMedia(media)) {
+                editedStatus = "Media edited successfully!";
+            }
+            else {
+                editedStatus = "Media can't be added.";
+            };
         }
 
-        redirectAttributes.addFlashAttribute("editedStatus", "Media edited successfully!");
+        redirectAttributes.addFlashAttribute("editedStatus", editedStatus);
         return "redirect:/admin/editMedia";
     }
 

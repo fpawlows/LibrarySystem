@@ -6,23 +6,29 @@ import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.repository.LoanRepository;
+import at.ac.fhsalzburg.swd.spring.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoanService implements LoanServiceInterface {
 
-    private final LoanRepository repo;
+    private final LoanRepository loanRepository;
+    private final ReservationRepository reservationRepository;
+
 
     @Value("${myapp.free.days.loan}") // inject secret from application.properties
     private Integer LOAN_DAYS_LIMIT;
 
-    public LoanService(LoanRepository repo) {
-        this.repo = repo;
+    public LoanService(LoanRepository loanRepository, ReservationRepository reservationRepository)
+    {
+        this.loanRepository = loanRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -40,7 +46,7 @@ public class LoanService implements LoanServiceInterface {
             state = state==null? Loan.loanState.Waiting_For_PickUp : state;
 
             Loan loan = new Loan(null, copy, user, dateBorrowed, state);
-            loan = repo.save(loan);
+            loan = loanRepository.save(loan);
 
             return loan;
         }
@@ -88,5 +94,18 @@ public class LoanService implements LoanServiceInterface {
     @Override
     public User findNextInQueue(Media media) {
         return null;
+    }
+
+
+    @Override
+    public Loan getLoanById(Long Id) {
+        Optional<Loan> loan = loanRepository.findById(Id);
+        return loan.isEmpty()? null : loan.get();
+    }
+
+    @Override
+    public Reservation getReservationById(Long Id) {
+        Optional<Reservation> reservation = reservationRepository.findById(Id);
+        return reservation.isEmpty()? null : reservation.get();
     }
 }

@@ -2,17 +2,18 @@ package at.ac.fhsalzburg.swd.spring.dto;
 
 
 
+import at.ac.fhsalzburg.swd.spring.dto.ids.CompartmentDTOId;
 import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 
 public class CompartmentDTO {
 
-    private CompartmentId compartmentId;
+    private CompartmentDTOId compartmentId;
     private Integer numberOfPlaces;
 
-    public CompartmentId getCompartmentId() {
+    public CompartmentDTOId getCompartmentId() {
         return compartmentId;
     }
-    public void setCompartmentId(CompartmentId compartmentId) {
+    public void setCompartmentId(CompartmentDTOId compartmentId) {
         this.compartmentId = compartmentId;
     }
     public Integer getNumberOfPlaces() {

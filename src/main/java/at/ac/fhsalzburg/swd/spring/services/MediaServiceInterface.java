@@ -16,39 +16,34 @@ import java.util.Map;
 
 public interface MediaServiceInterface {
 
-    boolean addMedia(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
-
-    boolean addPaper(Integer edition, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
-
-    boolean addMovie(Integer duration, String format, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
-
-    boolean addAudio(Integer duration, String codec, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
-
+    public abstract boolean addBook(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
+    public abstract boolean addPaper(Integer edition, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
+    public abstract boolean addMovie(Integer duration, String format, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
+    public abstract boolean addAudio(Integer duration, String codec, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
     public abstract boolean addMedia(Media media);
+
     public abstract boolean addGenre(Genre genre);
     public abstract boolean addGenre(String name);
-    public abstract boolean addCopy(Media media);
 
     public abstract boolean addCopy(Media media, Compartment compartment, Integer copyNr);
-
     public abstract boolean addCopy(Copy copy);
+    public abstract boolean addCopy(Media media);
 
     public abstract boolean addLocation(Location location);
     public abstract boolean addLocation(String name);
     public abstract boolean addShelf(Shelf shelf, Long locationId);
     public abstract boolean addShelf(Integer shelfNumber, Long locationId);
     public abstract boolean addCompartment(Compartment compartment, ShelfId shelfId);
-
     public abstract boolean addCompartment(Integer numberOfCompartmentPlaces, Integer compartmentPosition, ShelfId shelfId);
-
-    public abstract Collection<Media> getAll();
 
     public abstract void setAvailibility(CopyId copyId, Boolean isAvailable);
 
+    public abstract Collection<Media> getAllMedia();
     public abstract Collection<Media> getByAllOptional(String name, Integer fsk, List<Genre> genres);
-
     public abstract Media getMediaById(Long id);
     public abstract Copy getCopyById(CopyId copyId);
+    public abstract Genre getGenreById(Long Id);
+
 //    public abstract Media getByName(String name);
 
     public abstract void deleteById(Long id);

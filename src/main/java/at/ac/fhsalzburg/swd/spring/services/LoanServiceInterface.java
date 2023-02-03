@@ -19,4 +19,10 @@ public interface LoanServiceInterface {
     public abstract Reservation reserveMedia (Media media);
     public abstract void cancelReservation (Reservation reservation);
     public abstract User findNextInQueue (Media media);
+
+
+    public abstract Loan getLoanById(Long Id);
+    public abstract Reservation getReservationById(Long Id);
+
 }
+

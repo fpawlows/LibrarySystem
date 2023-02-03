@@ -34,13 +34,14 @@ public class MediaService implements MediaServiceInterface {
     }
 
     //TODO delete
-    private final Map<String, PairBusiness_DTO> mediaClassesPairs = new HashMap<>(){
+    private final Map<String, PairBusiness_DTO> mediaClassesPairs = new HashMap<>() {
         {
             put(Book.class.getSimpleName(), new PairBusiness_DTO(Book.class, BookDTO.class));
             put(Audio.class.getSimpleName(), new PairBusiness_DTO(Audio.class, AudioDTO.class));
             put(Paper.class.getSimpleName(), new PairBusiness_DTO(Paper.class, PaperDTO.class));
             put(Movie.class.getSimpleName(), new PairBusiness_DTO(Movie.class, MovieDTO.class));
-        }};
+        }
+    };
 
     //TODO maybe
     //private final Set<Class<? extends Object>> allClasses = (new Reflection("src/main/java/at/ac/fhsalzburg/swd/spring/model/medias")).getSubTypesOf(Media.class);
@@ -72,17 +73,16 @@ public class MediaService implements MediaServiceInterface {
         this.compartmentRepository = compartmentRepository;
     }
 
-
+//TODO check in each media if its allowed for particular user
     @Override
-    public boolean addMedia(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+    public boolean addBook(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
             description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-            fsk = fsk==null ? 0 : fsk;
-            Book media = new Book (ISBN, author, name, description, fsk, datePublished, genres, copies, reservations);
+            fsk = fsk == null ? 0 : fsk;
+            Book media = new Book(ISBN, author, name, description, fsk, datePublished, genres, copies, reservations);
             mediaRepository.save(media);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -92,12 +92,11 @@ public class MediaService implements MediaServiceInterface {
     public boolean addPaper(Integer edition, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
             description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-            fsk = fsk==null ? 0 : fsk;
-            Paper media = new Paper (edition, name, description, fsk, datePublished, genres, copies, reservations);
+            fsk = fsk == null ? 0 : fsk;
+            Paper media = new Paper(edition, name, description, fsk, datePublished, genres, copies, reservations);
             mediaRepository.save(media);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -106,12 +105,11 @@ public class MediaService implements MediaServiceInterface {
     public boolean addMovie(Integer duration, String format, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
             description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-            fsk = fsk==null ? 0 : fsk;
-            Movie media = new Movie (duration, format, name, description, fsk, datePublished, genres, copies, reservations);
+            fsk = fsk == null ? 0 : fsk;
+            Movie media = new Movie(duration, format, name, description, fsk, datePublished, genres, copies, reservations);
             mediaRepository.save(media);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -120,12 +118,11 @@ public class MediaService implements MediaServiceInterface {
     public boolean addAudio(Integer duration, String codec, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
         if (name != null && name.length() > 0 && possibleFskValues.contains(fsk)) {
             description = (description == null || description.equals("")) ? DEFAULT_DESCRIPTION : description;
-            fsk = fsk==null ? 0 : fsk;
-            Audio media = new Audio (duration, codec, name, description, fsk, datePublished, genres, copies, reservations);
+            fsk = fsk == null ? 0 : fsk;
+            Audio media = new Audio(duration, codec, name, description, fsk, datePublished, genres, copies, reservations);
             mediaRepository.save(media);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -145,8 +142,8 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public boolean addGenre(String name) {
-        if (name != null && name.length() > 0 ) {
-            Genre genre = new Genre (name);
+        if (name != null && name.length() > 0) {
+            Genre genre = new Genre(name);
             genreRepository.save(genre);
             return true;
         }
@@ -158,7 +155,7 @@ public class MediaService implements MediaServiceInterface {
         CopyId copyId = new CopyId(null, media);
         Copy copy = new Copy(copyId, null, true);
         Collection<Copy> copies = media.getCopies();
-        if(copies.add(copy)) {
+        if (copies.add(copy)) {
             media.setCopies(copies);
             copyRepository.save(copy);
             mediaRepository.save(media);
@@ -173,7 +170,7 @@ public class MediaService implements MediaServiceInterface {
             return false;
         }
         Collection<Integer> copyNumbers = new ArrayList<>();
-        for (Copy copy_ : (media.getCopies()!=null ? media.getCopies() : new ArrayList<Copy>())){
+        for (Copy copy_ : (media.getCopies() != null ? media.getCopies() : new ArrayList<Copy>())) {
             copyNumbers.add(copy_.getCopyId().getCopyNr());
         }
         if (copyNumbers.contains(copyNr)) {
@@ -183,16 +180,16 @@ public class MediaService implements MediaServiceInterface {
         Copy copy = new Copy(copyId, compartment, true);
         Collection<Copy> copies = media.getCopies();
 
-        if (copies==null) {
+        if (copies == null) {
             copies = new ArrayList<Copy>();
             copies.add(copy);
         } else {
-            if (!copies.add (copy)) {
+            if (!copies.add(copy)) {
                 throw new IllegalArgumentException("Cannot add copy to the list");
             }
         }
         List<Copy> copies_compartment = compartment.getCopies();
-        if (copies_compartment==null) {
+        if (copies_compartment == null) {
             copies_compartment = Arrays.asList(copy);
         } else {
             copies_compartment.add(copy);
@@ -219,7 +216,7 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     public boolean addLocation(String name) {
-        if (name!=null && !name.equals("")) {
+        if (name != null && !name.equals("")) {
             locationRepository.save(new Location(null, name));
         }
         return true;
@@ -230,13 +227,14 @@ public class MediaService implements MediaServiceInterface {
 
         Optional<Location> location = locationRepository.findById(locationId);
         if (location.isEmpty()) return false;
-        if (shelf==null) return false;
+        if (shelf == null) return false;
         Location location_valid = location.get();
-        if(location_valid.getShelves()==null || !location_valid.getShelves().contains(shelf)) {
+        if (location_valid.getShelves() == null || !location_valid.getShelves().contains(shelf)) {
             List<Shelf> shelves_arg = Arrays.asList(shelf);
             Collection<Shelf> shelves = location_valid.getShelves();
-            if (shelves==null) {shelves = shelves_arg;}
-            else {
+            if (shelves == null) {
+                shelves = shelves_arg;
+            } else {
                 if (shelves.addAll(shelves_arg)) return false;
             }
             //location_valid.setShelves(shelves);
@@ -253,11 +251,12 @@ public class MediaService implements MediaServiceInterface {
         if (shelfNumber == null) return false;
         Location location_valid = location.get();
         Shelf shelf = new Shelf(new ShelfId(shelfNumber, location_valid));
-        if(location_valid.getShelves()==null || !location_valid.getShelves().contains(shelf)) {
+        if (location_valid.getShelves() == null || !location_valid.getShelves().contains(shelf)) {
             Collection<Shelf> shelves_arg = Arrays.asList(shelf);
             Collection<Shelf> shelves = location_valid.getShelves();
-            if (shelves==null) {shelves = shelves_arg;}
-            else {
+            if (shelves == null) {
+                shelves = shelves_arg;
+            } else {
                 if (shelves.addAll(shelves_arg)) return false;
             }
             //location_valid.setShelves(shelves);
@@ -273,11 +272,12 @@ public class MediaService implements MediaServiceInterface {
         if (shelf_optional.isEmpty()) return false;
         if (compartment == null) return false;
         Shelf shelf = shelf_optional.get();
-        if(shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
+        if (shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
             Collection<Compartment> compartments_args = Arrays.asList(compartment);
             Collection<Compartment> compartments = shelf.getCompartments();
-            if (compartments==null) {compartments = compartments_args;}
-            else {
+            if (compartments == null) {
+                compartments = compartments_args;
+            } else {
                 if (compartments.addAll(compartments_args)) return false;
             }
             //shelf.setCompartments(compartments);
@@ -288,18 +288,19 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
-    public boolean addCompartment(Integer numberOfCompartmentPlaces, Integer compartmentPosition, ShelfId shelfId)  {
+    public boolean addCompartment(Integer numberOfCompartmentPlaces, Integer compartmentPosition, ShelfId shelfId) {
         Optional<Shelf> shelf_optional = shelfRepository.findById(shelfId);
         if (shelf_optional.isEmpty()) return false;
-        if (numberOfCompartmentPlaces==null || numberOfCompartmentPlaces<1) return false;
+        if (numberOfCompartmentPlaces == null || numberOfCompartmentPlaces < 1) return false;
 
         Shelf shelf = shelf_optional.get();
         Compartment compartment = new Compartment(new CompartmentId(compartmentPosition, shelf), numberOfCompartmentPlaces);
-        if(shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
+        if (shelf.getCompartments() == null || !shelf.getCompartments().contains(compartment)) {
             Collection<Compartment> compartments_args = Arrays.asList(compartment);
             Collection<Compartment> compartments = shelf.getCompartments();
-            if (compartments==null) {compartments = compartments_args;}
-            else {
+            if (compartments == null) {
+                compartments = compartments_args;
+            } else {
                 if (compartments.addAll(compartments_args)) return false;
             }
             //shelf.setCompartments(compartments);
@@ -311,7 +312,7 @@ public class MediaService implements MediaServiceInterface {
 
 
     @Override
-    public Collection<Media> getAll() {
+    public Collection<Media> getAllMedia() {
         List<Media> medias = new ArrayList<>();
 
         mediaRepository.findAll().forEach(medias::add);
@@ -336,8 +337,7 @@ public class MediaService implements MediaServiceInterface {
         Optional<Media> media = mediaRepository.findById(id);
         if (media.isEmpty()) {
             return null;
-        }
-        else {
+        } else {
             return media.get();
         }
     }
@@ -347,8 +347,7 @@ public class MediaService implements MediaServiceInterface {
         Optional<Copy> copy = copyRepository.findById(copyId);
         if (copy.isEmpty()) {
             return null;
-        }
-        else {
+        } else {
             return copy.get();
         }
     }
@@ -397,7 +396,7 @@ public class MediaService implements MediaServiceInterface {
         return compartments;
     }
 
-    public List<Integer> getPossibleFskValues(){
+    public List<Integer> getPossibleFskValues() {
         return possibleFskValues;
     }
 
@@ -426,6 +425,14 @@ public class MediaService implements MediaServiceInterface {
         return compartment.isEmpty() ? null : compartment.get();
     }
 
-    public Map<String, PairBusiness_DTO> getMediaClasses() { return mediaClassesPairs;}
-
+    public Map<String, PairBusiness_DTO> getMediaClasses() {
+        return mediaClassesPairs;
     }
+
+
+    public Genre getGenreById(Long Id){
+        Optional<Genre> genre = genreRepository.findById(Id);
+        return genre.isEmpty()? null : genre.get();
+    }
+
+}

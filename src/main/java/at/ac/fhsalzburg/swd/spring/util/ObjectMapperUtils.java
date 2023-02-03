@@ -4,11 +4,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import at.ac.fhsalzburg.swd.spring.dto.CopyDTO;
+import at.ac.fhsalzburg.swd.spring.dto.*;
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
-import at.ac.fhsalzburg.swd.spring.model.Copy;
+import at.ac.fhsalzburg.swd.spring.model.*;
+import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
+import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
+import at.ac.fhsalzburg.swd.spring.model.ids.PaymentId;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
+import at.ac.fhsalzburg.swd.spring.services.LoanService;
 import at.ac.fhsalzburg.swd.spring.services.MediaService;
+import at.ac.fhsalzburg.swd.spring.services.PaymentService;
 import org.modelmapper.*;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
@@ -16,8 +21,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
-import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserService;
 
 // initial version from https://stackoverflow.com/questions/47929674/modelmapper-mapping-list-of-entites-to-list-of-dto-objects
@@ -74,6 +77,124 @@ public class ObjectMapperUtils {
         // a provider to fetch a user instance from a repository
         typeMapUser.setProvider(userDelegatingProvider);
 
+
+        TypeMap<CompartmentDTO, Compartment> typeMapCompartment = modelMapper.getTypeMap(CompartmentDTO.class, Compartment.class);
+        if (typeMapCompartment == null) {
+            typeMapCompartment = modelMapper.createTypeMap(CompartmentDTO.class, Compartment.class);
+        }
+        Provider<Compartment> CompartmentDelegatingProvider = new Provider<Compartment>() {
+
+            public Compartment get(ProvisionRequest<Compartment> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return mediaService.getCompartmentById( IdMapperUtils.map(((CompartmentDTO) request.getSource()).getCompartmentId(), CompartmentId.class));
+            }
+        };
+
+        typeMapCompartment.setProvider(CompartmentDelegatingProvider);
+
+
+        TypeMap<GenreDTO, Genre> typeMapGenre = modelMapper.getTypeMap(GenreDTO.class, Genre.class);
+        if (typeMapGenre == null) {
+            typeMapGenre = modelMapper.createTypeMap(GenreDTO.class, Genre.class);
+        }
+        Provider<Genre> GenreDelegatingProvider = new Provider<Genre>() {
+
+            public Genre get(ProvisionRequest<Genre> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return mediaService.getGenreById(((GenreDTO) request.getSource()).getId());
+            }
+        };
+
+        typeMapGenre.setProvider(GenreDelegatingProvider);
+
+
+        TypeMap<LoanDTO, Loan> typeMapLoan = modelMapper.getTypeMap(LoanDTO.class, Loan.class);
+        if (typeMapLoan == null) {
+            typeMapLoan = modelMapper.createTypeMap(LoanDTO.class, Loan.class);
+        }
+        Provider<Loan> LoanDelegatingProvider = new Provider<Loan>() {
+
+            public Loan get(ProvisionRequest<Loan> request) {
+                LoanService loanService = (LoanService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("loanService");
+                return loanService.getLoanById(((LoanDTO) request.getSource()).getId());
+            }
+        };
+
+        typeMapLoan.setProvider(LoanDelegatingProvider);
+
+
+        TypeMap<LocationDTO, Location> typeMapLocation = modelMapper.getTypeMap(LocationDTO.class, Location.class);
+        if (typeMapLocation == null) {
+            typeMapLocation = modelMapper.createTypeMap(LocationDTO.class, Location.class);
+        }
+        Provider<Location> LocationDelegatingProvider = new Provider<Location>() {
+
+            public Location get(ProvisionRequest<Location> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return mediaService.getLocationById(((LocationDTO) request.getSource()).getId());
+            }
+        };
+
+        typeMapLocation.setProvider(LocationDelegatingProvider);
+
+
+        TypeMap<PaymentDTO, Payment> typeMapPayment = modelMapper.getTypeMap(PaymentDTO.class, Payment.class);
+        if (typeMapPayment == null) {
+            typeMapPayment = modelMapper.createTypeMap(PaymentDTO.class, Payment.class);
+        }
+        Provider<Payment> PaymentDelegatingProvider = new Provider<Payment>() {
+
+            public Payment get(ProvisionRequest<Payment> request) {
+                PaymentService paymentService = (PaymentService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("paymentService");
+                return paymentService.getPaymentById( IdMapperUtils.map(((PaymentDTO) request.getSource()).getPaymentId(), PaymentId.class));
+            }
+        };
+
+        typeMapPayment.setProvider(PaymentDelegatingProvider);
+
+
+        TypeMap<ReservationDTO, Reservation> typeMapReservation = modelMapper.getTypeMap(ReservationDTO.class, Reservation.class);
+        if (typeMapReservation == null) {
+            typeMapReservation = modelMapper.createTypeMap(ReservationDTO.class, Reservation.class);
+        }
+        Provider<Reservation> ReservationDelegatingProvider = new Provider<Reservation>() {
+
+            public Reservation get(ProvisionRequest<Reservation> request) {
+                LoanService loanService = (LoanService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("loanService");
+                return loanService.getReservationById(((ReservationDTO) request.getSource()).getReservationId());
+            }
+        };
+
+        typeMapReservation.setProvider(ReservationDelegatingProvider);
+
+
+        TypeMap<ShelfDTO, Shelf> typeMapShelf = modelMapper.getTypeMap(ShelfDTO.class, Shelf.class);
+        if (typeMapShelf == null) {
+            typeMapShelf = modelMapper.createTypeMap(ShelfDTO.class, Shelf.class);
+        }
+        Provider<Shelf> ShelfDelegatingProvider = new Provider<Shelf>() {
+
+            public Shelf get(ProvisionRequest<Shelf> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return mediaService.getShelfById(((ShelfDTO) request.getSource()).getId());
+            }
+        };
+
+        typeMapShelf.setProvider(ShelfDelegatingProvider);
 
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
@@ -175,7 +296,8 @@ public class ObjectMapperUtils {
                 MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
                         ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
                     .getBean("mediaService");
-                return ((CopyDTO) request.getSource()).getCopyId()!=null ? (Copy) mediaService.getCopyById(((CopyDTO) request.getSource()).getCopyId()) : new Copy();
+                return mediaService.getCopyById( IdMapperUtils.map(((CopyDTO) request.getSource()).getCopyId(), CopyId.class));
+
             }
         };
 

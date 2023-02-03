@@ -40,6 +40,7 @@
     <div th:if="${editedStatus != null}" class="alert alert-success" role="alert">
         <span th:text="${editedStatus}"></span>
     </div>
+
     <div th:if="${bookDTO!=null}">
         <div th:replace="fragments/addBook :: form"></div>
     </div>

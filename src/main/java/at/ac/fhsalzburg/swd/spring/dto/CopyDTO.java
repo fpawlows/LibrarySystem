@@ -2,6 +2,8 @@ package at.ac.fhsalzburg.swd.spring.dto;
 
 
 
+import at.ac.fhsalzburg.swd.spring.dto.ids.CompartmentDTOId;
+import at.ac.fhsalzburg.swd.spring.dto.ids.CopyDTOId;
 import at.ac.fhsalzburg.swd.spring.model.Compartment;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 
@@ -9,20 +11,20 @@ import java.io.Serializable;
 
 public class CopyDTO implements Serializable {
 
-    private CopyId copyId;
-    private Compartment compartment;
+    private CopyDTOId copyId;
+    private CompartmentDTO compartment;
     private Boolean isAvailable;
 
-    public CopyId getCopyId() {
+    public CopyDTOId getCopyId() {
         return copyId;
     }
-    public void setCopyId(CopyId copyId) {
+    public void setCopyId(CopyDTOId copyId) {
         this.copyId = copyId;
     }
-    public Compartment getCompartment() {
+    public CompartmentDTO getCompartment() {
         return compartment;
     }
-    public void setCompartment(Compartment compartment) {
+    public void setCompartment(CompartmentDTO compartment) {
         this.compartment = compartment;
     }
     public Boolean getIsAvailable() {
