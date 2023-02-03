@@ -53,8 +53,10 @@ public class ObjectMapperUtils {
         // initial configuration
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT)
             .setSkipNullEnabled(true) // skip null fields
-            .setFieldMatchingEnabled(true)
-            .setPropertyCondition(isStringBlank); // skip empty strings
+            .setFieldMatchingEnabled(true);
+            //.setPropertyCondition(isStringBlank); // skip empty strings
+        //TODO make sure if this skipping is good ddecision, but without it such instances with empty strings
+        // are not mapped - the table is empty in html
 
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<UserDTO, User> typeMapUser = modelMapper.getTypeMap(UserDTO.class, User.class);
