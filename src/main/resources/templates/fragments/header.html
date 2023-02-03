@@ -1,15 +1,14 @@
 <div class="header" th:fragment="header">
     <a href="/home" class="logo">LibraryLogo</a>
     <!-- TODO logo -->
+
     <div class="header-right">
         <a class="active btn btn-primary" href="/home">Home</a>
         <a class="active btn btn-primary" href="/profile">Profile</a>
-
-        <a sec:authorize="hasRole('ADMIN')" href="/admin/editMedia" class="active btn btn-primary">Add Media</a>
-
         <a sec:authorize="isAuthenticated()" href="/logout" class="active btn btn-primary">Logout</a>
         <a sec:authorize="!isAuthenticated()" href="/login" class="active btn btn-primary">Login</a>
         <a href="/register" class="active btn btn-primary">Register</a>
 
+        <a sec:authorize="hasRole('ADMIN')" href="/admin/editMedia" class="btn btn-secondary">Add Media</a>
     </div>
 </div>

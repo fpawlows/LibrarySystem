@@ -28,10 +28,10 @@ public abstract class Media implements VisitableMedia, Serializable {
     @ManyToMany
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "copyId.media", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "copyId.media", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<Copy> copies;
 
-    @OneToMany(mappedBy = "reservationId.media", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "reservationId.media", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
     protected Media() {}

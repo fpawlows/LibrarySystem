@@ -81,9 +81,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
             mediaService.addMedia(givenMedias.get(i));
 
-
             name = "Library"+i;
-            if(!mediaService.addLocation(name)) throw new ExceptionInInitializerError();
+            if(!mediaService.addLocation(name)) {
+                throw new ExceptionInInitializerError();
+            }
             for (int j=0; j<6; j++) {
                 Location location = mediaService.getLocationByName(name).stream().iterator().next();
                 if(!mediaService.addShelf(j, location.getId())) {
