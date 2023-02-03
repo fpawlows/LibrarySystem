@@ -4,16 +4,11 @@ import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Loan;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
-import at.ac.fhsalzburg.swd.spring.model.ids.LoanId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.repository.LoanRepository;
-import at.ac.fhsalzburg.swd.spring.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,13 +28,18 @@ public class LoanService implements LoanServiceInterface {
     @Override
     public Boolean isLoanAllowedFor (Copy copy, User user) {
         List<Reservation> mediaReservations = copy.getCopyId().getMedia().getReservations();
-        return (copy.isAvailable() && (mediaReservations.isEmpty() || mediaReservations.get(0).getReservationId().getUser() == user));
+        return (copy.isAvailable() && (mediaReservations.isEmpty() || mediaReservations.get(0).getUser() == user));
     }
 
     @Override
-    public Loan loanMedia(Copy copy, User user) {
+    public Loan loanMedia(Copy copy, User user, Date dateBorrowed, Loan.loanState state) {
         if (isLoanAllowedFor(copy, user)) {
-            Loan loan = new Loan(new LoanId(copy, user));
+            //TODO
+
+            dateBorrowed = dateBorrowed==null? new Date() : dateBorrowed;
+            state = state==null? Loan.loanState.Waiting_For_PickUp : state;
+
+            Loan loan = new Loan(null, copy, user, dateBorrowed, state);
             loan = repo.save(loan);
 
             return loan;
@@ -50,7 +50,7 @@ public class LoanService implements LoanServiceInterface {
     }
 
     @Override
-    public Boolean returnMedia(LoanId loanId) {
+    public Boolean returnMedia(Long loanId) {
         return null;
     }
 

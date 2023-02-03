@@ -21,7 +21,7 @@ public class User {
     private String role;
     private String jwttoken;
 
-    @OneToMany(mappedBy = "reservationId.user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<Reservation> reservations;
 
     protected User() {}

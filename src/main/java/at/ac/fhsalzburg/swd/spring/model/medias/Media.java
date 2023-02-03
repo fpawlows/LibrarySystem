@@ -31,7 +31,7 @@ public abstract class Media implements VisitableMedia, Serializable {
     @OneToMany(mappedBy = "copyId.media", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<Copy> copies;
 
-    @OneToMany(mappedBy = "reservationId.media", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "media", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
     protected Media() {}

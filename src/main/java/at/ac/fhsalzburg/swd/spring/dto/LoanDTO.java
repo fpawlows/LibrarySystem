@@ -4,35 +4,16 @@ package at.ac.fhsalzburg.swd.spring.dto;
 
 import java.util.Date;
 
-import at.ac.fhsalzburg.swd.spring.model.ids.LoanId;
+import lombok.Getter;
+import lombok.Setter;
 
-enum loanState {Waiting_For_PickUp, Borrowed, Returned};
-
+@Getter
+@Setter
 public class LoanDTO {
+    public static enum loanState {Waiting_For_PickUp, Borrowed, Returned};
 
-     private LoanId loanId;
+     private Long id;
     private Date dateBorrowed;
     private loanState state;
 
-    
-    public LoanId getLoanId() {
-        return loanId;
-    }
-    public void setLoanId(LoanId loanId) {
-        this.loanId = loanId;
-    }
-    public Date getDateBorrowed() {
-        return dateBorrowed;
-    }
-    public void setDateBorrowed(Date dateBorrowed) {
-        this.dateBorrowed = dateBorrowed;
-    }
-    public loanState getState() {
-        return state;
-    }
-    public void setState(loanState state) {
-        this.state = state;
-    }
-
-    
 }

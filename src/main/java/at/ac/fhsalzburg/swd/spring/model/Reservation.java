@@ -1,61 +1,33 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
-import lombok.Data;
+import at.ac.fhsalzburg.swd.spring.model.medias.Media;
+import lombok.*;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reservation  implements Serializable {
 
-    @EmbeddedId
-    private ReservationId reservationId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long reservationId;
     private Integer numberInQueue;
     private Date reservationDate;
 //TODO Change to ZonedDate
 
-    public Reservation () {}
+    @ManyToOne
+    @JoinColumn(name = "media_id", nullable = false)
+    private Media media;
 
-    public Reservation(ReservationId reservationId, Integer numberInQueue) {
-        this.reservationId = reservationId;
-        this.numberInQueue = numberInQueue;
-        this.reservationDate = new Date();
+    @ManyToOne
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
     }
-
-    public Reservation(ReservationId reservationId, Integer numberInQueue, Date reservationDate) {
-        this.reservationId = reservationId;
-        this.numberInQueue = numberInQueue;
-        this.reservationDate = reservationDate;
-    }
-
-    public Date getReservationDate() {
-        return reservationDate;
-    }
-
-    public void setReservationDate(Date reservationDate) {
-        this.reservationDate = reservationDate;
-    }
-
-    public ReservationId getReservationId() {
-        return reservationId;
-    }
-
-    public void setReservationId(ReservationId reservationId) {
-        this.reservationId = reservationId;
-    }
-
-    public Integer getNumberInQueue() {
-        return numberInQueue;
-    }
-
-    public void setNumberInQueue(Integer numberInQueue) {
-        this.numberInQueue = numberInQueue;
-    }
-}

@@ -4,12 +4,14 @@ import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Loan;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
-import at.ac.fhsalzburg.swd.spring.model.ids.LoanId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 
+import java.util.Date;
+
 public interface LoanServiceInterface {
-    public abstract Loan loanMedia (Copy copy, User user); //TODO concurrent - check .available setAvailable
-    public abstract Boolean returnMedia (LoanId loanId);
+    public abstract Loan loanMedia(Copy copy, User user, Date dateBorrowed, Loan.loanState state);
+
+    public abstract Boolean returnMedia (Long loanId);
     public abstract Boolean isLoanAllowedFor (Copy copy, User user);
     public abstract Iterable<Copy> getAvailableCopies (Media media);
     public abstract Boolean isDateExceeded (Loan loan);

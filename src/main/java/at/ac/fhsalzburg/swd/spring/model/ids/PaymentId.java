@@ -16,11 +16,7 @@ import java.util.Objects;
 public class PaymentId implements Serializable {
 
     @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "copy_nr", nullable = false),
-        @JoinColumn(name = "media_id", nullable = false),
-        @JoinColumn(name = "username", nullable = false) //here is id of an id
-    })
+    @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
 
     @Column(nullable = false)

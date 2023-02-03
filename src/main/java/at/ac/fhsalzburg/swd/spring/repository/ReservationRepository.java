@@ -9,15 +9,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
-import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
 
 
 @Repository
-public interface ReservationRepository extends CrudRepository<Reservation, ReservationId> {
+public interface ReservationRepository extends CrudRepository<Reservation, Long> {
 
 	@Transactional(timeout = 10)
-    Optional<Reservation> findById(ReservationId id);
+    Optional<Reservation> findById(Long id);
 
     @Transactional(timeout = 10)
-    List<Reservation> findAllByReservationIdMedia(Media media);
+    List<Reservation> findAllByMedia(Media media);
 }

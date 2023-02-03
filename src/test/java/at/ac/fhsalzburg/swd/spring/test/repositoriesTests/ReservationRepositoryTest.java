@@ -1,13 +1,9 @@
 package at.ac.fhsalzburg.swd.spring.test.repositoriesTests;
 
-import at.ac.fhsalzburg.swd.spring.model.Location;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
-import at.ac.fhsalzburg.swd.spring.model.ids.ReservationId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Book;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
-import at.ac.fhsalzburg.swd.spring.repository.LocationRepository;
-import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
 import at.ac.fhsalzburg.swd.spring.repository.ReservationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.lang.reflect.Array;
 
 import java.util.*;
 
@@ -53,7 +47,7 @@ public class ReservationRepositoryTest {
             givenMedias.add(new Book(i, Integer.toString(i)));
             User user = new User(i + "chuj", "asda", "asdada", "asdaasd", new Date() ,"asdsadasas", "asdasd", "USER");
             givenUsers.add(user);
-            Reservation reservation = new Reservation(new ReservationId(givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i)), (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES));
+            Reservation reservation = new Reservation(null, (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES), new Date(), givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i));
             givenReservations.get(i % N_FIRST_MEDIAS_FOR_QUEUES).add(reservation);
 
             entityManager.persist(user);
@@ -65,7 +59,7 @@ public class ReservationRepositoryTest {
 
         for (int i = 0; i < N_FIRST_MEDIAS_FOR_QUEUES; i++) {
             //when
-            List<Reservation> gotReservations = reservationRepository.findAllByReservationIdMedia(givenMedias.get(i));
+            List<Reservation> gotReservations = reservationRepository.findAllByMedia(givenMedias.get(i));
 
             //then
             if (gotReservations.isEmpty()) {
