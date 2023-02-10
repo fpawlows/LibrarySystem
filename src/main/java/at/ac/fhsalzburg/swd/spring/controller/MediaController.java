@@ -41,6 +41,7 @@ public class MediaController {
 
         if (media != null) {
             mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
+            //TODO check if we can do that instead of that derived class based what if long pyramid
         }
         else {
             message = message = "There is no media with ID: " + id;
