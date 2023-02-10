@@ -111,6 +111,7 @@ public class HomeController {
                 }
             }
         redirectAttributes.addFlashAttribute("result", result);
+        redirectAttributes.addFlashAttribute("mediaDTO", mediaDTO);
         return "redirect:/home/search";
 
     }
@@ -122,26 +123,31 @@ public class HomeController {
     public String getSearched(
         Model model, HttpSession session,
         @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-
-        String result = (String)model.asMap().get("result")!=null ? (String)model.asMap().get("result") : "No media searched";
-        List<Genre> allGenres = mediaService.getAllGenres();
+List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("allGenres", allGenres);
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
-        //User modUser = null;
+
+        //Create mediaDTO for search or reuse previous one
         if (model.getAttribute("mediaDTO") == null) {
-            MediaDTO mediaDTO = new MediaDTO();
+            MediaDTO mediaDTO = (MediaDTO) model.asMap().get("mediaDTO");
+            mediaDTO = mediaDTO!=null? mediaDTO : new MediaDTO();
             model.addAttribute("mediaDTO", mediaDTO);
         }
 
+        //If media was searched, then collections were passed through redirect attributes
         List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");
         List<AudioDTO> searchedAudiosCollection = (List<AudioDTO>) model.asMap().get("searchedAudiosCollection");
         List<PaperDTO> searchedPapersCollection = (List<PaperDTO>) model.asMap().get("searchedPapersCollection");
         List<MovieDTO> searchedMoviesCollection = (List<MovieDTO>) model.asMap().get("searchedMoviesCollection");
+
         model.addAttribute("searchedBooksCollection", searchedBooksCollection);
         model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
         model.addAttribute("searchedPapersCollection", searchedPapersCollection);
         model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
 
+
+        //Set final prompt
+        String result = (String)model.asMap().get("result")!=null ? (String)model.asMap().get("result") : "No media searched";
         model.addAttribute("result", result);
 
         return "home";

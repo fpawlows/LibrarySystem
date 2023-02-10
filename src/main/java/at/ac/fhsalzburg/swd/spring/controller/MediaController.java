@@ -49,7 +49,6 @@ public class MediaController {
 
         Boolean editable = (Boolean) (model.asMap().get("editable")!=null ? model.asMap().get("editable") : false);
         Copy copy = (Copy) model.asMap().get("copy");
-
         model.addAttribute("message", message);
         model.addAttribute("editable", editable);
         model.addAttribute("copy", copy);

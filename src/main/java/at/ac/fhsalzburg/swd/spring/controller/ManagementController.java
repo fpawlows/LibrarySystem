@@ -114,6 +114,7 @@ public class ManagementController {
         Media media = null;
         String editedStatus = "None action performed.";
 
+        //TODO behaviour based on class - pattern
         if (bookDTO.getClass().getSimpleName().equals(className))
             media = ObjectMapperUtils.map(bookDTO, mediaService.getMediaClasses().get(
                 className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
@@ -134,13 +135,17 @@ public class ManagementController {
         if (media==null) {
             throw new NamingException("Probably wrong DTO objects names");
         }
+
+        //If media exists, data was merged already by mapping (?)
         if (!entityManager.contains(media)) {
             if (mediaService.addMedia(media)) {
-                editedStatus = "Media edited successfully!";
+                editedStatus = "Media added successfully!";
             }
             else {
                 editedStatus = "Media can't be added.";
             };
+        } else {
+            editedStatus = "Media edited succesfully!";
         }
 
         redirectAttributes.addFlashAttribute("editedStatus", editedStatus);
