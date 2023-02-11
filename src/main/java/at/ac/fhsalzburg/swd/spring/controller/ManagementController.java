@@ -6,6 +6,7 @@ import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.ids.CompartmentId;
 import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import io.jsonwebtoken.security.InvalidKeyException;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -122,7 +123,7 @@ public class ManagementController {
         if (audioDTO.getClass().getSimpleName().equals(className))
             media = ObjectMapperUtils.map(audioDTO, mediaService.getMediaClasses().get(
                 className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
-            .Business);
+                .Business);
         if (paperDTO.getClass().getSimpleName().equals(className))
             media = ObjectMapperUtils.map(paperDTO, mediaService.getMediaClasses().get(
                 className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
@@ -132,7 +133,7 @@ public class ManagementController {
                 className.substring(className.length() - 3).equals("DTO") ? className.substring(0, className.length() - 3) : className)
                 .Business);
         //Media or ? extends
-        if (media==null) {
+        if (media == null) {
             throw new NamingException("Probably wrong DTO objects names");
         }
 
@@ -140,10 +141,10 @@ public class ManagementController {
         if (!entityManager.contains(media)) {
             if (mediaService.addMedia(media)) {
                 editedStatus = "Media added successfully!";
-            }
-            else {
+            } else {
                 editedStatus = "Media can't be added.";
-            };
+            }
+            ;
         } else {
             editedStatus = "Media edited succesfully!";
         }
@@ -162,28 +163,28 @@ public class ManagementController {
 
     @GetMapping("/editCopy")
     public String addCopy(Model model, RedirectAttributes redirectAttributes,
-                      @RequestParam(value = "mediaId", required = false) Long mediaId,
-                    @RequestParam(value = "copyId", required = false) CopyId copyId) {
+                          @RequestParam(value = "mediaId", required = false) Long mediaId,
+                          @RequestParam(value = "copyId", required = false) CopyId copyId) {
         Copy copy = null;
         Media media = null;
         MediaDTO mediaDTO = null;
 
         if (copyId == null) {
-            if(mediaId != null )  {
+            if (mediaId != null) {
                 media = mediaService.getMediaById(mediaId);
                 if (media != null) {
                     mediaDTO = ObjectMapperUtils.map(media, mediaService.getMediaClasses().get(media.getClass().getSimpleName()).DTO);
                     copy = new Copy();
                     copy.setCopyId(new CopyId(null, media));
-                    copy.setCompartment(new Compartment(new CompartmentId(null,null), null));
+                    copy.setCompartment(new Compartment(new CompartmentId(null, null), null));
                 }
             }
         } else {
             copy = mediaService.getCopyById(copyId);
         }
-            redirectAttributes.addFlashAttribute("copy", copy);
-            redirectAttributes.addFlashAttribute("editable", true);
-            return "redirect:/media/" + mediaId;
+        redirectAttributes.addFlashAttribute("copy", copy);
+        redirectAttributes.addFlashAttribute("editable", true);
+        return "redirect:/media/" + mediaId;
     }
 
     @PostMapping("/editCopy")
@@ -191,10 +192,9 @@ public class ManagementController {
                           @ModelAttribute("copy") Copy copy) {
         if (copy != null) {
             Compartment compartment = mediaService.getCompartmentById(copy.getCompartment().getCompartmentId());
-            if (compartment!=null) {
+            if (compartment != null) {
                 redirectAttributes.addFlashAttribute("message", "No compartment with chosen Id");
-            }
-            else {
+            } else {
                 copy.setCompartment(compartment);
                 if (mediaService.addCopy(copy)) {
                     redirectAttributes.addFlashAttribute("message", "Couldn't add copy");
@@ -202,6 +202,19 @@ public class ManagementController {
                 redirectAttributes.addFlashAttribute("message", "Copy successfully added");
             }
 
+        }
+        return "redirect:/media/" + copy.getCopyId().getMedia().getId();
+    }
+
+    @PostMapping("/setAvailability")
+    public String changeAvailability(Model model,
+                                     @RequestParam(value = "id") CopyId copyId,
+                                     @RequestParam(value = "availability") Boolean availability) {
+        Copy copy = null;
+        synchronized (this) {
+            copy = mediaService.getCopyById(copyId);
+            copy.setAvailable(availability);
+            mediaService.addCopy(copy);
         }
         return "redirect:/media/" + copy.getCopyId().getMedia().getId();
     }
