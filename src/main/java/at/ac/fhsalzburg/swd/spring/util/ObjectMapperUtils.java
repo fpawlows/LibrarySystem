@@ -195,8 +195,32 @@ public class ObjectMapperUtils {
                 return mediaService.getShelfById(((ShelfDTO) request.getSource()).getId());
             }
         };
-
         typeMapShelf.setProvider(ShelfDelegatingProvider);
+
+
+        TypeMap<CopyDTO, Copy> typeMapCopy = modelMapper.getTypeMap(CopyDTO.class, Copy.class);
+        if (typeMapCopy == null) {
+            typeMapCopy = modelMapper.createTypeMap(CopyDTO.class, Copy.class);
+        }
+        Provider<Copy> copyDelegatingProvider = new Provider<Copy>() {
+
+            public Copy get(ProvisionRequest<Copy> request) {
+                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
+                    .getBean("mediaService");
+                return mediaService.getCopyById( IdMapperUtils.map(((CopyDTO) request.getSource()).getCopyId(), CopyId.class));
+
+            }
+        };
+        typeMapCopy.setProvider(copyDelegatingProvider);
+
+
+
+
+
+
+        // MEDIA Mappings
+
 
         // create a typemap to override default behaviour for DTO to entity mapping
         TypeMap<MediaDTO, Media> typeMapMedia = modelMapper.getTypeMap(MediaDTO.class, Media.class);
@@ -222,11 +246,6 @@ public class ObjectMapperUtils {
         TypeMap<PaperDTO, Paper> typeMapPaper = modelMapper.getTypeMap(PaperDTO.class, Paper.class);
         if (typeMapPaper == null) {
             typeMapPaper = modelMapper.createTypeMap(PaperDTO.class, Paper.class);
-        }
-
-        TypeMap<CopyDTO, Copy> typeMapCopy = modelMapper.getTypeMap(CopyDTO.class, Copy.class);
-        if (typeMapCopy == null) {
-            typeMapCopy = modelMapper.createTypeMap(CopyDTO.class, Copy.class);
         }
 
         Provider<Media> mediaDelegatingProvider = new Provider<Media>() {
@@ -292,23 +311,11 @@ public class ObjectMapperUtils {
             }
         };
 
-        Provider<Copy> copyDelegatingProvider = new Provider<Copy>() {
-
-            public Copy get(ProvisionRequest<Copy> request) {
-                MediaService mediaService = (MediaService) WebApplicationContextUtils.getWebApplicationContext(
-                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getServletContext())
-                    .getBean("mediaService");
-                return mediaService.getCopyById( IdMapperUtils.map(((CopyDTO) request.getSource()).getCopyId(), CopyId.class));
-
-            }
-        };
 
         typeMapBook.setProvider(bookDelegatingProvider);
         typeMapAudio.setProvider(audioDelegatingProvider);
         typeMapMovie.setProvider(movieDelegatingProvider);
         typeMapPaper.setProvider(paperDelegatingProvider);
-        typeMapCopy.setProvider(copyDelegatingProvider);
-
     }
 
     //public static ModelMapper getModelMapper() {
