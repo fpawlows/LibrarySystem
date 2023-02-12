@@ -206,6 +206,18 @@ public class ManagementController {
         return "redirect:/media/" + copy.getCopyId().getMedia().getId();
     }
 
+    @RequestMapping("/setAvailability")
+    public String changeAvailability(Model model,
+                                     @ModelAttribute(value = "id") CopyId copyId) {
+        Copy copy = null;
+        synchronized (this) {
+            copy = mediaService.getCopyById(copyId);
+            copy.setAvailable(!copy.isAvailable());
+            mediaService.addCopy(copy);
+        }
+        return "redirect:/media/" + copy.getCopyId().getMedia().getId();
+    }
+/***
     @PostMapping("/setAvailability")
     public String changeAvailability(Model model,
                                      @RequestParam(value = "id") CopyId copyId,
@@ -218,6 +230,11 @@ public class ManagementController {
         }
         return "redirect:/media/" + copy.getCopyId().getMedia().getId();
     }
+                                     ***/
+
 }
+
+
+
 
 
