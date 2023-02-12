@@ -23,6 +23,8 @@ import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.OrderServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.ProductServiceInterface;
 
+import javax.persistence.PersistenceException;
+
 @Profile("!test")
 @Component
 public class CommandLineAppStartupRunner implements CommandLineRunner {
@@ -99,7 +101,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
                     CompartmentId compartmentId = new CompartmentId(k, mediaService.getShelfById(shelfId));
                     Compartment compartment = mediaService.getCompartmentById( compartmentId);
-                    if(!mediaService.addCopy(givenMedias.get(i), compartment, RandomGenerator.getDefault().nextInt(213454)));
+                    if(!mediaService.addCopy(givenMedias.get(i), compartment, RandomGenerator.getDefault().nextInt(213454))){
+                        //throw new PersistenceException("Couldnt add copy");
+                    }
                     }
                 }
             }

@@ -30,9 +30,7 @@
 
     <!--div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive"-->
     <div class="table-responsive">
-        <form id="compartmentForm" th:object="${compartment}" th:action="@{/admin/editCopy/}" method="post"></form>
 
-        <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy/}" method="post">
         <div th:if="${editable}">
             <button type="submit" class="btn btn-info" form="createCopy" >Submit</button>
             <button type="reset" class="btn btn-info" form="createCopy" >Reset</button>
@@ -50,12 +48,14 @@
         </thead>
         <tbody>
         <tr th:if="${editable}">
+            <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy/}" method="post">
+
             <td th:text="${copy.copyId.copyNr}">
                 <input form="createCopy" th:text="${copy.copyId.copyNr}" th:value="${copy.copyId}" th:field="*{copyId}"/>
                 <!--TODO see if works-->
             </td>
             <td colspan="3">
-                <select form="compartmentForm" id="locationId" th:field="*{compartment}">
+                <select form="createCopy" id="locationId" th:field="*{compartment}">
                     <option th:each="compartment_ : ${allCompartments}"
                             th:disabled="${compartment_.getNumberOfFreePlaces()>0}"
                             th:value="${compartment_.compartmentId}"
@@ -72,6 +72,7 @@
                     <option style="background-color: red" th:value="${false}" > Not Available </option>
                 </select>
             </td>
+            </form>
         </tr>
         <tr th:each="copy : ${mediaDTO.getCopies()}">
             <td> <span th:text="${copy.getCopyId().getCopyNr()}"> </span> </td>
@@ -79,14 +80,15 @@
             <td> <span th:text="${copy.compartment.compartmentId.shelf.id.shelfNumber}"> </span> </td>
             <td> <span th:text="${copy.compartment.compartmentId.position}"> </span> </td>
             <td>
-                <form sec:authorize="hasRole('ADMIN')" action="@{/admin/setAvailability/(copyId=${copy.copyId}, availability=${!copy.isAvailable})}" method="post">
-                    <button type="submit" name="isAvailable" class="btn"
+
+                <form sec:authorize="hasRole('ADMIN')" id="changeAvailability" th:action="@{/admin/setAvailability/}" th:object="${copy.getCopyId()}">
+                    <button type="submit" form="changeAvailability" name="isAvailable" class="btn"
                             th:classappend="${copy.isAvailable ? 'bg-success btn-danger' : 'bg-warning btn-success'}"
                             th:text="${copy.isAvailable ? 'Available' : 'Unavailable'}">
                     </button>
                 </form>
 
-                <span  sec:authorize="!hasRole('ADMIN')" th:text="${copy.isAvailable}" th:classappend="${copy.isAvailable ? 'bg-success' : 'bg-warning'}"> </span>
+                <span  sec:authorize="!hasRole('ADMIN')" class="btn" th:text="${copy.isAvailable ? 'Available' : 'Unavailable'}" th:classappend="${copy.isAvailable ? 'bg-success' : 'bg-warning'}"> </span>
             </td>
             <td>
 
@@ -106,7 +108,6 @@
         </tr>
         </tbody>
     </table>
-    </form>
     </div>
 
     <!--div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
