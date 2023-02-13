@@ -18,8 +18,12 @@
   </head>
   <body>
   <div th:replace="fragments/header :: header"></div>
-    <div class="container">
-        <div layout:fragment="content">
+  <div class="container">
+      <br>
+      <div class="alert alert-secondary alert-dismissible" role="alert" th:if="${topAlert!=null}"> <span th:text="${topAlert}"></span></div>
+      <br>
+
+      <div layout:fragment="content">
             <p>Changing contents</p>
         </div>
     </div>

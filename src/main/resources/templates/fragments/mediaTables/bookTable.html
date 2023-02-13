@@ -35,10 +35,11 @@
                 </a>
 
                 <a th:href="@{/reserve/(id=${media.getId()})}">
-                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || media.getCopies().contains(true))}" type="button" class="fa fa-calendar"> Reserve </button>
+                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || howManyMoreMediaCanBorrow==0 )}" type="button" class="fa fa-calendar"> Reserve </button>
+                    <!--|| media.getReservations().stream().allMatch(res -> res.getUser().getUsername() == #authentication.getPrincipal().getUsername()) -->
                 </a>
-                <a th:href="@{/loan/{id}(id=${media.getId()})}">
-                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || !media.getCopies().contains(true))}" type="button" class="fa fa-book"> Loan</button>
+                <a th:href="@{/loan/(id=${media.getId()})}">
+                    <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || howManyMoreMediaCanBorrow==0) }" type="button" class="fa fa-book"> Loan</button>
                 </a>
 
             </td>

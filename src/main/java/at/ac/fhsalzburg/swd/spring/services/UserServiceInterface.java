@@ -26,6 +26,5 @@ public interface UserServiceInterface {
 
 /////////////////////Mine \/
 
-
-
+    public abstract Integer howManyMoreMediaCanBorrow(String username);
 }

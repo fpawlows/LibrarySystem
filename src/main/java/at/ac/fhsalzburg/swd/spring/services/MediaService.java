@@ -321,8 +321,7 @@ public class MediaService implements MediaServiceInterface {
 
     @Transactional
     @Override
-    //TODO idk if this transactional will work
-    public void setAvailibility(CopyId copyId, Boolean isAvailable) {
+    public synchronized void setAvailibility(CopyId copyId, Boolean isAvailable) {
         Optional<Copy> copy = copyRepository.findById(copyId);
         if (copy.isEmpty()) {
             throw new NoSuchElementException("Wrong Id");
@@ -433,6 +432,11 @@ public class MediaService implements MediaServiceInterface {
     public Genre getGenreById(Long Id){
         Optional<Genre> genre = genreRepository.findById(Id);
         return genre.isEmpty()? null : genre.get();
+    }
+
+    @Override
+    synchronized public Integer getNextQueueNumber(Media media) {
+        return media.getReservations().size()+1;
     }
 
 }

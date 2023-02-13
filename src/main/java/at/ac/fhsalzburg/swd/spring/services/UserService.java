@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import at.ac.fhsalzburg.swd.spring.model.User;
@@ -24,9 +26,14 @@ public class UserService implements UserServiceInterface {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserRepository userRepository;
+
 	private TokenService tokenService; // autowired using setter/field injection
 
     public final static String DEFAULT_ROLE = "USER";
+
+    @Value("${myapp.medias.per.person.limit}") private Integer mediasPerPersonLimit;
 
 	int i;
 
@@ -107,7 +114,20 @@ public class UserService implements UserServiceInterface {
 		return repo.findByUsername(username);
 	}
 
-	@Autowired
+    @Override
+    public Integer howManyMoreMediaCanBorrow(String username) {
+
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new BadCredentialsException("No user with such a name");
+        }
+        if (mediasPerPersonLimit < user.getLoans().size()) {
+             throw new IllegalStateException("User has more Loaned medias than allowed");
+         }
+        return mediasPerPersonLimit - user.getLoans().size();
+    }
+
+    @Autowired
     public void setTokenService(@Lazy TokenService tokenService) {
         this.tokenService = tokenService;
     }

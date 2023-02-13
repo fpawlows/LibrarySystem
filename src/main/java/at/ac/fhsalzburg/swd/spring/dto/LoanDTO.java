@@ -13,6 +13,10 @@ public class LoanDTO {
     public static enum loanState {Waiting_For_PickUp, Borrowed, Returned};
 
      private Long id;
+
+    private CopyDTO copy;
+
+    private UserDTO user;
     private Date dateBorrowed;
     private loanState state;
 

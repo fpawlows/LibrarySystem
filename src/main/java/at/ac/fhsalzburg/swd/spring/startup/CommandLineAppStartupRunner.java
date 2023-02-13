@@ -3,6 +3,7 @@ package at.ac.fhsalzburg.swd.spring.startup;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -49,7 +50,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     	if (userService.getByUsername("admin")!=null) return; // data already exists -> return
 
-    	userService.addUser("admin", "Administrator", "admin@work.org", "123", new Date(), "admin","ADMIN");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.YEAR, -100);
+    	userService.addUser("admin", "Administrator", "admin@work.org", "123", c.getTime(), "admin","ADMIN");
 
         productService.addProduct("first product", 3.30f);
         User user = userService.getAll().iterator().next();

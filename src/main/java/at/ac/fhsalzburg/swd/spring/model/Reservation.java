@@ -21,7 +21,7 @@ public class Reservation  implements Serializable {
     private Long reservationId;
     private Integer numberInQueue;
     private Date reservationDate;
-//TODO Change to ZonedDate
+
 
     @ManyToOne
     @JoinColumn(name = "media_id", nullable = false)

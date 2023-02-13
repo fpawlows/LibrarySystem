@@ -34,7 +34,7 @@
                     <button style="width: 100%" type="button" class="fa fa-remove"> Remove </button>
                 </a>
 
-                <a th:href="@{/reserve/(id=${media.getId()})}">
+                <a th:href="@{/reservation/reserve/(id=${media.getId()}, username=${} )}">
                     <button style="width: 100%" th:disabled="${(media.getCopies() == null || media.getCopies().isEmpty() || media.getCopies().contains(true))}" type="button" class="fa fa-calendar"> Reserve </button>
                 </a>
                 <a th:href="@{/loan/{id}(id=${media.getId()})}">

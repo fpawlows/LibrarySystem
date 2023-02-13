@@ -2,13 +2,14 @@ package at.ac.fhsalzburg.swd.spring.model;
 
 
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User implements Serializable {
 
     @Id
 	private String username;
@@ -23,6 +24,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<Reservation> reservations;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<Loan> loans;
 
     protected User() {}
 
@@ -117,5 +121,13 @@ public class User {
 
     public void setReservations(Collection<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Collection<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(Collection<Loan> loans) {
+        this.loans = loans;
     }
 }

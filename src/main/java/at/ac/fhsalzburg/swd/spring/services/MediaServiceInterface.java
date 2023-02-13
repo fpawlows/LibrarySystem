@@ -16,6 +16,7 @@ import java.util.Map;
 
 public interface MediaServiceInterface {
 
+    //TODO adding methods should return created object
     public abstract boolean addBook(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
     public abstract boolean addPaper(Integer edition, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
     public abstract boolean addMovie(Integer duration, String format, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations);
@@ -43,6 +44,8 @@ public interface MediaServiceInterface {
     public abstract Media getMediaById(Long id);
     public abstract Copy getCopyById(CopyId copyId);
     public abstract Genre getGenreById(Long Id);
+
+    public abstract Integer getNextQueueNumber(Media media);
 
 //    public abstract Media getByName(String name);
 

@@ -8,9 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import at.ac.fhsalzburg.swd.spring.dto.medias.*;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.model.medias.*;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.stereotype.Controller;
@@ -50,12 +52,18 @@ public class HomeController {
         model.addAttribute("fskValues", mediaService.getPossibleFskValues());
         model.addAttribute("result", "No media searched.");
 
-        //User modUser = null;
+
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            User user = userService.getByUsername(currentUserName);
+            Integer howManyMoreMediaCanBorrow = userService.howManyMoreMediaCanBorrow(currentUserName);
+            model.addAttribute("howManyMoreMediaCanBorrow", howManyMoreMediaCanBorrow);
+        }
+
+
         if (model.getAttribute("mediaDTO") == null) {
             MediaDTO mediaDTO = new MediaDTO();
             model.addAttribute("mediaDTO", mediaDTO);
-            //TODO should be changed to session?
-            //
         }
 
         return "home";
@@ -135,6 +143,7 @@ List<Genre> allGenres = mediaService.getAllGenres();
         }
 
         //If media was searched, then collections were passed through redirect attributes
+
         List<BookDTO> searchedBooksCollection = (List<BookDTO>) model.asMap().get("searchedBooksCollection");
         List<AudioDTO> searchedAudiosCollection = (List<AudioDTO>) model.asMap().get("searchedAudiosCollection");
         List<PaperDTO> searchedPapersCollection = (List<PaperDTO>) model.asMap().get("searchedPapersCollection");
@@ -144,7 +153,6 @@ List<Genre> allGenres = mediaService.getAllGenres();
         model.addAttribute("searchedAudiosCollection", searchedAudiosCollection);
         model.addAttribute("searchedPapersCollection", searchedPapersCollection);
         model.addAttribute("searchedMoviesCollection", searchedMoviesCollection);
-
 
         //Set final prompt
         String result = (String)model.asMap().get("result")!=null ? (String)model.asMap().get("result") : "No media searched";
