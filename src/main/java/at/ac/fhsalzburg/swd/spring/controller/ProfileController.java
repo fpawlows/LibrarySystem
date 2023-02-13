@@ -40,6 +40,9 @@ public class ProfileController {
             String currentUserName = authentication.getName();
             User user = userService.getByUsername(currentUserName);
             UserDTO userDTO = ObjectMapperUtils.map(user, UserDTO.class);
+            Integer howManyMoreMediaCanBorrow = userService.howManyMoreMediaCanBorrow(currentUserName);
+            model.addAttribute("howManyMoreMediaCanBorrow", howManyMoreMediaCanBorrow);
+
             model.addAttribute("userDTO", userDTO);
         }
         else {
