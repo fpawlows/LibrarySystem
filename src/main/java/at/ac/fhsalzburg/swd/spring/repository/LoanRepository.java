@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public interface LoanRepository extends CrudRepository <Loan, Long> {
 
     @Transactional(timeout = 10)
-    List<Loan> findByDateBorrowed (Date dateBorrowed);
+    List<Loan> findByTimestampBorrowed (Timestamp timestampBorrowed);
 
     @Transactional(timeout = 10)
     Optional<Loan> findById(Long id);

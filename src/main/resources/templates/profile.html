@@ -23,6 +23,8 @@
                 <th> Reservation ID </th>
                 <th> Number in Queue </th>
                 <th> Reservation Date </th>
+                <th data-toggle="tooltip" data-placement="top" title="24h from this moment you have to Loan your Media"> Since when loan allowed </th>
+                <th> State </th>
                 <th> Media </th>
                 <th> Action </th>
             </tr>
@@ -31,11 +33,18 @@
             <tr th:each="reservation : ${userDTO.getReservations()}">
                 <td> <span th:text="${reservation.getReservationId()}"> </span> </td>
                 <td> <span th:text="${reservation.getNumberInQueue()}"> </span> </td>
-                <td> <span th:text="${reservation.getReservationDate()}"> </span> </td>
+                <td> <span th:text="${reservation.getReservationTimestamp()}"> </span> </td>
+                <td> <span th:text="${reservation.getPriorityStartTimestamp()}"> </span> </td>
+                <td> <span th:text="${reservation.getState()}"> </span> </td>
                 <td> <span th:text="${reservation.getMedia().getName()}"> </span> </td>
                 <td>
                     <a th:href="@{/reservation/cancel/(id=${reservation.getReservationId()})}">
                         <button style="width: 100%" type="button" class="fa fa-cancel"> Cancel </button>
+                    </a>
+
+                    <a th:href="@{/loan/(id=${reservation.media.getId()})}">
+                        <button style="width: 100%" th:disabled="${(reservation.media.getCopies() == null || reservation.media.getCopies().isEmpty() || howManyMoreMediaCanBorrow==0) }"
+                                type="button" class="fa fa-book"> Loan</button>
                     </a>
 
                 </td>
@@ -50,7 +59,7 @@
             <thead>
             <tr>
                 <th> Loan ID </th>
-                <th> Copy </th>
+                <th> Copy number </th>
                 <th> Borrowing Date </th>
                 <th> State </th>
                 <th> Action </th>
@@ -59,8 +68,8 @@
             <tbody>
             <tr th:each="loan : ${userDTO.getLoans()}">
                 <td> <span th:text="${loan.getId()}"> </span> </td>
-                <td> <span th:text="${loan.getCopy()}"> </span> </td>
-                <td> <span th:text="${loan.getDateBorrowed()}"> </span> </td>
+                <td> <span th:text="${loan.getCopy().getCopyId().getCopyNr()}"> </span> </td>
+                <td> <span th:text="${loan.getTimestampBorrowed()}"> </span> </td>
                 <td> <span th:text="${loan.getState()}"> </span> </td>
                 <td>
                     <a th:href="@{/loans/cancel/(id=${loan.getId()})}">

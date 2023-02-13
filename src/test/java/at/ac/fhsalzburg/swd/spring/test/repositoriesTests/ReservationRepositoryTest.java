@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -47,7 +48,7 @@ public class ReservationRepositoryTest {
             givenMedias.add(new Book(i, Integer.toString(i)));
             User user = new User(i + "chuj", "asda", "asdada", "asdaasd", new Date() ,"asdsadasas", "asdasd", "USER");
             givenUsers.add(user);
-            Reservation reservation = new Reservation(null, (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES), new Date(), givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i));
+            Reservation reservation = new Reservation(null, (int) Math.floor((i + N_FIRST_MEDIAS_FOR_QUEUES) / N_FIRST_MEDIAS_FOR_QUEUES), new Timestamp(System.currentTimeMillis()), null, null, givenMedias.get(i % N_FIRST_MEDIAS_FOR_QUEUES), givenUsers.get(i));
             givenReservations.get(i % N_FIRST_MEDIAS_FOR_QUEUES).add(reservation);
 
             entityManager.persist(user);

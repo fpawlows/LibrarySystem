@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -15,12 +16,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation  implements Serializable {
+    public static enum reservationState {inQueue, loanAllowed, loanCreated, canceled};
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long reservationId;
     private Integer numberInQueue;
-    private Date reservationDate;
+    private Timestamp reservationTimestamp;
+    private Timestamp priorityStartTimestamp;
+    private Reservation.reservationState state = reservationState.inQueue;
+
+
 
 
     @ManyToOne

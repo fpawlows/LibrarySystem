@@ -18,6 +18,6 @@ public class ReservationDTO {
     private Long reservationId;
     private Integer numberInQueue;
     private Date reservationDate;
-    //TODO Change to ZonedDate
+    //TODO update
 
 }

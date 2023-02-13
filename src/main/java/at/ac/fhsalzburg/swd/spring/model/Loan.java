@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Loan {
-    public static enum loanState {Waiting_For_PickUp, Borrowed, Returned};
+    public static enum loanState {waitingForPickUp, Borrowed, Returned};
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +33,7 @@ public class Loan {
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
-    private Date dateBorrowed;
-    private loanState state;
+    //TODO timestamp
+    private Timestamp timestampBorrowed;
+    private loanState state = loanState.waitingForPickUp;
 }
