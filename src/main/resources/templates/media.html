@@ -100,8 +100,8 @@
                     <button style="width: 100%" type="button" class="fa fa-remove"> Remove </button>
                 </a>
 
-                <a th:href="@{/loan/{id}(id=${copy.copyId})}">
-                    <button style="width: 100%" th:disabled="${(mediaDTO.getCopies() == null || mediaDTO.getCopies().isEmpty() || !mediaDTO.getCopies().contains(true))}" type="button" class="fa fa-book"> Loan</button>
+                <a th:href="@{/loan/(copyId=${copy.copyId})}">
+                    <button style="width: 100%" th:disabled="${(mediaDTO.getCopies() == null || mediaDTO.getCopies().isEmpty())}" type="button" class="fa fa-book"> Loan</button>
                 </a>
 
             </td>

@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
 import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
@@ -42,7 +43,7 @@ public class ProfileController {
             UserDTO userDTO = ObjectMapperUtils.map(user, UserDTO.class);
             Integer howManyMoreMediaCanBorrow = userService.howManyMoreMediaCanBorrow(currentUserName);
             model.addAttribute("howManyMoreMediaCanBorrow", howManyMoreMediaCanBorrow);
-
+            model.addAttribute("loanAllowed", Reservation.reservationState.loanAllowed);
             model.addAttribute("userDTO", userDTO);
         }
         else {

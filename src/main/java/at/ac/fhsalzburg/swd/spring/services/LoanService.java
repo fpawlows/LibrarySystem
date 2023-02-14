@@ -26,16 +26,18 @@ public class LoanService implements LoanServiceInterface {
     private final LoanRepository loanRepository;
     private final ReservationRepository reservationRepository;
     private final MediaServiceInterface mediaService;
+    private final UserServiceInterface userService;
 
 
     @Value("${myapp.free.days.loan}") // inject secret from application.properties
     private Integer LOAN_DAYS_LIMIT;
 
-    public LoanService(LoanRepository loanRepository, ReservationRepository reservationRepository, MediaServiceInterface mediaService)
+    public LoanService(LoanRepository loanRepository, ReservationRepository reservationRepository, MediaServiceInterface mediaService, UserServiceInterface userService)
     {
         this.loanRepository = loanRepository;
         this.reservationRepository = reservationRepository;
         this.mediaService = mediaService;
+        this.userService = userService;
     }
 
 
@@ -53,7 +55,9 @@ public class LoanService implements LoanServiceInterface {
     @Override
     public Boolean canBorrowNextCopy (Media media, User user) throws BadAttributeValueExpException {
         List<Reservation> mediaReservations = media.getReservations();
-        return (mediaReservations.isEmpty() || mediaReservations.get(0).getUser() == user) && isMediaAllowedFor(media, user);
+        Integer howManyMoreMediaCanBorrow = userService.howManyMoreMediaCanBorrow(user.getUsername());
+        return howManyMoreMediaCanBorrow > 0 && isMediaAllowedFor(media, user)
+            && (mediaReservations.isEmpty() || mediaReservations.get(0).getUser() == user);
     }
 
     @Override
@@ -64,29 +68,33 @@ public class LoanService implements LoanServiceInterface {
     @Override
     public Loan loanMedia(Copy copy, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException {
         if (isCopyAllowedFor(copy, user)) {
-            dateBorrowed = dateBorrowed==null? new Timestamp(System.currentTimeMillis()) : dateBorrowed;
-            state = state==null? Loan.loanState.waitingForPickUp : state;
-
-            Loan loan = new Loan(null, copy, user, dateBorrowed, state);
-            loan = loanRepository.save(loan);
+            Loan loan = createLoan(copy, user, dateBorrowed, state);
             return loan;
         }
             return null;
     }
 
+
     @Override
     public synchronized Loan loanMedia(Media media, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException {
         if (canBorrowNextCopy(media, user)) {
-            dateBorrowed = dateBorrowed == null ? new Timestamp(System.currentTimeMillis()) : dateBorrowed;
-            state = state == null ? Loan.loanState.waitingForPickUp : state;
-
-                Copy copy = getAvailableCopies(media).iterator().next();
-                Loan loan = new Loan(null, copy, user, dateBorrowed, state);
-                loanRepository.save(loan);
+            Copy copy = getAvailableCopies(media).iterator().next();
+                Loan loan = createLoan(copy, user, dateBorrowed, state);
                 mediaService.setAvailibility(copy.getCopyId(), false);
                 return loan;
         }
         return null;
+    }
+
+
+    @Override
+    public synchronized Loan createLoan(Copy copy, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException {
+        dateBorrowed = dateBorrowed == null ? new Timestamp(System.currentTimeMillis()) : dateBorrowed;
+        state = state == null ? Loan.loanState.waitingForPickUp : state;
+
+        Loan loan = new Loan(null, copy, user, dateBorrowed, state);
+        loan = loanRepository.save(loan);
+        return loan;
     }
 
     @Override

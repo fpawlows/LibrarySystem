@@ -42,8 +42,9 @@
                         <button style="width: 100%" type="button" class="fa fa-cancel"> Cancel </button>
                     </a>
 
-                    <a th:href="@{/loan/(id=${reservation.media.getId()})}">
-                        <button style="width: 100%" th:disabled="${(reservation.media.getCopies() == null || reservation.media.getCopies().isEmpty() || howManyMoreMediaCanBorrow==0) }"
+                    <a th:href="@{/loan/(mediaId=${reservation.media.getId()})}">
+                        <button style="width: 100%"
+                                th:disabled="${(reservation.getState() != loanAllowed)}"
                                 type="button" class="fa fa-book"> Loan</button>
                     </a>
 

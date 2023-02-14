@@ -26,9 +26,6 @@ public class Reservation  implements Serializable {
     private Timestamp priorityStartTimestamp;
     private Reservation.reservationState state = reservationState.inQueue;
 
-
-
-
     @ManyToOne
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
@@ -36,4 +33,5 @@ public class Reservation  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "username", nullable = false)
     private User user;
+
     }

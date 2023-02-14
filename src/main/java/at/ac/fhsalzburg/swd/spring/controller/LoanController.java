@@ -1,8 +1,10 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
+import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Loan;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
+import at.ac.fhsalzburg.swd.spring.model.ids.CopyId;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.services.LoanServiceInterface;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
@@ -84,16 +86,39 @@ public class LoanController extends BaseController {
     @RequestMapping(value = "/loan")
     public String loanMedia(
         HttpServletRequest request, RedirectAttributes redirectAttributes, Model model,
-        @RequestParam(value = "id") Long mediaId, @CurrentSecurityContext(expression = "authentication") Authentication authentication){
+        @RequestParam(value = "mediaId", required = false) Long mediaId,
+        @RequestParam(value = "copyId", required = false) CopyId copyId,
+        @CurrentSecurityContext(expression = "authentication") Authentication authentication){
 
         String topAlert = null;
 
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             User user = userService.getByUsername(currentUserName);
-            Media media = mediaService.getMediaById(mediaId);
+
+            Copy copy = null;
+            if (copyId != null)
+            {
+                copy = mediaService.getCopyById(copyId);
+            }
+
+            Media media = null;
+            if (mediaId!=null)
+            {
+                media = mediaService.getMediaById(mediaId);
+            }
             try {
-                Loan loan = loanService.loanMedia(media, user, null, null);
+                Loan loan = null;
+                if (media != null) {
+                    loan = loanService.loanMedia(media, user, null, null);
+                } else {
+                    if (copy != null) {
+                        loan = loanService.loanMedia(copy, user, null, null);
+                    }
+                    else {
+                        throw new IllegalArgumentException("Didn't receive any of ids to loan");
+                    }
+                }
                 if ( loan != null) {
                     topAlert = "Media is waiting to be picked up";
                     redirectAttributes.addFlashAttribute("topAlert", topAlert);
