@@ -4,17 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
     <title layout:title-patern="$CONTENT_TITLE">System</title>
 
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/favicon-32x32.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/favicon-16x16.png}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+      <link rel="stylesheet" th:href="@{/css/header.css}"/>
   </head>
   <body>
-    <div class="container">
-        <div layout:fragment="content">
+  <div th:replace="fragments/header :: header"></div>
+  <div class="container">
+      <br>
+      <div class="alert alert-secondary alert-dismissible" role="alert" th:if="${topAlert!=null}"> <span th:text="${topAlert}"></span></div>
+      <br>
+
+      <div layout:fragment="content">
             <p>Changing contents</p>
         </div>
     </div>

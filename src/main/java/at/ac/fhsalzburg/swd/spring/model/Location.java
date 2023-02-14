@@ -1,31 +1,32 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "LOCATION")
-public class Location {
+public class Location implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "location_id")
     private Long id;
-    private String roomName;
+    private String name;
 
-    @OneToMany(mappedBy = "id.location")
+    @OneToMany(mappedBy = "id.location", fetch = FetchType.LAZY)
     private Collection<Shelf> shelves;
 
     public Location() {}
 
-    public Location(Long id, String roomName) {
+    public Location(Long id, String name) {
         this.id = id;
-        this.roomName = roomName;
+        this.name = name;
     }
 
-    public Location(Long id, String roomName, Collection<Shelf> shelves) {
+    public Location(Long id, String name, Collection<Shelf> shelves) {
         this.id = id;
-        this.roomName = roomName;
+        this.name = name;
         this.shelves = shelves;
     }
 
@@ -37,12 +38,12 @@ public class Location {
         this.id = id;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String roomName) {
+        this.name = roomName;
     }
 
     public Collection<Shelf> getShelves() {

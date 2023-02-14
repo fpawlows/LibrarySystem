@@ -1,57 +1,39 @@
 package at.ac.fhsalzburg.swd.spring.model;
 
-import at.ac.fhsalzburg.swd.spring.model.ids.LoanId;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
-enum loanState {Waiting_For_PickUp, Borrowed, Returned};
-
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Loan {
-    @EmbeddedId
-    private LoanId loanId;
-    private Date dateBorrowed;
-    private loanState state;
+    public static enum loanState {waitingForPickUp, Borrowed, Returned, Cancelled};
 
-    public Loan() {}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    public Loan(LoanId loanId, Date dateBorrowed) {
-        this.loanId = loanId;
-        this.dateBorrowed = dateBorrowed;
-        this.state = loanState.Waiting_For_PickUp;
-    }
+    @OneToOne
+    @JoinColumns({
+        @JoinColumn(name = "copy_nr", nullable = false),
+        @JoinColumn(name = "media_id", nullable = false) //here is id of an id
+    })
+    private Copy copy;
 
-    public Loan(LoanId loanId, Date dateBorrowed, loanState state) {
-        this.loanId = loanId;
-        this.dateBorrowed = dateBorrowed;
-        this.state = state;
-    }
+    @ManyToOne
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
 
-    public loanState getState() {
-        return state;
-    }
-
-    public void setState(loanState state) {
-        this.state = state;
-    }
-
-    public LoanId getLoanId() {
-        return loanId;
-    }
-
-    public void setLoanId(LoanId loanId) {
-        this.loanId = loanId;
-    }
-
-    public Date getDateBorrowed() {
-        return dateBorrowed;
-    }
-
-    public void setDateBorrowed(Date dateBorrowed) {
-        this.dateBorrowed = dateBorrowed;
-    }
+    //TODO timestamp
+    private Timestamp timestampBorrowed;
+    private loanState state = loanState.waitingForPickUp;
 }
-

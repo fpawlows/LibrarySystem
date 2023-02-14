@@ -1,14 +1,23 @@
 package at.ac.fhsalzburg.swd.spring.model.medias;
 
+import at.ac.fhsalzburg.swd.spring.model.Copy;
+import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.medias.visitors.MediaVisitor;
+
 import javax.persistence.Entity;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Audio extends Media {
+
     private String codec;
     private Integer duration;
 
     public Audio() {
-
+//TODO change them to protected?
     }
 
     public Audio(String codec, Integer duration) {
@@ -16,8 +25,14 @@ public class Audio extends Media {
         this.duration = duration;
     }
 
-    public Audio(String name, String description, Short fsk, Float price, String codec, Integer duration) {
-        super(name, description, fsk, price);
+    public Audio(Integer duration, String codec, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+        super(name, description, fsk, datePublished, genres, copies, reservations);
+        this.codec = codec;
+        this.duration = duration;
+    }
+
+    public Audio(String name, String description, Integer fsk, String codec, Integer duration) {
+        super(name, description, fsk);
         this.codec = codec;
         this.duration = duration;
     }
@@ -30,11 +45,16 @@ public class Audio extends Media {
         this.codec = codec;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public void accept(MediaVisitor mediaVisitor) {
+        mediaVisitor.visit(this);
     }
 }

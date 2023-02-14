@@ -2,12 +2,21 @@ package at.ac.fhsalzburg.swd.spring.dto;
 
 
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
+import at.ac.fhsalzburg.swd.spring.model.Loan;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-public class UserDTO {
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+@Data
+public class UserDTO implements Serializable {
 
     private String username;
     private String fullname;
@@ -19,68 +28,8 @@ public class UserDTO {
     private String jwttoken;
     private String role;
 
-    public String getUsername() {
-        return username;
-    }
+    private Collection<Reservation> reservations;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public void setEMail(String eMail) {
-        this.eMail = eMail;
-    }
-
-    public String getEMail() {
-        return this.eMail;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getJwttoken() {
-		return jwttoken;
-	}
-
-	public void setJwttoken(String jwtToken) {
-		this.jwttoken = jwtToken;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
+    private Collection<Loan> loans;
 
 }

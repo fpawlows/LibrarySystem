@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main-layout}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <title th:text="${mediaDTO?.getName()}">Media</title>
+</head>
+
+<body>
+
+<main layout:fragment="content" th:remove="tag">
+
+    <h1 class="card-title" th:text="${mediaDTO?.getName()}"></h1>
+    <br/>
+
+    <h3>Description: </h3>
+    <span th:text="${mediaDTO?.getDescription()}"></span>
+    <br/>
+    <hr/>
+
+    <div sec:authorize="hasRole('ADMIN')">
+        <form class="form" th:action="@{/admin/editCopy}">
+            <button type="submit" class="active btn btn-primary" th:name="mediaId" th:value="${mediaDTO.getId()}">Add Copy</button>
+        </form>
+        <!--a  th:href="@{/admin/editCopy(mediaId=${mediaDTO?.getId()})}" class="active btn btn-primary">Add Copy</a-->
+        <br/>
+    </div>
+
+    <!--div th:unless="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}" class="table-responsive"-->
+    <div class="table-responsive">
+
+        <div th:if="${editable}">
+            <button type="submit" class="btn btn-info" form="createCopy" >Submit</button>
+            <button type="reset" class="btn btn-info" form="createCopy" >Reset</button>
+        </div>
+            <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th> Copy number </th>
+            <th> Location </th>
+            <th> Shelf number</th>
+            <th> Compartment position </th>
+            <th> Available </th>
+            <th sec:authorize="isAuthenticated()"> Action </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${editable}">
+            <form id="createCopy" th:object="${copy}" th:action="@{/admin/editCopy/}" method="post">
+
+            <td th:text="${copy.copyId.copyNr}">
+                <input form="createCopy" th:text="${copy.copyId.copyNr}" th:value="${copy.copyId}" th:field="*{copyId}"/>
+                <!--TODO see if works-->
+            </td>
+            <td colspan="3">
+                <select form="createCopy" id="locationId" th:field="*{compartment}">
+                    <option th:each="compartment_ : ${allCompartments}"
+                            th:disabled="${compartment_.getNumberOfFreePlaces()>0}"
+                            th:value="${compartment_.compartmentId}"
+                            th:text="${compartment_.describe()}">
+                            <!--
+                            th:selected="${compartment_ == copy.compartment}"
+                            -->
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select id="available" th:field="*{isAvailable}">
+                    <option style="background-color: green" th:value="${true}" > Available </option>
+                    <option style="background-color: red" th:value="${false}" > Not Available </option>
+                </select>
+            </td>
+            </form>
+        </tr>
+        <tr th:each="copy : ${mediaDTO.getCopies()}">
+            <td> <span th:text="${copy.getCopyId().getCopyNr()}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.location.name}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.shelf.id.shelfNumber}"> </span> </td>
+            <td> <span th:text="${copy.compartment.compartmentId.position}"> </span> </td>
+            <td>
+
+                <form sec:authorize="hasRole('ADMIN')" id="changeAvailability" th:action="@{/admin/setAvailability/}" th:object="${copy.getCopyId()}">
+                    <button type="submit" form="changeAvailability" name="isAvailable" class="btn"
+                            th:classappend="${copy.isAvailable ? 'bg-success btn-danger' : 'bg-warning btn-success'}"
+                            th:text="${copy.isAvailable ? 'Available' : 'Unavailable'}">
+                    </button>
+                </form>
+
+                <span  sec:authorize="!hasRole('ADMIN')" class="btn" th:text="${copy.isAvailable ? 'Available' : 'Unavailable'}" th:classappend="${copy.isAvailable ? 'bg-success' : 'bg-warning'}"> </span>
+            </td>
+            <td sec:authorize="isAuthenticated()">
+
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/editCopy(id=${copy.getCopyId()})}">
+                    <button style="width: 100%" type="button" class="fa fa-edit"> Edit </button>
+                </a>
+
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/deleteCopy(id=${copy.copyId})}" th:method="delete">
+                    <button style="width: 100%" type="button" class="fa fa-remove"> Remove </button>
+                </a>
+
+                <a th:href="@{/loan/(copyId=${copy.copyId})}">
+                    <button style="width: 100%" th:disabled="${(mediaDTO.getCopies() == null || mediaDTO.getCopies().isEmpty())}" type="button" class="fa fa-book"> Loan</button>
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <!--div th:if="${mediaDTO.getCopies()==null || mediaDTO.getCopies().isEmpty()}">
+        <span> No Copies found </span>
+    </div-->
+    <div class="alert alert-success" role="alert" th:if="${message!=null && !mediaDTO.getCopies().isEmpty()}">
+        <span th:text="${message}"></span>
+    </div>
+    </main>
+</body>
+
+</html></html>

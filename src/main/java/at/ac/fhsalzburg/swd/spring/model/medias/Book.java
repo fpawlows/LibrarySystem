@@ -1,12 +1,22 @@
 package at.ac.fhsalzburg.swd.spring.model.medias;
 
+import at.ac.fhsalzburg.swd.spring.model.Copy;
+import at.ac.fhsalzburg.swd.spring.model.Genre;
+import at.ac.fhsalzburg.swd.spring.model.Reservation;
+import at.ac.fhsalzburg.swd.spring.model.medias.visitors.MediaVisitor;
+
 import javax.persistence.Entity;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Book extends Media {
+
     private Integer ISBN;
     private String Author;
 
+    //TODO change to protected
     public Book() {
     }
 
@@ -15,8 +25,14 @@ public class Book extends Media {
         this.Author = author;
     }
 
-    public Book(String name, String description, Short fsk, Float price, Integer ISBN, String author) {
-        super(name, description, fsk, price);
+    public Book(Integer ISBN, String author, String name, String description, Integer fsk, Date datePublished, List<Genre> genres, Collection<Copy> copies, List<Reservation> reservations) {
+        super(name, description, fsk, datePublished, genres, copies, reservations);
+        this.ISBN = ISBN;
+        this.Author = author;
+    }
+
+    public Book(String name, String description, Integer fsk, Integer ISBN, String author) {
+        super(name, description, fsk);
         this.ISBN = ISBN;
         this.Author = author;
     }
@@ -35,6 +51,12 @@ public class Book extends Media {
 
     public void setAuthor(String author) {
         this.Author = author;
+    }
+
+
+    @Override
+    public void accept(MediaVisitor mediaVisitor) {
+        mediaVisitor.visit(this);
     }
 }
 

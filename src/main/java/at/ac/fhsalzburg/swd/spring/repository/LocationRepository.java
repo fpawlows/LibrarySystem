@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -15,4 +16,7 @@ public interface LocationRepository extends CrudRepository<Location, Long> {
 	@Transactional(timeout = 10)
     Optional <Location> findById(Long id);
 
+    @Transactional(timeout = 10)
+    Collection <Location> findByName(String name);
+;
 }

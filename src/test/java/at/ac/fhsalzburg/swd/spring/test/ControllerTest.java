@@ -34,6 +34,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import at.ac.fhsalzburg.swd.spring.controller.LoanController;
 import at.ac.fhsalzburg.swd.spring.controller.TemplateController;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.repository.UserRepository;
@@ -57,7 +59,7 @@ public class ControllerTest {
     private UserRepository repo;
 
     @Autowired
-    TemplateController myController;
+    LoanController myController;
 
     @BeforeEach // this method will be run before each test
     public void setup() {
@@ -110,6 +112,16 @@ public class ControllerTest {
                 .andExpect(status().is3xxRedirection());
 
     }
+
+    @Test
+    public void TestController() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/home")
+                .contentType(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("allGenres", "fskValues", "result"))
+                .andExpect(view().name("addReservation"));;
+    }
+
 
 
     // REST Service Test

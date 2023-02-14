@@ -16,7 +16,7 @@ import java.util.Objects;
 public class CopyId implements Serializable {
 
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer copyNr;
 
     @ManyToOne

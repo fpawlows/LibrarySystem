@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main-layout}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <title> User's Profile</title>
+</head>
+
+<body>
+
+<main layout:fragment="content" th:remove="tag">
+
+    <h1 class="card-title" th:text="'Profile of ' + ${userDTO.getUsername()}"></h1>
+    <br/>
+
+    <div class="table-responsive">
+        <label for="reservationsTable">Reservations</label>
+        <table id="reservationsTable" class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th> Reservation ID </th>
+                <th> Number in Queue </th>
+                <th> Reservation Date </th>
+                <th data-toggle="tooltip" data-placement="top" title="24h from this moment you have to Loan your Media"> Since when loan allowed </th>
+                <th> State </th>
+                <th> Media </th>
+                <th> Action </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservation : ${userDTO.getReservations()}">
+                <td> <span th:text="${reservation.getReservationId()}"> </span> </td>
+                <td> <span th:text="${reservation.getNumberInQueue()}"> </span> </td>
+                <td> <span th:text="${reservation.getReservationTimestamp()}"> </span> </td>
+                <td> <span th:text="${reservation.getPriorityStartTimestamp()}"> </span> </td>
+                <td> <span th:text="${reservation.getState()}"> </span> </td>
+                <td> <span th:text="${reservation.getMedia().getName()}"> </span> </td>
+                <td>
+                    <a th:href="@{/reservation/cancel/(id=${reservation.getReservationId()})}">
+                        <button style="width: 100%" type="button" class="fa fa-cancel"> Cancel </button>
+                    </a>
+
+                    <a th:href="@{/loan/(mediaId=${reservation.media.getId()})}">
+                        <button style="width: 100%"
+                                th:disabled="${(reservation.getState() != loanAllowed)}"
+                                type="button" class="fa fa-book"> Loan</button>
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive">
+        <label for="reservationsTable">Active Loans</label>
+        <table id="loansTable" class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th> Loan ID </th>
+                <th> Copy number </th>
+                <th> Borrowing Date </th>
+                <th> State </th>
+                <th> Action </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="loan : ${userDTO.getLoans()}">
+                <td> <span th:text="${loan.getId()}"> </span> </td>
+                <td> <span th:text="${loan.getCopy().getCopyId().getCopyNr()}"> </span> </td>
+                <td> <span th:text="${loan.getTimestampBorrowed()}"> </span> </td>
+                <td> <span th:text="${loan.getState()}"> </span> </td>
+                <td>
+                    <a th:href="@{/loans/cancel/(id=${loan.getId()})}">
+                        <button style="width: 100%" type="button" class="fa fa-cancel"> Cancel </button>
+                    </a>
+
+                    <a sec:authorize="isAuthenticated()"
+                          th:if="${loan.getState() == waitingForPickUp}"
+                          th:href="@{/loans/pickUp(id=${loan.getId()})}">
+                        <!--input th:name="pickUpCode" form="formPickUp"-->
+                        <button style="width: 100%" type="button" class="btn btn-success"> Remove </button>
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+</body>
+
+</html></html>

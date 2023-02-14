@@ -37,11 +37,11 @@ public class TemplateController {
                // constructors, or methods in a component. Spring's dependency injection mechanism
                // wires appropriate beans into the class members marked with @Autowired.
     private ApplicationContext context;
-    
+
     @Autowired
     private EntityManager entityManager;
-    
-   
+
+
     @Autowired
     UserServiceInterface userService;
 
@@ -52,7 +52,7 @@ public class TemplateController {
                                     // applicable to both setter and field injection.
                                     // https://www.baeldung.com/spring-annotations-resource-inject-autowire
     TestBean sessionBean;
-    
+
 
     @Autowired
     TestBean singletonBean;
@@ -81,7 +81,7 @@ public class TemplateController {
             count++;
             session.setAttribute("count", count);
         }
-        
+
         // check if user is logged in
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
@@ -91,10 +91,10 @@ public class TemplateController {
         model.addAttribute("message", userService.doSomething());
 
         model.addAttribute("halloNachricht", "welchem to SWD lab");
-        
+
         // map list of entities to list of DTOs
         List<UserDTO> listOfUserTO = ObjectMapperUtils.mapAll(userService.getAll(), UserDTO.class);
-        
+
         model.addAttribute("users", listOfUserTO);
 
         model.addAttribute("beanSingleton", singletonBean.getHashCode());
@@ -103,43 +103,32 @@ public class TemplateController {
         model.addAttribute("beanPrototype", prototypeBean.getHashCode());
 
         model.addAttribute("beanSession", sessionBean.getHashCode());
-        
-        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();        
+
+        Authentication lauthentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("authenticated", lauthentication);
 
 
         return "index";
     }
-    
-    @RequestMapping(value = {"/login"})
-    public String login(Model model) {
-    	return "login";
-    }
-    
-    @RequestMapping(value = {"/login-error"})
-    public String loginError(Model model) {
-    	model.addAttribute("error","Login error");
-    	return "login";
-    }
 
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model, @RequestParam(value = "username", required = false) String username) {
-        
+
     	User modUser = null;
     	UserDTO userDto = new UserDTO();
-    	
+
     	if (username!=null) {
-    		modUser = userService.getByUsername(username);    		    	
+    		modUser = userService.getByUsername(username);
     	}
-    	
+
     	if (modUser!=null) {
     		// map user to userDTO
     		userDto = ObjectMapperUtils.map(modUser, UserDTO.class);
     	} else {
     		userDto = new UserDTO();
     	}
-    	    	
-        model.addAttribute("user", userDto);     
+
+        model.addAttribute("user", userDto);
 
         return "addUser";
     }
@@ -154,12 +143,12 @@ public class TemplateController {
                                                                          // named model attribute
                                                                          // and then exposes it to a
                                                                          // web view:
-    	
+
         // merge instances
-        User user = ObjectMapperUtils.map(userDTO, User.class); 
-    	
+        User user = ObjectMapperUtils.map(userDTO, User.class);
+
         // if user already existed in DB, new information is already merged and saved
-        // a new user must be persisted (because not managed by entityManager yet)        
+        // a new user must be persisted (because not managed by entityManager yet)
         if (!entityManager.contains(user)) userService.addUser(user);
 
         return "redirect:/";

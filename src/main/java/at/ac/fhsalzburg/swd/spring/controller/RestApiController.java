@@ -20,8 +20,9 @@ import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 
 @RestController
 @RequestMapping("/api")
-public class RestApiController {	
-	
+//TODO REST API access to the rest of the data under /api
+public class RestApiController {
+
 	@Autowired
     private EntityManager entityManager;
 
@@ -30,7 +31,7 @@ public class RestApiController {
     // test with: curl http://localhost:8080/api/users -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
     @GetMapping("/users")
     public @ResponseBody List<UserDTO> allUsers() {
-    	
+
     	// map list of entities to list of DTOs
         List<UserDTO> listOfUserTO = ObjectMapperUtils.mapAll(userService.getAll(), UserDTO.class);
 
@@ -49,10 +50,10 @@ public class RestApiController {
     // test with: curl -X PUT http://localhost:8080/api/users/fromrest -H "Content-Type: application/json" -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak" -d '{"username":"fromrest","fullname":"created by rest","tel":"+00000000","birthDate":"2022-09-30T00:00:00.000+00:00","password":"fromrest","jwtToken":null,"email":"fromrest@acme.at"}'
     @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.PUT)
     public String setUser(@RequestBody UserDTO userDTO) {
-    	User user = ObjectMapperUtils.map(userDTO, User.class); 
-    	
+    	User user = ObjectMapperUtils.map(userDTO, User.class);
+
         // if user already existed in DB, new information is already merged and saved
-        // a new user must be persisted (because not managed by entityManager yet)        
+        // a new user must be persisted (because not managed by entityManager yet)
         if (!entityManager.contains(user)) userService.addUser(user);
 
         return "redirect:/api/users";
@@ -61,10 +62,10 @@ public class RestApiController {
     // test with curl -X DELETE http://localhost:8080/api/users/fromrest -H "Content-Type: application/json" -H 'Accept: application/json' -H "Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQzMDc0NDksImV4cCI6MTY5NTg0MzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.curjpEf0q9S43s5EPLB9Pk7VXZEex0onsK2xr74QOak"
     @RequestMapping(value = {"/users/{username}"}, method = RequestMethod.DELETE)
     public String delete(@PathVariable String username) {
-   
+
     	userService.deleteUser(username);
-   
+
         return "redirect:/api/users";
     }
- 
+
 }

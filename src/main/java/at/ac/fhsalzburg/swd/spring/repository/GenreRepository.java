@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -10,8 +11,11 @@ import at.ac.fhsalzburg.swd.spring.model.Genre;
 
 
 @Repository
-public interface GenreRepository extends CrudRepository<Genre, Integer> {
+public interface GenreRepository extends CrudRepository<Genre, Long> {
 
-	@Transactional(timeout = 10)
-    Optional<Genre> findById(Integer id);
+    @Transactional(timeout = 10)
+    Optional<Genre> findById(Long id);
+
+    @Transactional(timeout = 10)
+    List<Genre> findAll();
 }

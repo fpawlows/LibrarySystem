@@ -4,22 +4,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Genre {
+public class Genre implements Serializable {
+    //TODO move serializable to genreDTO and make MediadTO have a list of GenreDTO not Genre itself
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String name;
 
     public Genre() {};
 
-    public Genre(Integer id_, String name_) {
-        id = id_;
+    public Genre (String name_) {
         name = name_;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -27,11 +28,15 @@ public class Genre {
         return name;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String toString(){
+        return this.getName();
     }
 }
