@@ -22,7 +22,7 @@ import at.ac.fhsalzburg.swd.spring.repository.MediaRepository;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
-public class MediaServiceTest {
+public class MediaRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -49,4 +49,6 @@ public class MediaServiceTest {
             assertEquals(givenMedia, foundMedia);
         }
     }
+
+
 }
