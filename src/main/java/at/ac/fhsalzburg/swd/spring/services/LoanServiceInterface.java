@@ -30,7 +30,7 @@ public interface LoanServiceInterface {
 
     public abstract Boolean cancelReservation (Long reservationId);
 
-    public abstract Boolean loanFromReservation(Reservation reservation) throws BadAttributeValueExpException;
+    public abstract Loan loanFromReservation(Reservation reservation) throws BadAttributeValueExpException;
 
     public abstract User findNextInQueue (Media media);
 

@@ -112,6 +112,7 @@ public class LoanService implements LoanServiceInterface {
     @Override
     public synchronized Loan rollbackLoan (Loan loan) {
         loan.setState(Loan.loanState.Cancelled);
+        mediaService.setAvailibility(loan.getCopy().getCopyId(), true);
         loanRepository.save(loan);
         return loan;
     }
@@ -199,6 +200,12 @@ public class LoanService implements LoanServiceInterface {
                         if (media.getReservations().size()==0) {
                             reservation = allowLoan(reservation);
                         }
+                        Reservation finalReserv = reservation;
+                        Runnable task = () -> {
+                            cancelReservation(finalReserv.getReservationId());
+                        };
+                        futureLoans.add(new FutureIdPair(reservation.getReservationId(), executor.schedule(task, 10, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
+                        //Set to 2 days - from properties
                         reservationRepository.save(reservation);
                         return true;
                     }
@@ -213,19 +220,33 @@ public class LoanService implements LoanServiceInterface {
         if (!optionalReservation.isEmpty()) {
             Reservation reservation = optionalReservation.get();
             reservation.setState(Reservation.reservationState.canceled);
+            reservationRepository.save(reservation);
         }
         return false;
     }
 
     @Override
     synchronized
-    public Boolean loanFromReservation(Reservation reservation) throws BadAttributeValueExpException {
+    public Loan loanFromReservation(Reservation reservation) throws BadAttributeValueExpException {
         Loan loan = loanMedia(reservation.getMedia(), reservation.getUser(), new Timestamp(System.currentTimeMillis()), Loan.loanState.waitingForPickUp);
         reservation.setState(Reservation.reservationState.loanCreated);
-        reservationRepository.save(reservation);
-        loanRepository.save(loan);
 
-        return false;
+        List<FutureIdPair> sortedReservationsFutures = futureReservations.stream().filter(p -> p.id == reservation.getReservationId()).sorted().collect(Collectors.toList());
+        if (sortedReservationsFutures.iterator().hasNext()) {
+            FutureIdPair futureIdPair = sortedReservationsFutures.iterator().next();
+
+            if (futureIdPair.future.isDone()) {
+                return null;
+            }
+            reservation.setState(Reservation.reservationState.loanCreated);
+            futureIdPair.future.cancel(true);
+
+            reservationRepository.save(reservation);
+            loanRepository.save(loan);
+
+            return loan;
+        }
+        return null;
     }
 
     @Override
