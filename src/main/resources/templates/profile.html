@@ -77,6 +77,13 @@
                         <button style="width: 100%" type="button" class="fa fa-cancel"> Cancel </button>
                     </a>
 
+                    <form id="formPickUp" sec:authorize="isAuthenticated()"
+                          th:if="${loan.getState() == waitingForPickUp}"
+                          th:action="@{/loans/pickUp(id=${loan.getId()})}" th:method="post">
+                        <!--input th:name="pickUpCode" form="formPickUp"-->
+                        <button style="width: 100%" form="formPickUp" type="submit" class="btn btn-success"> Remove </button>
+                    </form>
+
                 </td>
             </tr>
             </tbody>

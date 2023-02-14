@@ -7,6 +7,7 @@ import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.model.medias.Media;
 import at.ac.fhsalzburg.swd.spring.repository.LoanRepository;
 import at.ac.fhsalzburg.swd.spring.repository.ReservationRepository;
+import javassist.compiler.ast.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +15,38 @@ import javax.management.BadAttributeValueExpException;
 import java.sql.Timestamp;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Service
 public class LoanService implements LoanServiceInterface {
 
+    protected class FutureIdPair implements Comparable<FutureIdPair> {
+        public Long id;
+        public Future future;
+        public Timestamp initialized;
+
+        public FutureIdPair(Long id, ScheduledFuture<?> schedule, Timestamp initialized) {
+            this.future = schedule;
+            this.id = id;
+            this.initialized = initialized;
+        }
+
+        @Override
+        public int compareTo(FutureIdPair anotherPair) {
+            return (int) (this.initialized.getTime() - anotherPair.initialized.getTime());
+        }
+    }
+
     private final LoanRepository loanRepository;
     private final ReservationRepository reservationRepository;
     private final MediaServiceInterface mediaService;
     private final UserServiceInterface userService;
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+//TODO shutdown when application exits
+    private Collection<FutureIdPair> futureReservations;
+    private Collection<FutureIdPair> futureLoans;
 
 
     @Value("${myapp.free.days.loan}") // inject secret from application.properties
@@ -38,6 +58,8 @@ public class LoanService implements LoanServiceInterface {
         this.reservationRepository = reservationRepository;
         this.mediaService = mediaService;
         this.userService = userService;
+        futureLoans = new ArrayList<FutureIdPair>();
+        futureReservations = new ArrayList<FutureIdPair>();
     }
 
 
@@ -57,7 +79,7 @@ public class LoanService implements LoanServiceInterface {
         List<Reservation> mediaReservations = media.getReservations();
         Integer howManyMoreMediaCanBorrow = userService.howManyMoreMediaCanBorrow(user.getUsername());
         return howManyMoreMediaCanBorrow > 0 && isMediaAllowedFor(media, user)
-            && (mediaReservations.isEmpty() || mediaReservations.get(0).getUser() == user);
+            && (mediaReservations.isEmpty() || findNextInQueue(media) == user);
     }
 
     @Override
@@ -88,13 +110,47 @@ public class LoanService implements LoanServiceInterface {
 
 
     @Override
-    public synchronized Loan createLoan(Copy copy, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException {
+    public synchronized Loan rollbackLoan (Loan loan) {
+        loan.setState(Loan.loanState.Cancelled);
+        loanRepository.save(loan);
+        return loan;
+    }
+
+
+        @Override
+        public synchronized Loan createLoan(Copy copy, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException {
         dateBorrowed = dateBorrowed == null ? new Timestamp(System.currentTimeMillis()) : dateBorrowed;
         state = state == null ? Loan.loanState.waitingForPickUp : state;
 
         Loan loan = new Loan(null, copy, user, dateBorrowed, state);
         loan = loanRepository.save(loan);
+
+
+            Loan finalLoan = loan;
+            Runnable task = () -> {
+            rollbackLoan(finalLoan);
+            };
+
+        futureLoans.add(new FutureIdPair(loan.getId(), executor.schedule(task, 5, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
+        //from properties
         return loan;
+    }
+
+    @Override
+    public synchronized Loan startLoan(Loan loan) {
+        List<FutureIdPair> sortedLoansFutures = futureLoans.stream().filter(p -> p.id == loan.getId()).sorted().collect(Collectors.toList());
+        if (sortedLoansFutures.iterator().hasNext()) {
+            FutureIdPair futureIdPair = sortedLoansFutures.iterator().next();
+
+            if (futureIdPair.future.isDone()) {
+                return null;
+            }
+            loan.setState(Loan.loanState.Borrowed);
+            futureIdPair.future.cancel(true);
+            loanRepository.save(loan);
+            return loan;
+        }
+        return null ;
     }
 
     @Override
@@ -174,7 +230,8 @@ public class LoanService implements LoanServiceInterface {
 
     @Override
     public User findNextInQueue(Media media) {
-        return null;
+        List<Reservation> mediaReservations = media.getReservations();
+        return mediaReservations.get(0).getUser();
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Loan {
-    public static enum loanState {waitingForPickUp, Borrowed, Returned};
+    public static enum loanState {waitingForPickUp, Borrowed, Returned, Cancelled};
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring.controller;
 
 import at.ac.fhsalzburg.swd.spring.dto.UserDTO;
+import at.ac.fhsalzburg.swd.spring.model.Loan;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.MediaServiceInterface;
@@ -38,6 +39,11 @@ public class ProfileController {
         Model model, @CurrentSecurityContext(expression = "authentication") Authentication authentication){
 
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+            Loan.loanState waitingForPickUpState = Loan.loanState.waitingForPickUp;
+
+            model.addAttribute("waitingForPickUpState", waitingForPickUpState);
+
             String currentUserName = authentication.getName();
             User user = userService.getByUsername(currentUserName);
             UserDTO userDTO = ObjectMapperUtils.map(user, UserDTO.class);
@@ -45,6 +51,7 @@ public class ProfileController {
             model.addAttribute("howManyMoreMediaCanBorrow", howManyMoreMediaCanBorrow);
             model.addAttribute("loanAllowed", Reservation.reservationState.loanAllowed);
             model.addAttribute("userDTO", userDTO);
+
         }
         else {
             throw new AuthenticationCredentialsNotFoundException("Not authenticated");

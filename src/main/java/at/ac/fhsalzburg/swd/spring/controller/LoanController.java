@@ -141,4 +141,22 @@ public class LoanController extends BaseController {
         return "redirect:/home/";
     }
 
+    @RequestMapping("/loans/pickUp")
+    public String pickUp(Model model,
+            @CurrentSecurityContext(expression = "authentication") Authentication authentication,
+            @RequestParam(value = "id") Long loanId) {
+
+        String topAlert = null;
+
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            User user = userService.getByUsername(currentUserName);
+            Loan loan = loanService.getLoanById(loanId);
+            if (loan != null) {
+                loanService.startLoan(loan);
+            }
+        }
+    return "profile";
+    }
+
 }

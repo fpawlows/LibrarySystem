@@ -25,6 +25,8 @@ public interface LoanServiceInterface {
     public abstract Boolean reserveMedia (Media media, User user) throws BadAttributeValueExpException;
     public abstract Reservation allowLoan(Reservation reservation);
     public abstract Loan createLoan(Copy copy, User user, Timestamp dateBorrowed, Loan.loanState state) throws BadAttributeValueExpException;
+    public abstract Loan startLoan(Loan loan);
+    public abstract  Loan rollbackLoan (Loan loan);
 
     public abstract Boolean cancelReservation (Long reservationId);
 
