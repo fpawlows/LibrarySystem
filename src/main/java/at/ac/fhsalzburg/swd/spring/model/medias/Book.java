@@ -31,8 +31,8 @@ public class Book extends Media {
         this.Author = author;
     }
 
-    public Book(String name, String description, Integer fsk, Integer ISBN, String author) {
-        super(name, description, fsk);
+    public Book(String name, String description, Integer fsk, Date date, Integer ISBN, String author) {
+        super(name, description, fsk, date);
         this.ISBN = ISBN;
         this.Author = author;
     }

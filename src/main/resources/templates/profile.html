@@ -78,10 +78,14 @@
                     </a>
 
                     <a sec:authorize="isAuthenticated()"
-                          th:if="${loan.getState() == waitingForPickUp}"
+                          th:if="${loan.getState() == waitingForPickUpState}"
                           th:href="@{/loans/pickUp(id=${loan.getId()})}">
                         <!--input th:name="pickUpCode" form="formPickUp"-->
-                        <button style="width: 100%" type="button" class="btn btn-success"> Remove </button>
+                        <button style="width: 100%" type="button" class="btn btn-success"> Pick Up </button>
+                    </a>
+
+                    <a th:href="@{/loans/return/(id=${loan.getId()})}">
+                        <button style="width: 100%" type="button" class="fa fa-cancel"> Return </button>
                     </a>
 
                 </td>

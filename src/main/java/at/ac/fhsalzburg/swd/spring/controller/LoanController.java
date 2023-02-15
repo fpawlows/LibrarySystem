@@ -53,7 +53,7 @@ public class LoanController extends BaseController {
             Media media = mediaService.getMediaById(mediaId);
             try {
                 if (loanService.reserveMedia(media, user)) {
-                    topAlert = "Media reserved";
+                    topAlert = "Media reserved. Go to your profile, when you wish to Loan it.";
                 } else {
                     topAlert = "Couldn't reserve media";
                 }
@@ -120,7 +120,7 @@ public class LoanController extends BaseController {
                     }
                 }
                 if ( loan != null) {
-                    topAlert = "Media is waiting to be picked up";
+                    topAlert = "Media is waiting to be picked up. Your CopyNr: " + loan.getCopy().getCopyId().getCopyNr();
                     redirectAttributes.addFlashAttribute("topAlert", topAlert);
                     return "redirect:/media/" + loan.getCopy().getCopyId().getMedia().getId();
                 } else {
@@ -142,7 +142,9 @@ public class LoanController extends BaseController {
     }
 
     @RequestMapping("/loans/pickUp")
-    public String pickUp(Model model,
+    public String pickUp(
+        Model model, RedirectAttributes redirectAttributes,
+        HttpServletRequest request,
             @CurrentSecurityContext(expression = "authentication") Authentication authentication,
             @RequestParam(value = "id") Long loanId) {
 
@@ -153,10 +155,15 @@ public class LoanController extends BaseController {
             User user = userService.getByUsername(currentUserName);
             Loan loan = loanService.getLoanById(loanId);
             if (loan != null) {
-                loanService.startLoan(loan);
+                if (loanService.startLoan(loan)!=null) {
+                    topAlert = "Loaned succesfully!";
+                } else {
+                    topAlert = "Couldn't loan";
+                }
             }
         }
-    return "profile";
+        redirectAttributes.addFlashAttribute("topAlert", topAlert);
+    return "redirect:" + request.getHeader("Referer");
     }
 
 }

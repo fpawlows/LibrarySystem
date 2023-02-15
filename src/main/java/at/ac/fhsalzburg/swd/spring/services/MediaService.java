@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class MediaService implements MediaServiceInterface {
@@ -436,7 +437,7 @@ public class MediaService implements MediaServiceInterface {
 
     @Override
     synchronized public Integer getNextQueueNumber(Media media) {
-        return media.getReservations().size()+1;
+        return media.getReservations().stream().filter(p -> p.getState() == Reservation.reservationState.inQueue || p.getState() == Reservation.reservationState.loanAllowed).collect(Collectors.toList()).size()+1;
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.management.BadAttributeValueExpException;
+import javax.persistence.PersistenceException;
 import java.sql.Timestamp;
 import java.time.Period;
 import java.time.ZoneId;
@@ -132,22 +133,50 @@ public class LoanService implements LoanServiceInterface {
             rollbackLoan(finalLoan);
             };
 
-        futureLoans.add(new FutureIdPair(loan.getId(), executor.schedule(task, 5, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
+        futureLoans.add(new FutureIdPair(loan.getId(), executor.schedule(task, 10, TimeUnit.MINUTES),  new Timestamp(System.currentTimeMillis())));
         //from properties
         return loan;
     }
 
     @Override
     public synchronized Loan startLoan(Loan loan) {
-        List<FutureIdPair> sortedLoansFutures = futureLoans.stream().filter(p -> p.id == loan.getId()).sorted().collect(Collectors.toList());
+        List<FutureIdPair> sortedLoansFutures = futureLoans.stream().filter(p -> p.id.longValue() == loan.getId().longValue()).sorted().collect(Collectors.toList());
         if (sortedLoansFutures.iterator().hasNext()) {
             FutureIdPair futureIdPair = sortedLoansFutures.iterator().next();
 
             if (futureIdPair.future.isDone()) {
                 return null;
             }
-            loan.setState(Loan.loanState.Borrowed);
             futureIdPair.future.cancel(true);
+            futureLoans.remove(futureIdPair);
+
+            List<Reservation> reservations = reservationRepository.findAllByMedia(loan.getCopy().getCopyId().getMedia()).stream()
+                .filter(p -> p.getUser().getUsername() == loan.getUser().getUsername() && p.getState() == Reservation.reservationState.loanAllowed)
+                .collect(Collectors.toList());
+
+            if (reservations.size() == 1) {
+                Reservation reservation = reservations.iterator().next();
+                List<FutureIdPair> sortedReservationsFutures = futureReservations.stream().filter
+                    (p -> p.id.longValue() == reservation.getReservationId().longValue()).sorted().collect(Collectors.toList());
+                if (sortedReservationsFutures.iterator().hasNext()) {
+                    FutureIdPair futureIdPairRes = sortedReservationsFutures.iterator().next();
+
+                    if (futureIdPairRes.future.isDone()) {
+                        return null;
+                    }
+
+                    futureIdPairRes.future.cancel(true);
+                    futureReservations.remove(futureIdPairRes);
+
+                    reservation.setState(Reservation.reservationState.loanCreated);
+                    reservationRepository.save(reservation);
+                }
+                else if (reservations.size() >1) {
+                    throw new PersistenceException("Multiple reservations active in db.");
+                }
+            }
+
+            loan.setState(Loan.loanState.Borrowed);
             loanRepository.save(loan);
             return loan;
         }
@@ -182,7 +211,7 @@ public class LoanService implements LoanServiceInterface {
     }
 
     @Override
-    public Reservation allowLoan(Reservation reservation) {
+    public synchronized Reservation allowLoan(Reservation reservation) {
         reservation.setState(Reservation.reservationState.loanAllowed);
         reservation.setPriorityStartTimestamp(new Timestamp(System.currentTimeMillis()));
 //start timer
@@ -194,19 +223,20 @@ public class LoanService implements LoanServiceInterface {
     public Boolean reserveMedia(Media media, User user) throws BadAttributeValueExpException {
             if (isMediaAllowedFor(media, user)) {
                 synchronized (this) {
-                    if (!media.getReservations().stream().anyMatch(res -> res.getUser().getUsername() == user.getUsername())) {
+                    if (!media.getReservations().stream().anyMatch(res -> (res.getUser().getUsername() == user.getUsername() && (res.getState() == Reservation.reservationState.inQueue || res.getState() == Reservation.reservationState.loanAllowed)))) {
                         Reservation.reservationState state = Reservation.reservationState.inQueue;
                         Reservation reservation = new Reservation(null, mediaService.getNextQueueNumber(media), new Timestamp(System.currentTimeMillis()), null, state, media, user);
-                        if (media.getReservations().size()==0) {
+                        if (reservation.getNumberInQueue() == 1) {
                             reservation = allowLoan(reservation);
                         }
                         Reservation finalReserv = reservation;
                         Runnable task = () -> {
                             cancelReservation(finalReserv.getReservationId());
                         };
-                        futureLoans.add(new FutureIdPair(reservation.getReservationId(), executor.schedule(task, 10, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
                         //Set to 2 days - from properties
-                        reservationRepository.save(reservation);
+                        reservation = reservationRepository.save(reservation);
+                        futureReservations.add(new FutureIdPair(reservation.getReservationId(), executor.schedule(task, 15, TimeUnit.MINUTES),  new Timestamp(System.currentTimeMillis())));
+
                         return true;
                     }
                 }
@@ -228,25 +258,35 @@ public class LoanService implements LoanServiceInterface {
     @Override
     synchronized
     public Loan loanFromReservation(Reservation reservation) throws BadAttributeValueExpException {
-        Loan loan = loanMedia(reservation.getMedia(), reservation.getUser(), new Timestamp(System.currentTimeMillis()), Loan.loanState.waitingForPickUp);
-        reservation.setState(Reservation.reservationState.loanCreated);
 
-        List<FutureIdPair> sortedReservationsFutures = futureReservations.stream().filter(p -> p.id == reservation.getReservationId()).sorted().collect(Collectors.toList());
+        if(reservation.getState() != Reservation.reservationState.loanAllowed) {
+            return null;
+        }
+
+        List<FutureIdPair> sortedReservationsFutures = futureReservations.stream().filter(p -> p.id.longValue() == reservation.getReservationId().longValue()).sorted().collect(Collectors.toList());
         if (sortedReservationsFutures.iterator().hasNext()) {
             FutureIdPair futureIdPair = sortedReservationsFutures.iterator().next();
 
             if (futureIdPair.future.isDone()) {
                 return null;
             }
-            reservation.setState(Reservation.reservationState.loanCreated);
+
             futureIdPair.future.cancel(true);
+            futureLoans.remove(futureIdPair);
 
-            reservationRepository.save(reservation);
-            loanRepository.save(loan);
-
-            return loan;
         }
-        return null;
+
+        Loan loan = loanMedia(reservation.getMedia(), reservation.getUser(), new Timestamp(System.currentTimeMillis()), Loan.loanState.waitingForPickUp);
+        if (loan == null) {
+            return null;
+        }
+
+        reservation.setState(Reservation.reservationState.loanCreated);
+
+        reservationRepository.save(reservation);
+        loanRepository.save(loan);
+        return loan;
+
     }
 
     @Override

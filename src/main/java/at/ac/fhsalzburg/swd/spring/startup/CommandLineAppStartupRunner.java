@@ -51,11 +51,11 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                    // end
     public void run(String... args) throws Exception {
 
-        
+
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.YEAR, -100);
-        
+
     	if (userService.getByUsername("admin")!=null) return; // data already exists -> return
     	userService.addUser("admin", "Administrator", "admin@work.org", "123", c.getTime(), "admin","ADMIN");
 
@@ -88,30 +88,30 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         for (int i = 0; i < N_FIRST_MEDIAS_FOR_QUEUES; i++) {
             givenReservations.add(new ArrayList<Reservation>());
         }
-        
+
         givenGenres.add(new Genre("Documentation"));
         givenGenres.add(new Genre("Horror"));
         givenGenres.add(new Genre("Family"));
         givenGenres.add(new Genre("Thriller"));
         givenGenres.add(new Genre("Romantic"));
         givenGenres.add(new Genre("Dokumentation"));
-        
+
         for (var g : givenGenres)
         	mediaService.addGenre(g);
 
-        for (int i = 0; i < N_MEDIAS; i++) {       	
+        for (int i = 0; i < N_MEDIAS; i++) {
             if(i < N_MEDIAS_P_TYPE)
-                givenMedias.add(new Book("BookXY " + i, "Description" + i, (i%9*3)%19, Integer.MAX_VALUE-(i*3), "AuthorXY " + i));
+                givenMedias.add(new Book("BookXY " + i, "Description " + i + "\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.", (i%9*3)%19, new Date(), Integer.MAX_VALUE-(i*3), "AuthorXY " + i));
             else if(i < 2 * N_MEDIAS_P_TYPE)
-                givenMedias.add(new Audio("Audio " + i, "Description" + i, (i%9*3)%19, "MP3", i*4));
+                givenMedias.add(new Audio("Audio " + i, "Description " + i + "\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .", (i%9*3)%19, new Date(), "MP3", i*4));
             else if(i < 3 * N_MEDIAS_P_TYPE)
-                givenMedias.add(new Movie("MovieXY " + i, "Description" + i, (i%9*3)%19, i*4, "MP4"));
+                givenMedias.add(new Movie("MovieXY " + i, "Description " + i + "\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.", (i%9*3)%19, new Date(), i*4, "MP4"));
             else if(i < 4 * N_MEDIAS_P_TYPE)
-                givenMedias.add(new Paper("PaperXY " + i, "Description" + i, (i%9*3)%19, i));
-            
+                givenMedias.add(new Paper("PaperXY " + i, "Description " + i + "\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.", (i%9*3)%19, new Date(), i));
+
             int g = i%3;
             givenMedias.get(i).setGenres(givenGenres.subList(g, g+3));
-            
+
             mediaService.addMedia(givenMedias.get(i));
 
             name = "Library"+i;

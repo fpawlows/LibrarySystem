@@ -31,8 +31,8 @@ public class Audio extends Media {
         this.duration = duration;
     }
 
-    public Audio(String name, String description, Integer fsk, String codec, Integer duration) {
-        super(name, description, fsk);
+    public Audio(String name, String description, Integer fsk, Date date, String codec, Integer duration) {
+        super(name, description, fsk, date);
         this.codec = codec;
         this.duration = duration;
     }

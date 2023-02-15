@@ -36,10 +36,11 @@ public abstract class Media implements VisitableMedia, Serializable {
 
     protected Media() {}
 
-    public Media(String name, String description, Integer fsk) {
+    public Media(String name, String description, Integer fsk, Date datePublished) {
         this.name = name;
         this.description = description;
         this.fsk = fsk;
+        this.datePublished = datePublished;
     }
 
     public Media(String name, String description, Integer fsk, Date datePublished, List<Genre> genres) {

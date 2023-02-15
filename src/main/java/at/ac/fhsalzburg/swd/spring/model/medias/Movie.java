@@ -4,6 +4,7 @@ import at.ac.fhsalzburg.swd.spring.model.Copy;
 import at.ac.fhsalzburg.swd.spring.model.Genre;
 import at.ac.fhsalzburg.swd.spring.model.Reservation;
 import at.ac.fhsalzburg.swd.spring.model.medias.visitors.MediaVisitor;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Data
 public class Movie extends Media {
 
     private Integer duration;
@@ -24,8 +26,8 @@ public class Movie extends Media {
         this.format = format;
     }
 
-    public Movie(String name, String description, Integer fsk, Integer duration, String format) {
-        super(name, description, fsk);
+    public Movie(String name, String description, Integer fsk, Date date, Integer duration, String format) {
+        super(name, description, fsk, date);
         this.duration = duration;
         this.format = format;
     }
