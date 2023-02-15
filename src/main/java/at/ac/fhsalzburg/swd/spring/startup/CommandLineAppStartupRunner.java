@@ -69,7 +69,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         orderService.addOrder(new Date(), user, productService.getAll());
 
 
-        final Integer N_MEDIAS = 100;
+        final Integer N_MEDIAS = 40;
         final Integer N_MEDIAS_P_TYPE = N_MEDIAS/4;
         final Integer N_FIRST_MEDIAS_FOR_QUEUES = 3;
 

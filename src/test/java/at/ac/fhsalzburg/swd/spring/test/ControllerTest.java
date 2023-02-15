@@ -119,7 +119,7 @@ public class ControllerTest {
                 .contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("allGenres", "fskValues", "result"))
-                .andExpect(view().name("addReservation"));;
+                .andExpect(view().name("home"));;
     }
 
 
