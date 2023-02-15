@@ -22,7 +22,7 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumns({
         @JoinColumn(name = "copy_nr", nullable = false),
         @JoinColumn(name = "media_id", nullable = false) //here is id of an id

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class MediaRepositoryTest {
     @Test
     public void addNewBook() {
         // given
-        Book givenMedia = new Book("asdf", "asdf", 0, 1234, "A");
+        Book givenMedia = new Book("asdf", "asdf", 0, new Date(), 1234, "A");
         entityManager.persist(givenMedia);
         entityManager.flush();
 
