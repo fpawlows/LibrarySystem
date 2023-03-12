@@ -25,6 +25,8 @@ import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 
+//Class NOT USED
+
 @Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring
             // will look at the methods of the class marked with the @Controller annotation and
             // establish the routing table to know which methods serve which endpoints.
@@ -62,7 +64,7 @@ public class TemplateController {
     // ----------------------------------------------------------------------
 
 
-    @RequestMapping("/") // The @RequestMapping(method = RequestMethod.GET, value = "/path")
+    @RequestMapping("/old") // The @RequestMapping(method = RequestMethod.GET, value = "/path")
                          // annotation specifies a method in the controller that should be
                          // responsible for serving the HTTP request to the given path. Spring will
                          // work the implementation details of how it's done. You simply specify the
@@ -151,6 +153,6 @@ public class TemplateController {
         // a new user must be persisted (because not managed by entityManager yet)
         if (!entityManager.contains(user)) userService.addUser(user);
 
-        return "redirect:/";
+        return "redirect:/old";
     }
 }

@@ -26,7 +26,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class LoanController extends BaseController {
+public class LoanController {
     @Autowired
     private EntityManager entityManager;
 
@@ -66,8 +66,6 @@ public class LoanController extends BaseController {
         } else {
             throw new AuthenticationCredentialsNotFoundException("No logged user");
         }
-
-//        redirectAttributes = forwardSearchedLists(model, redirectAttributes);
 
         return "redirect:" + request.getHeader("Referer");
     }

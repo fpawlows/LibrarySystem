@@ -5,7 +5,6 @@ package at.ac.fhsalzburg.swd.spring.startup;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 import java.util.random.RandomGenerator;
 
 import at.ac.fhsalzburg.swd.spring.model.*;
@@ -24,22 +23,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
-import at.ac.fhsalzburg.swd.spring.services.OrderServiceInterface;
-import at.ac.fhsalzburg.swd.spring.services.ProductServiceInterface;
-
-import javax.persistence.PersistenceException;
 
 @Profile("!test")
 @Component
 public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Autowired
     UserServiceInterface userService;
-
-    @Autowired
-    ProductServiceInterface productService;
-
-    @Autowired
-    OrderServiceInterface orderService;
 
     @Autowired
     MediaServiceInterface mediaService;
@@ -61,13 +50,6 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
         if (userService.getByUsername("Max")!=null) return; // data already exists -> return
     	userService.addUser("Max", "Mustermann", "max@work.org", "123", new Date(), "max","USER");
-
-        productService.addProduct("first product", 3.30f);
-        User user = userService.getAll().iterator().next();
-        user.setCredit(100l);
-        user = userService.getByUsername("admin");
-        orderService.addOrder(new Date(), user, productService.getAll());
-
 
         final Integer N_MEDIAS = 40;
         final Integer N_MEDIAS_P_TYPE = N_MEDIAS/4;

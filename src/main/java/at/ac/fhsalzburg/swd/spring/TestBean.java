@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
 
+//Class NOT USED
+
 @Configuration
 public class TestBean implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	int HashCode;

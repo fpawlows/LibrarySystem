@@ -18,6 +18,8 @@ import at.ac.fhsalzburg.swd.spring.model.User;
 import at.ac.fhsalzburg.swd.spring.services.UserServiceInterface;
 import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
 
+//Class NOT USED
+
 @RestController
 @RequestMapping("/api")
 //TODO REST API access to the rest of the data under /api

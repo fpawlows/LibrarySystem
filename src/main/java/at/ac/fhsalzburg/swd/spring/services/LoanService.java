@@ -133,7 +133,7 @@ public class LoanService implements LoanServiceInterface {
             rollbackLoan(finalLoan);
             };
 
-        futureLoans.add(new FutureIdPair(loan.getId(), executor.schedule(task, 10, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
+        futureLoans.add(new FutureIdPair(loan.getId(), executor.schedule(task, 10, TimeUnit.MINUTES),  new Timestamp(System.currentTimeMillis())));
         //from properties
         return loan;
     }
@@ -235,7 +235,7 @@ public class LoanService implements LoanServiceInterface {
                         };
                         //Set to 2 days - from properties
                         reservation = reservationRepository.save(reservation);
-                        futureReservations.add(new FutureIdPair(reservation.getReservationId(), executor.schedule(task, 15, TimeUnit.SECONDS),  new Timestamp(System.currentTimeMillis())));
+                        futureReservations.add(new FutureIdPair(reservation.getReservationId(), executor.schedule(task, 15, TimeUnit.MINUTES),  new Timestamp(System.currentTimeMillis())));
 
                         return true;
                     }
@@ -259,6 +259,7 @@ public class LoanService implements LoanServiceInterface {
     synchronized
     public Loan loanFromReservation(Reservation reservation) throws BadAttributeValueExpException {
 
+        //TODO Mutex here for the loanState
         if(reservation.getState() != Reservation.reservationState.loanAllowed) {
             return null;
         }

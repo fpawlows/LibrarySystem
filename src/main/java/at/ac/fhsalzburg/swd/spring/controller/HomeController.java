@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller // marks the class as a web controller, capable of handling the HTTP requests. Spring
 // will look at the methods of the class marked with the @Controller annotation and
 // establish the routing table to know which methods serve which endpoints.
-@RequestMapping( value = {"/home"})
+@RequestMapping( value = {"/home", "/"})
 public class HomeController {
 
     @Autowired
